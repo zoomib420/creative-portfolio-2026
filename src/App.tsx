@@ -24,7 +24,6 @@ export function App() {
     let cancelled = false;
     detectCapabilities().then((caps) => {
       if (!cancelled) setCapabilities(caps);
-      // eslint-disable-next-line no-console
       console.info('[capabilities]', caps);
     });
     return () => {
@@ -51,6 +50,9 @@ export function App() {
 
   return (
     <>
+      <a className="skip-link" href="#work">
+        ข้ามไปยังเนื้อหา
+      </a>
       <Nav />
       <FidelityBadge />
 

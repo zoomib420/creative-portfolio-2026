@@ -109,6 +109,19 @@ export async function detectCapabilities(): Promise<Capabilities> {
     reason = lowPower ? 'low-power device' : 'no WebGL2/WebGPU';
   }
 
+  // Mobile / touch devices: cap at 'standard' to save battery and avoid
+  // jank from the heaviest effects (unless a tier was explicitly forced).
+  if (!forced && coarse && tier === 'high') {
+    tier = 'standard';
+    reason = 'coarse pointer (mobile) — capped from high';
+  }
+
+  // Very small viewports also fall back to the lighter standard path.
+  if (!forced && tier === 'high' && typeof window !== 'undefined' && window.innerWidth < 640) {
+    tier = 'standard';
+    reason = 'small viewport — capped from high';
+  }
+
   return {
     tier,
     hasWebGPU,

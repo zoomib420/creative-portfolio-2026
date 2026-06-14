@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# EXAMPLE — update the domain to your real site (see docs/USER_TODO.md)
+Sitemap: https://your-portfolio.example.com/sitemap.xml

@@ -23,7 +23,6 @@ export async function createWebGPURenderer(props: GlProps): Promise<unknown> {
     await renderer.init();
     return renderer;
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.warn('[renderer] WebGPU init failed, falling back to WebGL:', err);
     const three = await import('three');
     return new three.WebGLRenderer({

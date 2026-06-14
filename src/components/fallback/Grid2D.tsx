@@ -12,10 +12,10 @@ export function Grid2D() {
     <main id="top" className="content-layer mx-auto max-w-5xl px-6 pt-32 pb-24 md:px-10">
       {/* Hero */}
       <section className="mb-28">
-        <p className="mb-4 text-xs tracking-[0.3em] text-[var(--color-accent)] uppercase">
+        <p className="mb-4 font-[var(--font-label)] text-xs tracking-[0.3em] text-[var(--color-accent)] uppercase">
           {profile.role} · 2026
         </p>
-        <h1 className="font-[var(--font-display)] text-4xl leading-tight font-semibold text-balance md:text-6xl">
+        <h1 className="font-[var(--font-display)] text-4xl leading-tight font-medium text-balance md:text-6xl">
           {profile.tagline}
         </h1>
         <p className="mt-6 max-w-2xl text-[var(--color-muted)]">

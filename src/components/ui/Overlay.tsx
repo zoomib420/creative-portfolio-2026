@@ -1,6 +1,7 @@
 import { projects } from '../../data/projects';
 import { profile } from '../../data/profile';
 import { ProjectCard } from './ProjectCard';
+import { Squiggle } from './Squiggle';
 
 /**
  * Scrollable HTML content layered above the 3D canvas. Text stays in the DOM
@@ -12,11 +13,15 @@ export function Overlay() {
       {/* Hero — leaves space so the 3D object is visible behind the text. */}
       <section id="hero" className="flex min-h-screen flex-col justify-center px-6 md:px-16">
         <div className="max-w-3xl" data-reveal>
-          <p className="mb-4 text-xs tracking-[0.3em] text-[var(--color-accent)] uppercase">
+          <p className="mb-4 font-[var(--font-label)] text-xs tracking-[0.3em] text-[var(--color-accent)] uppercase">
             {profile.role} · 2026
           </p>
-          <h1 className="font-[var(--font-display)] text-5xl leading-[1.05] font-semibold text-balance md:text-7xl">
-            Living <span className="text-[var(--color-accent)]">Experience</span>
+          <h1 className="font-[var(--font-display)] text-5xl leading-[1.05] font-medium text-balance md:text-7xl">
+            Living{' '}
+            <span className="relative inline-block text-[var(--color-accent)] italic">
+              Experience
+              <Squiggle className="absolute -bottom-2 left-0 h-3 w-full" />
+            </span>
           </h1>
           <p className="mt-6 max-w-xl text-[var(--color-muted)]">{profile.tagline}</p>
           <p className="mt-8 text-xs tracking-widest text-[var(--color-muted)] uppercase">
