@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type ComponentProps } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { AdaptiveDpr, AdaptiveEvents, Preload } from '@react-three/drei';
 import { Vector3 } from 'three';
@@ -7,6 +7,7 @@ import { Island } from './Island';
 import { Overlay } from '../ui/Overlay';
 import { useAppStore } from '../../lib/store';
 import { useSmoothScroll, cameraState } from '../../lib/scroll';
+import { createWebGPURenderer } from '../../lib/renderer';
 
 /**
  * High / Standard fidelity experience.
@@ -69,6 +70,12 @@ export default function Experience3D() {
 
   useSmoothScroll();
 
+  // On the high tier, render with WebGPU (dynamic import); otherwise WebGL.
+  const gl: ComponentProps<typeof Canvas>['gl'] =
+    tier === 'high'
+      ? (props) => createWebGPURenderer(props as never) as never
+      : { antialias: true, powerPreference: 'high-performance' };
+
   return (
     <>
       <div className="canvas-root">
@@ -76,7 +83,7 @@ export default function Experience3D() {
           shadows={tier === 'high'}
           dpr={dpr}
           camera={{ position: [0, 0.6, 7], fov: 45 }}
-          gl={{ antialias: tier === 'high', powerPreference: 'high-performance' }}
+          gl={gl}
         >
           <color attach="background" args={['#05060a']} />
           <fog attach="fog" args={['#05060a', 8, 22]} />
