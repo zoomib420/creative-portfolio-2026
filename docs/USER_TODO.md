@@ -32,10 +32,12 @@
 - [ ] `model` — ไฟล์ `.glb` บีบอัด ถ้าจะทำห้อง 3D (ดูข้อ 4)
 - [ ] `ambientHz` — ความถี่ Solfeggio ของผลงานนั้น (ปรับได้ตามอารมณ์)
 
-## 🔴 3. ชื่อ/SEO ใน `index.html`
-ไฟล์นี้เป็น HTML static (import TS ไม่ได้) ต้องแก้มือ — ค้นหา `EXAMPLE`
+## 🔴 3. ชื่อ/SEO ใน `index.html` + ไฟล์ SEO
+ไฟล์ static ต้องแก้มือ — ค้นหา `EXAMPLE`
 - [ ] `<title>` (ตอนนี้: "พีรพล จันทร์เกษม — Creative Technologist")
-- [ ] `<meta property="og:title">` และ `og:description`
+- [ ] `<meta property="og:title">` / `og:description` / Twitter card
+- [ ] **โดเมนจริง** ใน: `<link canonical>`, JSON-LD (`url`, `sameAs`, `email`) ใน `index.html`,
+      `public/robots.txt`, `public/sitemap.xml` (ตอนนี้เป็น `your-portfolio.example.com`)
 
 ## 🟡 4. รูปภาพ / สื่อ (วางใน `public/`)
 - [ ] `public/og-image.png` — รูปแชร์โซเชียล 1200×630 (ตอนนี้ลิงก์ค้างไว้ ยังไม่มีไฟล์)

@@ -40,8 +40,12 @@
 - [ ] AI Image Remix (Replicate/TensorFlow.js) (T-24)
 
 ## Phase 5 — Deployment & Optimization
+- [x] โพลิชภาพ: toon+outline, postprocessing (bloom/grain/vignette), paper grain, Fraunces type
+- [x] A11y (skip-link, focus), SEO (robots/sitemap/canonical/JSON-LD/Twitter)
+- [x] ESLint flat config + GitHub Actions CI (lint+build)
+- [x] Mobile/perf guard (cap coarse-pointer/small viewport)
 - [ ] Blockchain certificate verify ผ่าน QR (T-40)
-- [ ] Deploy + SSL + CDN (Vercel/Cloudflare) (T-50)
+- [ ] Deploy + SSL + CDN (Vercel/Cloudflare) (T-50) — รอคุณ (ดู USER_TODO)
 - [ ] Lighthouse budget + ทดสอบครบ 3 tier บนเครื่องจริง
 - [ ] Final Checklist (ด้านล่าง)
 

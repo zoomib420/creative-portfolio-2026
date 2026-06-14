@@ -32,6 +32,16 @@
 
 ข้อความสำคัญ **อยู่ใน DOM เสมอ** ไม่วาดเป็น texture ใน canvas (เพื่อ SEO + a11y + ความคม)
 
+### Renderer: WebGL (default) vs WebGPU (opt-in)
+- Default render path is **WebGL**, because the post-processing stack
+  (`@react-three/postprocessing`: bloom/grain/vignette in `PostFX.tsx`) is
+  WebGL-only and that's what delivers the look.
+- **WebGPU** is opt-in via `?webgpu=1` on the high tier (`src/lib/renderer.ts`,
+  dynamic import, WebGL fallback on init failure). Known issue: three/webgpu's
+  shadow path crashes in this version, so **shadows are disabled project-wide**.
+- The hand-drawn look (toon materials + inverted-hull outlines, `src/lib/toon.ts`)
+  is renderer-agnostic and works on both paths.
+
 ## 3. Code-splitting / bundle
 
 - `Experience3D` โหลดด้วย `lazy(() => import(...))` → tier `basic` ไม่ดาวน์โหลด Three.js เลย
