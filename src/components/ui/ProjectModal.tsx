@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAppStore } from '../../lib/store';
 import { projectsById } from '../../data/projects';
+import { ambientAudio } from '../../lib/audio';
 
 /**
  * Project detail modal — shared by both the 2D grid and the 3D overlay.
@@ -10,7 +11,15 @@ import { projectsById } from '../../data/projects';
 export function ProjectModal() {
   const activeId = useAppStore((s) => s.activeProjectId);
   const close = useAppStore((s) => s.closeProject);
+  const audioEnabled = useAppStore((s) => s.audioEnabled);
   const project = activeId ? projectsById[activeId] : null;
+
+  // Shift the ambient Solfeggio frequency to match this project's "room".
+  useEffect(() => {
+    if (!project || !audioEnabled) return;
+    if (project.ambientHz) ambientAudio.setFrequency(project.ambientHz);
+    return () => ambientAudio.setFrequency(528);
+  }, [project, audioEnabled]);
 
   // Close on Escape + lock body scroll while open.
   useEffect(() => {

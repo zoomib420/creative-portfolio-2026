@@ -10,8 +10,8 @@ export function Overlay() {
   return (
     <main id="top" className="content-layer">
       {/* Hero — leaves space so the 3D object is visible behind the text. */}
-      <section className="flex min-h-screen flex-col justify-center px-6 md:px-16">
-        <div className="max-w-3xl">
+      <section id="hero" className="flex min-h-screen flex-col justify-center px-6 md:px-16">
+        <div className="max-w-3xl" data-reveal>
           <p className="mb-4 text-xs tracking-[0.3em] text-[var(--color-accent)] uppercase">
             {profile.role} · 2026
           </p>
@@ -27,8 +27,10 @@ export function Overlay() {
 
       {/* Work */}
       <section id="work" className="px-6 py-24 md:px-16">
-        <h2 className="mb-10 font-[var(--font-display)] text-3xl font-semibold">ผลงานที่คัดสรร</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 data-reveal className="mb-10 font-[var(--font-display)] text-3xl font-semibold">
+          ผลงานที่คัดสรร
+        </h2>
+        <div data-reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
             <ProjectCard key={p.id} project={p} glass />
           ))}
@@ -37,9 +39,11 @@ export function Overlay() {
 
       {/* About */}
       <section id="about" className="px-6 py-24 md:px-16">
-        <h2 className="mb-6 font-[var(--font-display)] text-3xl font-semibold">เกี่ยวกับผม</h2>
-        <p className="max-w-2xl leading-relaxed text-[var(--color-muted)]">{profile.bio}</p>
-        <p className="mt-4 text-sm text-[var(--color-muted)]">📍 {profile.location}</p>
+        <div data-reveal>
+          <h2 className="mb-6 font-[var(--font-display)] text-3xl font-semibold">เกี่ยวกับผม</h2>
+          <p className="max-w-2xl leading-relaxed text-[var(--color-muted)]">{profile.bio}</p>
+          <p className="mt-4 text-sm text-[var(--color-muted)]">📍 {profile.location}</p>
+        </div>
       </section>
 
       <footer id="contact" className="px-6 py-16 md:px-16">

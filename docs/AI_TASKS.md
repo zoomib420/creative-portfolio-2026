@@ -16,27 +16,28 @@
   `src/components/fallback/Grid2D.tsx`, `docs/CONTENT.md`
 - **Acceptance**: ไม่เหลือ `[...]` placeholder; ผลงานแสดงครบทั้ง 2D และ 3D overlay
 
-### T-10 · GSAP + Lenis scroll & camera 🟡 — `status: done (v1)`
-Smooth scroll (Lenis) + ผูกตำแหน่ง scroll กับการเคลื่อนกล้อง/วัตถุ
-- **ไฟล์**: `src/lib/scroll.ts` (Lenis + `scrollState`), `Experience3D.tsx` (`CameraRig`)
-- **ทำแล้ว**: smooth scroll, กล้อง orbit/dolly ตาม scroll, ปิดเมื่อ reduced-motion
-- **ต่อยอด**: GSAP ScrollTrigger สำหรับ section-based director cues; pin/timeline
+### T-10 · GSAP + Lenis scroll & camera 🟡 — `status: done`
+Smooth scroll (Lenis) + GSAP ScrollTrigger director cues (camera waypoint ต่อ section)
+- **ไฟล์**: `src/lib/scroll.ts` (Lenis+GSAP integration, `cameraState`, WAYPOINTS),
+  `Experience3D.tsx` (`CameraRig` eases ตาม waypoint), `Overlay.tsx` (`id` + `data-reveal`)
+- **ทำแล้ว**: smooth scroll, กล้องเปลี่ยนมุมต่อ section, content fade-in, ปิดเมื่อ reduced-motion
+- **ต่อยอด (ถ้าต้องการ)**: pinning, timeline แบบ scrubbed, parallax
 
-### T-11 · Audio reactive + Solfeggio 🟡 — `status: partial`
-Web Audio API/Tone.js วิเคราะห์ความถี่ → ขับ shader/วัตถุ; เพลงต่อห้องใช้ `project.ambientHz`
-- **ทำแล้ว**: `src/lib/audio.ts` (ambient Solfeggio pad) + ปุ่ม `AudioToggle` เริ่มหลัง gesture
-- **เหลือ**: FFT analyser → ส่งค่าเข้า shader/วัตถุ; สลับ `ambientHz` ตาม section/ผลงาน
-- **Acceptance**: ไม่มี error autoplay; ปิดเสียงได้; วัตถุ react กับเสียงจริง
+### T-11 · Audio reactive + Solfeggio 🟡 — `status: done (v1)`
+Web Audio API วิเคราะห์ความถี่ → ขับวัตถุ; เพลงต่อห้องใช้ `project.ambientHz`
+- **ทำแล้ว**: `audio.ts` (pad + LFO + `getLevel()` FFT), HeroObject pulse ตามเสียง,
+  ProjectModal สลับ `ambientHz` ตามผลงาน, AudioToggle เริ่มหลัง gesture
+- **ต่อยอด**: ขับ WebGPU shader ด้วย FFT bins, Tone.js สำหรับ texture เสียงที่รวยขึ้น
 
 ### T-12 · WebGPU shader hero (tier high) 🔴 — `status: todo`
 อัปเกรด `HeroObject` เป็น shader/material คุณภาพสูงบน `high` พร้อม fallback `standard`
 - **ไฟล์**: `src/components/three/HeroObject.tsx`
 - **Acceptance**: high สวยขึ้นจริง; standard ยังรันได้; ไม่พังบน basic (ไม่ถูกโหลด)
 
-### T-13 · Runtime fps downgrade 🟡 — `status: todo`
+### T-13 · Runtime fps downgrade 🟡 — `status: done`
 วัด fps ถ้าตกต่อเนื่อง → `store.setTier()` ลดระดับ
-- **ไฟล์**: ใหม่ `src/lib/perf.ts`, แก้ `Experience3D.tsx`
-- **Acceptance**: จำลอง fps ต่ำแล้ว downgrade จริง ไม่กระตุก/วน
+- **ไฟล์**: `Experience3D.tsx` (`PerfGuard` — sample 1s, ลดระดับเมื่อ <30fps ติดกัน 4s)
+- **ต่อยอด**: แยกเป็น `lib/perf.ts`, เพิ่ม hysteresis/อัปเกรดกลับเมื่อ fps ฟื้น
 
 ### T-14 · GLB loader + บีบอัด 🟡 — `status: todo`
 โหลดโมเดล `project.model` แบบ lazy ต่อ section; Draco/Meshopt + KTX2; dispose ตอน unmount
@@ -72,9 +73,12 @@ AI เลือก component สำเร็จรูปมาแสดงตา
 ตัวละคร/ฉากเปลี่ยนตาม scroll (ต้องมี T-10)
 - **Acceptance**: เล่าเรื่องครบตาม scroll; reduced-motion ใช้ 2D narrative
 
-### T-32 · โมเดล Floating Island 🔴 — `status: todo`
-เกาะลอยฟ้า นำทางด้วย fixed points (หญ้า/น้ำตก/ผีเสื้อ)
-- **Acceptance**: nav จุดต่อจุดลื่น; องค์ประกอบธรรมชาติ animate; fallback 2D
+### T-32 · โมเดล Floating Island 🔴 — `status: done (v1)`
+เกาะลอยฟ้า + องค์ประกอบธรรมชาติ (procedural ไม่ใช้ไฟล์โมเดล)
+- **ไฟล์**: `src/components/three/Island.tsx` (base + grass สั่นไหว + motes ลอย + rocks),
+  detail ตาม tier, นำทางด้วย camera waypoints (T-10)
+- **ทำแล้ว**: เกาะ, หญ้า instanced สั่นไหว, แสง motes ลอย, idle rotation, fallback 2D
+- **ต่อยอด**: น้ำตก (shader), ผีเสื้อ (sprite), fixed-point click navigation, GLB props
 
 ### T-40 · Blockchain certificate verify 🔴 — `status: todo`
 เก็บ hash เกียรติบัตรบน ledger + ตรวจสอบผ่าน QR

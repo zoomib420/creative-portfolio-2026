@@ -58,8 +58,9 @@
 ดูเป็น task พร้อม acceptance ใน `docs/AI_TASKS.md` — สั่ง AI ทำต่อได้เมื่อพร้อม
 - [ ] เสียงพากย์ + QR Code Talk (ElevenLabs/Botnoi) — T-23 (ต้องมี key + ไฟล์เสียง)
 - [ ] AI Image Remix (Replicate) — T-24 (ต้องมี token)
-- [ ] เลือกโมเดลนำเสนอหลัก: Walk-through / Scroll-story / Floating Island — T-30..32
-- [ ] WebGPU shader คุณภาพสูง + audio-reactive — T-11, T-12
+- [ ] เพิ่มโมเดลนำเสนออื่น: Walk-through / Scroll-story — T-30, T-31 (Floating Island ทำแล้ว)
+- [ ] WebGPU shader คุณภาพสูงบน tier high — T-12 (audio-reactive v1 ทำแล้ว)
+- [ ] โหลดโมเดล .glb จริงต่อ section — T-14 (รอไฟล์โมเดลจากคุณ)
 - [ ] Blockchain certificate verify — T-40 (ต้องตัดสินใจ chain/ผู้ให้บริการ)
 
 ## 🟡 7. Deploy (Phase 5) — T-50
@@ -78,11 +79,13 @@
 ---
 
 ## ✅ สิ่งที่ทำเสร็จแล้ว (ไม่ต้องแตะ เว้นแต่อยากปรับ)
-- รากฐานรันได้ + `npm run build` ผ่าน + ทดสอบบนเบราว์เซอร์จริง (HIGH/BASIC ผ่าน)
-- ระบบ Multi-tier Fidelity (WebGPU→WebGL→2D) + override `?tier=`
-- Hero 3D + กล้องเลื่อนตาม scroll (Lenis) + 2D fallback
+- รากฐานรันได้ + `npm run build` ผ่าน + ทดสอบบนเบราว์เซอร์จริง (HIGH/BASIC ผ่าน ไม่มี error)
+- ระบบ Multi-tier Fidelity (WebGPU→WebGL→2D) + override `?tier=` + runtime fps downgrade
+- **Floating Island 3D** (เกาะ + หญ้าไหว + แสงลอย) detail ตาม tier
+- **คริสตัลกลางเกาะ react กับเสียง** + ความถี่ Solfeggio เปลี่ยนตามผลงาน
+- **Lenis smooth scroll + GSAP ScrollTrigger** — กล้องเปลี่ยนมุมต่อ section + เนื้อหา fade-in
 - Project Modal (คลิกการ์ดดูรายละเอียด) ใช้ได้ทั้ง 2D/3D
-- ระบบเสียง Solfeggio + ปุ่ม toggle (เริ่มหลัง user gesture)
+- ปุ่มเปิด/ปิดเสียง (เริ่มหลัง user gesture)
 - โครง AI proxy + วิดเจ็ต AI Guide (รอแค่ key)
 - เอกสารครบชุดสำหรับ AI (`AGENTS.md`, `docs/`)
 

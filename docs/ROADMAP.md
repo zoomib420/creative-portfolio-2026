@@ -26,11 +26,11 @@
 - [ ] วาง component library / design system เล็ก ๆ
 
 ## Phase 3 — Core 3D Development
-- [x] Lenis smooth scroll & camera move ตาม scroll (T-10 v1) · GSAP timeline ต่อยอดได้
-- [ ] โมเดลการนำเสนอที่เลือก (T-30 / T-31 / T-32)
-- [ ] WebGPU shader บน tier `high` + fallback (T-11, T-12)
-- [ ] Runtime fps downgrade (T-13)
-- [ ] โหลด/บีบอัด GLB ต่อ section (T-14)
+- [x] Lenis + GSAP ScrollTrigger smooth scroll & camera director cues (T-10)
+- [x] Floating Island model (T-32 v1) · Walk-through/Scroll-story (T-30/T-31) ยัง
+- [x] Audio-reactive crystal + Solfeggio ต่อผลงาน (T-11 v1) · WebGPU shader (T-12) ยัง
+- [x] Runtime fps downgrade (T-13)
+- [ ] โหลด/บีบอัด GLB ต่อ section (T-14) — รอไฟล์โมเดลจริง
 
 ## Phase 4 — AI & Media Integration
 - [~] AI proxy skeleton + AI Guide UI (T-20 done, T-21 รอ backend/key) · GenUI (T-22) ยัง
