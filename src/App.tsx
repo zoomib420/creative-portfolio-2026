@@ -6,6 +6,7 @@ import { Nav } from './components/ui/Nav';
 import { FidelityBadge } from './components/ui/FidelityBadge';
 import { ProjectModal } from './components/ui/ProjectModal';
 import { AIGuide } from './components/ui/AIGuide';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { Grid2D } from './components/fallback/Grid2D';
 
 // Heavy 3D experience is code-split: the basic (2D) tier never downloads it.
@@ -53,9 +54,11 @@ export function App() {
       <FidelityBadge />
 
       {use3D ? (
-        <Suspense fallback={<Loader label="กำลังโหลดโลก 3D…" />}>
-          <Experience3D />
-        </Suspense>
+        <ErrorBoundary fallback={<Grid2D />}>
+          <Suspense fallback={<Loader label="กำลังโหลดโลก 3D…" />}>
+            <Experience3D />
+          </Suspense>
+        </ErrorBoundary>
       ) : (
         <Grid2D />
       )}
