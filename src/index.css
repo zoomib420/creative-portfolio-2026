@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+
+/*
+  Design tokens — single source of truth for the "vibe".
+  See docs/DESIGN.md. Tailwind v4 reads these via the @theme block.
+*/
+@theme {
+  --color-void: #05060a;
+  --color-ink: #0b0e16;
+  --color-mist: #e8eaf2;
+  --color-muted: #8b90a6;
+  --color-accent: #6ee7ff;
+  --color-accent-2: #b78bff;
+  --color-glow: #1a2440;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-thai: 'IBM Plex Sans Thai', system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-void);
+  color: var(--color-mist);
+  font-family: var(--font-thai), var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Respect users who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.canvas-root {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.content-layer {
+  position: relative;
+  z-index: 1;
+}
