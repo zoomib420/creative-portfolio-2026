@@ -27,8 +27,9 @@
 
 ## Phase 3 — Core 3D Development
 - [x] Lenis + GSAP ScrollTrigger smooth scroll & camera director cues (T-10)
-- [x] Floating Island model (T-32 v1) · Walk-through/Scroll-story (T-30/T-31) ยัง
-- [x] Audio-reactive crystal + Solfeggio ต่อผลงาน (T-11 v1) · WebGPU shader (T-12) ยัง
+- [x] ครบ 3 โมเดลนำเสนอ: Island (T-32) · Walk-through (T-30) · Scroll-story (T-31) + ปุ่มสลับ
+- [x] WebGPU rendering จริงบน tier high (T-12 renderer) · TSL shader + shadow ยัง
+- [x] Audio-reactive crystal + Solfeggio ต่อผลงาน (T-11 v1)
 - [x] Runtime fps downgrade (T-13)
 - [ ] โหลด/บีบอัด GLB ต่อ section (T-14) — รอไฟล์โมเดลจริง
 

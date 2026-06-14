@@ -7,6 +7,7 @@ import { FidelityBadge } from './components/ui/FidelityBadge';
 import { ProjectModal } from './components/ui/ProjectModal';
 import { AIGuide } from './components/ui/AIGuide';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { ModeSwitcher } from './components/ui/ModeSwitcher';
 import { Grid2D } from './components/fallback/Grid2D';
 
 // Heavy 3D experience is code-split: the basic (2D) tier never downloads it.
@@ -63,6 +64,7 @@ export function App() {
         <Grid2D />
       )}
 
+      {use3D && <ModeSwitcher />}
       <ProjectModal />
       <AIGuide />
     </>

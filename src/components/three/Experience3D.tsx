@@ -1,12 +1,12 @@
 import { useRef, type ComponentProps } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { AdaptiveDpr, AdaptiveEvents, Preload } from '@react-three/drei';
-import { Vector3 } from 'three';
-import { HeroObject } from './HeroObject';
-import { Island } from './Island';
+import { IslandScene } from './scenes/IslandScene';
+import { WalkthroughScene } from './scenes/WalkthroughScene';
+import { ScrollstoryScene } from './scenes/ScrollstoryScene';
 import { Overlay } from '../ui/Overlay';
 import { useAppStore } from '../../lib/store';
-import { useSmoothScroll, cameraState } from '../../lib/scroll';
+import { useSmoothScroll } from '../../lib/scroll';
 import { createWebGPURenderer } from '../../lib/renderer';
 
 /**
@@ -17,24 +17,6 @@ import { createWebGPURenderer } from '../../lib/renderer';
  * ScrollTrigger (see lib/scroll.ts) — "director's cue" navigation (Task T-10).
  * PerfGuard downgrades the tier if the framerate stays low (Task T-13).
  */
-
-function CameraRig() {
-  const { camera } = useThree();
-  const lookTarget = useRef(new Vector3(cameraState.lx, cameraState.ly, cameraState.lz));
-
-  useFrame(() => {
-    camera.position.x += (cameraState.px - camera.position.x) * 0.04;
-    camera.position.y += (cameraState.py - camera.position.y) * 0.04;
-    camera.position.z += (cameraState.pz - camera.position.z) * 0.04;
-
-    lookTarget.current.x += (cameraState.lx - lookTarget.current.x) * 0.04;
-    lookTarget.current.y += (cameraState.ly - lookTarget.current.y) * 0.04;
-    lookTarget.current.z += (cameraState.lz - lookTarget.current.z) * 0.04;
-    camera.lookAt(lookTarget.current);
-  });
-
-  return null;
-}
 
 function PerfGuard() {
   const tier = useAppStore((s) => s.tier);
@@ -66,6 +48,7 @@ function PerfGuard() {
 
 export default function Experience3D() {
   const tier = useAppStore((s) => s.tier);
+  const mode = useAppStore((s) => s.presentationMode);
   const dpr: [number, number] = tier === 'high' ? [1, 2] : [1, 1.5];
 
   useSmoothScroll();
@@ -80,25 +63,23 @@ export default function Experience3D() {
     <>
       <div className="canvas-root">
         <Canvas
-          shadows={tier === 'high'}
           dpr={dpr}
           camera={{ position: [0, 0.6, 7], fov: 45 }}
           gl={gl}
         >
-          <color attach="background" args={['#05060a']} />
-          <fog attach="fog" args={['#05060a', 8, 22]} />
-          <ambientLight intensity={0.45} />
-          <directionalLight
-            position={[5, 8, 5]}
-            intensity={1.3}
-            color="#ffffff"
-            castShadow={tier === 'high'}
-          />
+          {/* keyed by mode so a scene's runtime colour mutations reset on switch */}
+          <color key={`bg-${mode}`} attach="background" args={['#05060a']} />
+          <fog key={`fog-${mode}`} attach="fog" args={['#05060a', 8, 26]} />
+          <ambientLight intensity={0.5} />
+          {/* NOTE: no shadow casting — three's WebGPU shadow path crashes in
+              this version (ShadowNode setPipeline). Lighting + emissive carry
+              the look; revisit shadows when three/webgpu stabilises (T-12). */}
+          <directionalLight position={[5, 8, 5]} intensity={1.3} color="#ffffff" />
           <pointLight position={[-5, -1, -3]} intensity={0.9} color="#b78bff" />
 
-          <Island />
-          <HeroObject />
-          <CameraRig />
+          {mode === 'island' && <IslandScene />}
+          {mode === 'walkthrough' && <WalkthroughScene />}
+          {mode === 'scrollstory' && <ScrollstoryScene />}
           <PerfGuard />
 
           <AdaptiveDpr pixelated />

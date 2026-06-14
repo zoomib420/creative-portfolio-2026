@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import type { Capabilities, FidelityTier } from './capabilities';
 
+/** The three presentation models from the strategy doc. */
+export type PresentationMode = 'island' | 'walkthrough' | 'scrollstory';
+
 interface AppState {
   /** null until capability detection finishes. */
   capabilities: Capabilities | null;
@@ -11,6 +14,8 @@ interface AppState {
   audioEnabled: boolean;
   /** Currently open project modal, or null. */
   activeProjectId: string | null;
+  /** Which 3D presentation model is active. */
+  presentationMode: PresentationMode;
 
   setCapabilities: (caps: Capabilities) => void;
   setTier: (tier: FidelityTier) => void;
@@ -18,6 +23,7 @@ interface AppState {
   setAudioEnabled: (enabled: boolean) => void;
   openProject: (id: string) => void;
   closeProject: () => void;
+  setPresentationMode: (mode: PresentationMode) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -26,6 +32,7 @@ export const useAppStore = create<AppState>((set) => ({
   hasUserGesture: false,
   audioEnabled: false,
   activeProjectId: null,
+  presentationMode: 'island',
 
   setCapabilities: (caps) => set({ capabilities: caps, tier: caps.tier }),
   setTier: (tier) => set({ tier }),
@@ -33,4 +40,5 @@ export const useAppStore = create<AppState>((set) => ({
   setAudioEnabled: (enabled) => set({ audioEnabled: enabled }),
   openProject: (id) => set({ activeProjectId: id }),
   closeProject: () => set({ activeProjectId: null }),
+  setPresentationMode: (mode) => set({ presentationMode: mode }),
 }));
