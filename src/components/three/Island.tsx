@@ -1,7 +1,8 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Object3D, Color, type Group, type InstancedMesh } from 'three';
+import { Object3D, Color, BackSide, type Group, type InstancedMesh } from 'three';
 import { useAppStore } from '../../lib/store';
+import { toonGradient } from '../../lib/toon';
 
 /**
  * Procedural Floating Island (Task T-32) — no external assets, so it loads
@@ -55,9 +56,9 @@ function Grass({ count }: { count: number }) {
   });
 
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, count]} castShadow>
+    <instancedMesh ref={ref} args={[undefined, undefined, count]}>
       <coneGeometry args={[1, 1, 4]} />
-      <meshStandardMaterial color="#3fa66a" roughness={0.8} />
+      <meshToonMaterial color="#3fa66a" gradientMap={toonGradient(3)} />
     </instancedMesh>
   );
 }
@@ -131,9 +132,9 @@ function Rocks({ count }: { count: number }) {
   return (
     <>
       {rocks.map((r, i) => (
-        <mesh key={i} position={[r.x, 1.04, r.z]} rotation={[0, r.rot, 0]} castShadow>
+        <mesh key={i} position={[r.x, 1.04, r.z]} rotation={[0, r.rot, 0]}>
           <dodecahedronGeometry args={[r.s, 0]} />
-          <meshStandardMaterial color={color} roughness={0.9} flatShading />
+          <meshToonMaterial color={color} gradientMap={toonGradient(3)} />
         </mesh>
       ))}
     </>
@@ -152,15 +153,27 @@ export function Island() {
 
   return (
     <group ref={groupRef} position={[0, -1.5, 0]}>
+      {/* ink outline around the whole island mass (inverted hull) */}
+      <group scale={1.03}>
+        <mesh position={[0, 1, 0]}>
+          <cylinderGeometry args={[4, 3.8, 0.4, 48]} />
+          <meshBasicMaterial color="#05060a" side={BackSide} />
+        </mesh>
+        <mesh position={[0, -0.4, 0]}>
+          <coneGeometry args={[3.8, 3, 12]} />
+          <meshBasicMaterial color="#05060a" side={BackSide} />
+        </mesh>
+      </group>
+
       {/* grassy top */}
-      <mesh receiveShadow position={[0, 1, 0]}>
+      <mesh position={[0, 1, 0]}>
         <cylinderGeometry args={[4, 3.8, 0.4, 48]} />
-        <meshStandardMaterial color="#2f8f5b" roughness={0.85} />
+        <meshToonMaterial color="#2f8f5b" gradientMap={toonGradient(3)} />
       </mesh>
       {/* rocky underside (inverted cone) */}
       <mesh position={[0, -0.4, 0]}>
         <coneGeometry args={[3.8, 3, 12]} />
-        <meshStandardMaterial color="#4a3f3a" roughness={0.95} flatShading />
+        <meshToonMaterial color="#4a3f3a" gradientMap={toonGradient(3)} />
       </mesh>
 
       {detail.rocks > 0 && <Rocks count={detail.rocks} />}

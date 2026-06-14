@@ -13,7 +13,10 @@
   --color-accent-2: #b78bff;
   --color-glow: #1a2440;
 
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  /* Fraunces = expressive editorial serif for headings (gallery/art-book feel).
+     Space Grotesk = eyebrows/labels. Inter/IBM Plex = body. */
+  --font-display: 'Fraunces', 'IBM Plex Sans Thai', Georgia, serif;
+  --font-label: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-thai: 'IBM Plex Sans Thai', system-ui, sans-serif;
 }
@@ -30,12 +33,36 @@ body,
 
 body {
   margin: 0;
-  background: var(--color-void);
+  background-color: var(--color-void);
+  /* subtle radial depth so flat (2D) views don't feel like a plain dark slab */
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, rgba(110, 231, 255, 0.08), transparent 60%),
+    radial-gradient(100% 90% at 90% 110%, rgba(183, 139, 255, 0.07), transparent 55%);
+  background-attachment: fixed;
   color: var(--color-mist);
   font-family: var(--font-thai), var(--font-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* Film/paper grain over the whole page — organic texture that breaks the
+   "clean digital render" look. Pointer-events:none so it never blocks input. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    opacity: 0.035;
+  }
 }
 
 /* Respect users who ask for less motion. */

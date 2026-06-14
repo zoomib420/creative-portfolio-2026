@@ -4,6 +4,7 @@ import { AdaptiveDpr, AdaptiveEvents, Preload } from '@react-three/drei';
 import { IslandScene } from './scenes/IslandScene';
 import { WalkthroughScene } from './scenes/WalkthroughScene';
 import { ScrollstoryScene } from './scenes/ScrollstoryScene';
+import { PostFX } from './PostFX';
 import { Overlay } from '../ui/Overlay';
 import { useAppStore } from '../../lib/store';
 import { useSmoothScroll } from '../../lib/scroll';
@@ -53,11 +54,17 @@ export default function Experience3D() {
 
   useSmoothScroll();
 
-  // On the high tier, render with WebGPU (dynamic import); otherwise WebGL.
-  const gl: ComponentProps<typeof Canvas>['gl'] =
-    tier === 'high'
-      ? (props) => createWebGPURenderer(props as never) as never
-      : { antialias: true, powerPreference: 'high-performance' };
+  // WebGPU is opt-in via ?webgpu=1 (post-processing is WebGL-only, and the
+  // WebGL path is what delivers the bloom/grain look). The WebGPU renderer
+  // stays available for experimentation. See docs/ARCHITECTURE.md.
+  const useWebGPU =
+    tier === 'high' &&
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('webgpu') === '1';
+
+  const gl: ComponentProps<typeof Canvas>['gl'] = useWebGPU
+    ? (props) => createWebGPURenderer(props as never) as never
+    : { antialias: true, powerPreference: 'high-performance' };
 
   return (
     <>
@@ -81,6 +88,9 @@ export default function Experience3D() {
           {mode === 'walkthrough' && <WalkthroughScene />}
           {mode === 'scrollstory' && <ScrollstoryScene />}
           <PerfGuard />
+
+          {/* post-processing only on the WebGL path */}
+          {!useWebGPU && <PostFX />}
 
           <AdaptiveDpr pixelated />
           <AdaptiveEvents />
