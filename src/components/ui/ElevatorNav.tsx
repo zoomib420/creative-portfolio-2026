@@ -1,5 +1,5 @@
 import { useAppStore } from '../../lib/store';
-import { navFloors } from '../../data/floors';
+import { floorsById, navFloors } from '../../data/floors';
 import { scrollToSection } from '../../lib/scroll';
 
 /**
@@ -10,9 +10,12 @@ import { scrollToSection } from '../../lib/scroll';
 export function ElevatorNav() {
   const activeSection = useAppStore((s) => s.activeSection);
   const setActiveSection = useAppStore((s) => s.setActiveSection);
+  const openFloor = useAppStore((s) => s.openFloor);
+  const activeFloor = floorsById[activeSection] ?? floorsById.hero;
 
-  // Highest floor on top, lobby at the bottom — like a real elevator panel.
-  const ordered = [...navFloors].reverse();
+  // Top floor (Lobby) at the top, ground (Contact) at the bottom — matches the
+  // tower's top→bottom layout.
+  const ordered = navFloors;
 
   const go = (id: string) => {
     setActiveSection(id); // immediate feedback (the 2D tier has no scroll-spy)
@@ -49,6 +52,18 @@ export function ElevatorNav() {
             </button>
           );
         })}
+
+        {activeSection !== 'hero' && (
+          <button
+            type="button"
+            onClick={() => openFloor(activeSection)}
+            className="mt-1 rounded-full bg-[var(--color-butter)] px-2.5 py-1 font-[var(--font-label)] text-[10px] font-bold text-[var(--color-mist)] shadow-[0_0_0_3px_rgba(255,212,121,0.18)] transition-transform hover:scale-105"
+            aria-label={`เปิดห้อง ${activeFloor.label}`}
+            title={`เปิดห้อง ${activeFloor.label}`}
+          >
+            ดูห้อง
+          </button>
+        )}
       </div>
     </nav>
   );

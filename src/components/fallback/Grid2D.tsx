@@ -1,8 +1,5 @@
-import { projects } from '../../data/projects';
-import { games } from '../../data/games';
 import { profile } from '../../data/profile';
-import { ProjectCard } from '../ui/ProjectCard';
-import { GameCard } from '../ui/GameCard';
+import { FloorContent } from '../ui/FloorContent';
 
 /**
  * Basic (2D/Static) tier — the graceful fallback for low-power devices,
@@ -26,54 +23,34 @@ export function Grid2D() {
         </p>
       </section>
 
-      {/* Work */}
-      <section id="work" className="mb-28">
-        <h2 className="mb-8 font-[var(--font-display)] text-2xl font-semibold">ผลงานของผม</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p) => (
-            <ProjectCard key={p.id} project={p} />
-          ))}
-        </div>
-      </section>
-
-      {/* Arcade */}
-      <section id="arcade" className="mb-28">
-        <h2 className="mb-8 font-[var(--font-display)] text-2xl font-semibold text-[#c7a6e6]">พักเล่นเกมสักหน่อยไหม?</h2>
-        <div className="grid gap-6 sm:grid-cols-2 max-w-3xl">
-          {games.map((g) => (
-            <GameCard key={g.id} game={g} />
-          ))}
-        </div>
-      </section>
-
       {/* About */}
       <section id="about" className="mb-28">
         <h2 className="mb-6 font-[var(--font-display)] text-2xl font-semibold">เกี่ยวกับผม</h2>
-        <p className="max-w-2xl leading-relaxed text-[var(--color-muted)]">{profile.bio}</p>
-        <p className="mt-4 text-sm text-[var(--color-muted)]">📍 {profile.location}</p>
+        <FloorContent id="about" />
       </section>
 
-      <footer id="contact" className="border-t border-[var(--color-glow)] pt-8">
-        <p className="text-sm text-[var(--color-muted)]">
-          ติดต่อ:{' '}
-          <a className="text-[var(--color-accent)]" href={`mailto:${profile.email}`}>
-            {profile.email}
-          </a>
-        </p>
-        <ul className="mt-4 flex flex-wrap gap-4 text-xs tracking-widest uppercase">
-          {profile.socials.map((s) => (
-            <li key={s.url}>
-              <a
-                className="text-[var(--color-muted)] transition-colors hover:text-[var(--color-accent)]"
-                href={s.url}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                {s.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+      {/* Work */}
+      <section id="work" className="mb-28">
+        <h2 className="mb-8 font-[var(--font-display)] text-2xl font-semibold">ผลงานของผม</h2>
+        <FloorContent id="work" />
+      </section>
+
+      {/* Tech + Arcade */}
+      <section id="tech" className="mb-28">
+        <h2 className="mb-8 font-[var(--font-display)] text-2xl font-semibold text-[#c7a6e6]">
+          เทค & ห้องเกม
+        </h2>
+        <FloorContent id="tech" />
+      </section>
+
+      <section id="contact" className="mb-28">
+        <h2 className="mb-6 font-[var(--font-display)] text-2xl font-semibold">ติดต่อ</h2>
+        <FloorContent id="contact" />
+      </section>
+
+      <footer id="thanks" className="border-t border-[var(--color-glow)] pt-8">
+        <h2 className="mb-6 font-[var(--font-display)] text-2xl font-semibold">ขอบคุณ</h2>
+        <FloorContent id="thanks" />
       </footer>
     </main>
   );

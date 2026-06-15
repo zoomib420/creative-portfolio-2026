@@ -6,10 +6,21 @@
 
 export type ProjectLevel = 'beginner' | 'intermediate' | 'advanced';
 
+export type ProjectCategory = 'automation' | 'website' | 'application' | 'games';
+
+/** Ordered categories used to group the Work section. */
+export const projectCategories: { id: ProjectCategory; label: string }[] = [
+  { id: 'automation', label: 'Automation' },
+  { id: 'website', label: 'Website' },
+  { id: 'application', label: 'Application' },
+  { id: 'games', label: 'Games' },
+];
+
 export interface Project {
   id: string;
   title: string;
   level: ProjectLevel;
+  category: ProjectCategory;
   /** Year shown on the card / modal. */
   year: number;
   /** Your role on the project. */
@@ -33,6 +44,7 @@ export const projects: Project[] = [
     id: 'schedule-automator',
     title: 'Schedule Automator & Classroom Creator',
     level: 'advanced',
+    category: 'automation',
     year: 2024,
     role: 'Solo Developer',
     tagline: 'ลดงานสถาบันพัฒนาสมองจากชั่วโมงเหลือไม่กี่คลิก',
@@ -45,6 +57,7 @@ export const projects: Project[] = [
     id: 'calories-book',
     title: 'Calories Book',
     level: 'intermediate',
+    category: 'application',
     year: 2025,
     role: 'Creator & Developer',
     tagline: 'แอปนับแคลอรี่อัจฉริยะ วิเคราะห์อาหารจากรูปด้วย AI',
@@ -57,6 +70,7 @@ export const projects: Project[] = [
     id: 'introvert-mind',
     title: 'Introvert Mind',
     level: 'beginner',
+    category: 'website',
     year: 2025,
     role: 'Solo Developer',
     tagline: 'เว็บประเมินความเป็นอินโทรเวิร์ต 12 รูปแบบ',
@@ -69,6 +83,7 @@ export const projects: Project[] = [
     id: 'kids-plearn',
     title: 'Kids Plearn',
     level: 'intermediate',
+    category: 'games',
     year: 2026,
     role: 'Game Developer',
     tagline: 'เกมทดสอบความรู้เด็ก แลกของรางวัลในชีวิตจริง',
@@ -81,6 +96,7 @@ export const projects: Project[] = [
     id: 'z-world',
     title: 'Z World',
     level: 'advanced',
+    category: 'games',
     year: 2026,
     role: 'Game Developer',
     tagline: 'เกม Roblox แนว Open-World Zombie Survival',
@@ -93,6 +109,7 @@ export const projects: Project[] = [
     id: 'portfolio',
     title: 'Interactive 3D Portfolio',
     level: 'advanced',
+    category: 'website',
     year: 2026,
     role: 'Creative Technologist',
     tagline: 'พอร์ตโฟลิโอ 3D นำทางด้วยลิฟต์',

@@ -39,7 +39,12 @@ export function GameModal() {
       aria-modal="true"
       aria-label={game.title}
     >
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-md" />
+      <button
+        type="button"
+        className="absolute inset-0 bg-black/90 backdrop-blur-md"
+        onClick={close}
+        aria-label="Exit game from backdrop"
+      />
 
       <div className="relative z-10 flex h-full w-full max-w-5xl flex-col overflow-hidden rounded-none border-[var(--color-glow)] bg-[var(--color-ink)] md:h-[80vh] md:rounded-2xl md:border">
         {/* Header bar */}

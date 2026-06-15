@@ -6,6 +6,7 @@ import { Nav } from './components/ui/Nav';
 import { FidelityBadge } from './components/ui/FidelityBadge';
 import { ProjectModal } from './components/ui/ProjectModal';
 import { GameModal } from './components/ui/GameModal';
+import { RoomModal } from './components/ui/RoomModal';
 import { AIGuide } from './components/ui/AIGuide';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { ElevatorNav } from './components/ui/ElevatorNav';
@@ -68,6 +69,7 @@ export function App() {
       )}
 
       <ElevatorNav />
+      <RoomModal />
       <ProjectModal />
       <GameModal />
       <AIGuide />

@@ -1,8 +1,5 @@
-import { projects } from '../../data/projects';
-import { games } from '../../data/games';
 import { profile } from '../../data/profile';
-import { ProjectCard } from './ProjectCard';
-import { GameCard } from './GameCard';
+import { FloorContent } from './FloorContent';
 import { Squiggle } from './Squiggle';
 
 /**
@@ -32,60 +29,44 @@ export function Overlay() {
         </div>
       </section>
 
-      {/* Work */}
-      <section id="work" className="px-6 py-24 md:px-16">
-        <h2 data-reveal className="mb-10 font-[var(--font-display)] text-3xl font-semibold">
-          ผลงานของผม
-        </h2>
-        <div data-reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p) => (
-            <ProjectCard key={p.id} project={p} glass />
-          ))}
-        </div>
-      </section>
-
-      {/* Arcade */}
-      <section id="arcade" className="px-6 py-24 md:px-16">
-        <h2 data-reveal className="mb-10 font-[var(--font-display)] text-3xl font-semibold text-[#c7a6e6]">
-          พักเล่นเกมสักหน่อยไหม?
-        </h2>
-        <div data-reveal className="grid gap-6 sm:grid-cols-2 max-w-3xl">
-          {games.map((g) => (
-            <GameCard key={g.id} game={g} glass />
-          ))}
-        </div>
-      </section>
-
       {/* About */}
       <section id="about" className="px-6 py-24 md:px-16">
-        <div data-reveal>
+        <div data-reveal className="max-w-3xl">
           <h2 className="mb-6 font-[var(--font-display)] text-3xl font-semibold">เกี่ยวกับผม</h2>
-          <p className="max-w-2xl leading-relaxed text-[var(--color-muted)]">{profile.bio}</p>
-          <p className="mt-4 text-sm text-[var(--color-muted)]">📍 {profile.location}</p>
+          <FloorContent id="about" />
         </div>
       </section>
 
-      <footer id="contact" className="px-6 py-16 md:px-16">
-        <p className="text-sm text-[var(--color-muted)]">
-          ติดต่อ:{' '}
-          <a className="text-[var(--color-accent)]" href={`mailto:${profile.email}`}>
-            {profile.email}
-          </a>
-        </p>
-        <ul className="mt-4 flex flex-wrap gap-4 text-xs tracking-widest uppercase">
-          {profile.socials.map((s) => (
-            <li key={s.url}>
-              <a
-                className="text-[var(--color-muted)] transition-colors hover:text-[var(--color-accent)]"
-                href={s.url}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                {s.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+      {/* Work */}
+      <section id="work" className="px-6 py-24 md:px-16">
+        <div data-reveal>
+          <h2 className="mb-10 font-[var(--font-display)] text-3xl font-semibold">ผลงานของผม</h2>
+          <FloorContent id="work" />
+        </div>
+      </section>
+
+      {/* Tech + Arcade */}
+      <section id="tech" className="px-6 py-24 md:px-16">
+        <div data-reveal>
+          <h2 className="mb-10 font-[var(--font-display)] text-3xl font-semibold text-[#c7a6e6]">
+            เทค & ห้องเกม
+          </h2>
+          <FloorContent id="tech" />
+        </div>
+      </section>
+
+      <section id="contact" className="px-6 py-24 md:px-16">
+        <div data-reveal>
+          <h2 className="mb-6 font-[var(--font-display)] text-3xl font-semibold">ติดต่อ</h2>
+          <FloorContent id="contact" />
+        </div>
+      </section>
+
+      <footer id="thanks" className="px-6 py-16 md:px-16">
+        <div data-reveal className="max-w-2xl">
+          <h2 className="mb-6 font-[var(--font-display)] text-3xl font-semibold">ขอบคุณ</h2>
+          <FloorContent id="thanks" />
+        </div>
       </footer>
     </main>
   );

@@ -14,7 +14,10 @@ export function scrollToSection(id: string): void {
   const el = document.getElementById(id);
   if (!el) return;
   if (lenisInstance) lenisInstance.scrollTo(el, { offset: 0 });
-  else el.scrollIntoView({ behavior: 'smooth' });
+  else {
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+  }
 }
 
 /**
@@ -34,27 +37,31 @@ export interface CameraWaypoint {
   lz: number;
 }
 
-// Elevator ride: an isometric 3/4 view of the cutaway building (ElevatorScene).
-// The camera climbs to the active floor's room as the visitor scrolls. Each
-// room sits at its floor height (data/floors.ts: level * FLOOR_SPACING). Floors
-// without a section yet (Gallery, Arcade) get their waypoint in Phase B.
+// Elevator ride: an isometric view of the rotating tower (ElevatorScene). The
+// camera DESCENDS the building top→bottom as the visitor scrolls — hero is the
+// top floor, contact the ground. Each waypoint frames that floor's window band
+// (height = ElevatorScene.floorCenterY); px/pz fixed for a steady 3/4 angle.
 export const cameraState: CameraWaypoint = {
-  px: 4.2,
-  py: 1.7,
-  pz: 6.2,
+  px: 6,
+  py: 5.6,
+  pz: 9.5,
   lx: 0,
-  ly: 0.4,
+  ly: 4.6,
   lz: 0,
 };
 
 export const scrollState = { progress: 0, velocity: 0 };
 
+// Only the KEYS matter now: ScrollTrigger uses them to set `activeSection` as
+// each section scrolls past. ElevatorScene derives the camera + rotation from
+// activeSection + scroll progress, so these waypoint values are unused legacy.
 const WAYPOINTS: Record<string, CameraWaypoint> = {
-  hero: { px: 4.2, py: 1.7, pz: 6.2, lx: 0, ly: 0.4, lz: 0 },
-  work: { px: 4.2, py: 3.3, pz: 6.2, lx: 0, ly: 2.0, lz: 0 },
-  arcade: { px: 4.2, py: 4.9, pz: 6.2, lx: 0, ly: 3.6, lz: 0 },
-  about: { px: 4.2, py: 6.5, pz: 6.2, lx: 0, ly: 5.2, lz: 0 },
-  contact: { px: 4.2, py: 8.1, pz: 6.2, lx: 0, ly: 6.8, lz: 0 },
+  hero: { px: 6, py: 5.6, pz: 9.5, lx: 0, ly: 4.6, lz: 0 },
+  about: { px: 6, py: 5.0, pz: 9.5, lx: 0, ly: 4.0, lz: 0 },
+  work: { px: 6, py: 4.3, pz: 9.5, lx: 0, ly: 3.3, lz: 0 },
+  tech: { px: 6, py: 3.6, pz: 9.5, lx: 0, ly: 2.6, lz: 0 },
+  contact: { px: 6, py: 2.9, pz: 9.5, lx: 0, ly: 1.9, lz: 0 },
+  thanks: { px: 6, py: 2.2, pz: 9.5, lx: 0, ly: 1.2, lz: 0 },
 };
 
 function prefersReducedMotion(): boolean {

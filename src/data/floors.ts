@@ -21,14 +21,57 @@ export interface Floor {
   level: number;
   /** Shown in the elevator nav. false = scaffolded for a later phase. */
   ready: boolean;
+  /** Short blurb shown on the building front (click "เข้าไปดู" to open the room). */
+  teaser?: string;
 }
 
 export const floors: Floor[] = [
   { id: 'hero', n: 'L', label: 'Lobby', accent: '#ffd479', level: 0, ready: true },
-  { id: 'work', n: '1', label: 'Work', accent: '#ff9a62', level: 1, ready: true },
-  { id: 'arcade', n: '2', label: 'Arcade', accent: '#c7a6e6', level: 2, ready: true },
-  { id: 'about', n: '3', label: 'About', accent: '#7fd093', level: 3, ready: true },
-  { id: 'contact', n: '4', label: 'Contact', accent: '#56c2b0', level: 4, ready: true },
+  {
+    id: 'about',
+    n: '1',
+    label: 'เกี่ยวกับผม',
+    accent: '#56c2b0',
+    level: 1,
+    ready: true,
+    teaser: 'ซูม — สายมนุษยศาสตร์ที่เลี้ยวมาสร้างของด้วย AI',
+  },
+  {
+    id: 'work',
+    n: '2',
+    label: 'ผลงาน',
+    accent: '#ff9a62',
+    level: 2,
+    ready: true,
+    teaser: 'Automation · เว็บไซต์ · แอป · เกม',
+  },
+  {
+    id: 'tech',
+    n: '3',
+    label: 'เทค & เครื่องมือ',
+    accent: '#c7a6e6',
+    level: 3,
+    ready: true,
+    teaser: 'สแต็ก/เครื่องมือที่ใช้ + แวะเล่นเกมตรงนี้',
+  },
+  {
+    id: 'contact',
+    n: '4',
+    label: 'ติดต่อ',
+    accent: '#7fd093',
+    level: 4,
+    ready: true,
+    teaser: 'อยากคุยหรือจ้างงาน ทักมาได้เลย',
+  },
+  {
+    id: 'thanks',
+    n: '5',
+    label: 'ขอบคุณ',
+    accent: '#f4a3c0',
+    level: 5,
+    ready: true,
+    teaser: 'ขอบคุณที่แวะเข้ามาชม',
+  },
 ];
 
 /** Vertical spacing between floors, in world units (used by ElevatorScene). */

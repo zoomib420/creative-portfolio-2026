@@ -15,6 +15,8 @@ interface AppState {
   activeGameId: string | null;
   /** Section the visitor is currently viewing (drives the elevator panel). */
   activeSection: string;
+  /** Floor whose full-content "room" is open (camera zooms in), or null. */
+  focusedFloor: string | null;
 
   setCapabilities: (caps: Capabilities) => void;
   setTier: (tier: FidelityTier) => void;
@@ -25,6 +27,8 @@ interface AppState {
   openGame: (id: string) => void;
   closeGame: () => void;
   setActiveSection: (id: string) => void;
+  openFloor: (id: string) => void;
+  closeFloor: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -35,6 +39,7 @@ export const useAppStore = create<AppState>((set) => ({
   activeProjectId: null,
   activeGameId: null,
   activeSection: 'hero',
+  focusedFloor: null,
 
   setCapabilities: (caps) => set({ capabilities: caps, tier: caps.tier }),
   setTier: (tier) => set({ tier }),
@@ -45,4 +50,6 @@ export const useAppStore = create<AppState>((set) => ({
   openGame: (id) => set({ activeGameId: id }),
   closeGame: () => set({ activeGameId: null }),
   setActiveSection: (id) => set({ activeSection: id }),
+  openFloor: (id) => set({ focusedFloor: id }),
+  closeFloor: () => set({ focusedFloor: null }),
 }));

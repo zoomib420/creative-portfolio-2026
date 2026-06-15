@@ -1,5 +1,11 @@
 import { profile } from '../../data/profile';
+import { scrollToSection } from '../../lib/scroll';
 import { AudioToggle } from './AudioToggle';
+
+function handleNavClick(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
+  e.preventDefault();
+  scrollToSection(id);
+}
 
 export function Nav() {
   return (
@@ -11,16 +17,32 @@ export function Nav() {
         {profile.handle}
       </a>
       <nav className="flex items-center gap-5 text-xs tracking-widest text-[var(--color-muted)] uppercase md:gap-6">
-        <a href="#work" className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline">
+        <a
+          href="#work"
+          onClick={(e) => handleNavClick(e, 'work')}
+          className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline"
+        >
           Work
         </a>
-        <a href="#arcade" className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline">
-          Arcade
+        <a
+          href="#tech"
+          onClick={(e) => handleNavClick(e, 'tech')}
+          className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline"
+        >
+          Tech
         </a>
-        <a href="#about" className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline">
+        <a
+          href="#about"
+          onClick={(e) => handleNavClick(e, 'about')}
+          className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline"
+        >
           About
         </a>
-        <a href="#contact" className="transition-colors hover:text-[var(--color-accent)]">
+        <a
+          href="#contact"
+          onClick={(e) => handleNavClick(e, 'contact')}
+          className="transition-colors hover:text-[var(--color-accent)]"
+        >
           Contact
         </a>
         <AudioToggle />
