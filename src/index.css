@@ -112,7 +112,12 @@ body::after {
   z-index: 0;
 }
 
-.content-layer {
-  position: relative;
-  z-index: 1;
+/* In the components layer so position utilities (e.g. `fixed` on the elevator
+   nav, fidelity badge, and modals) still win over this default — otherwise the
+   unlayered rule beat Tailwind's `.fixed` and broke fixed positioning. */
+@layer components {
+  .content-layer {
+    position: relative;
+    z-index: 1;
+  }
 }
