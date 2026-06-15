@@ -34,23 +34,27 @@ export interface CameraWaypoint {
   lz: number;
 }
 
-// Default = hero view. CameraRig lerps toward this; GSAP tweens it per section.
+// Elevator ride: an isometric 3/4 view of the cutaway building (ElevatorScene).
+// The camera climbs to the active floor's room as the visitor scrolls. Each
+// room sits at its floor height (data/floors.ts: level * FLOOR_SPACING). Floors
+// without a section yet (Gallery, Arcade) get their waypoint in Phase B.
 export const cameraState: CameraWaypoint = {
-  px: 0,
-  py: 0.6,
-  pz: 7,
+  px: 4.2,
+  py: 1.7,
+  pz: 6.2,
   lx: 0,
-  ly: 0.2,
+  ly: 0.4,
   lz: 0,
 };
 
 export const scrollState = { progress: 0, velocity: 0 };
 
 const WAYPOINTS: Record<string, CameraWaypoint> = {
-  hero: { px: 0, py: 0.6, pz: 7, lx: 0, ly: 0.2, lz: 0 },
-  work: { px: 5, py: 2.6, pz: 4, lx: 0, ly: -0.3, lz: 0 },
-  about: { px: -5, py: 1.0, pz: 4.5, lx: 0, ly: 0, lz: 0 },
-  contact: { px: 0, py: 4, pz: 6, lx: 0, ly: -0.5, lz: 0 },
+  hero: { px: 4.2, py: 1.7, pz: 6.2, lx: 0, ly: 0.4, lz: 0 },
+  work: { px: 4.2, py: 3.3, pz: 6.2, lx: 0, ly: 2.0, lz: 0 },
+  arcade: { px: 4.2, py: 4.9, pz: 6.2, lx: 0, ly: 3.6, lz: 0 },
+  about: { px: 4.2, py: 6.5, pz: 6.2, lx: 0, ly: 5.2, lz: 0 },
+  contact: { px: 4.2, py: 8.1, pz: 6.2, lx: 0, ly: 6.8, lz: 0 },
 };
 
 function prefersReducedMotion(): boolean {

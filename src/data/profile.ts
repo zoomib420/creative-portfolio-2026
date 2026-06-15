@@ -1,9 +1,6 @@
 /**
- * ─────────────────────────────────────────────────────────────────────────
- *  ⚠️  ข้อมูลตัวตน — ตอนนี้เป็น "ตัวอย่าง (EXAMPLE)" ทั้งหมด
- *  แก้ไฟล์นี้ไฟล์เดียวจบ แล้วทั้งเว็บ (2D + 3D) จะอัปเดตตาม
- *  รายการที่ต้องแก้สรุปไว้ใน docs/USER_TODO.md
- * ─────────────────────────────────────────────────────────────────────────
+ * ข้อมูลตัวตน (จริงแล้ว) — แก้ไฟล์นี้ไฟล์เดียว แล้วทั้งเว็บ (2D + 3D) อัปเดตตาม.
+ * ที่ยังเหลือ: โดเมนจริง + SEO/OG ใน index.html ตอน deploy (ดู docs/USER_TODO.md).
  */
 
 export interface SocialLink {
@@ -26,26 +23,15 @@ export interface Profile {
   socials: SocialLink[];
 }
 
-// EXAMPLE DATA — แทนที่ด้วยข้อมูลจริงของคุณ
 export const profile: Profile = {
-  name: 'พีรพล จันทร์เกษม', // EXAMPLE
-  handle: 'PEERA.DEV', // EXAMPLE
-  role: 'Creative Technologist',
-  tagline:
-    'ผมออกแบบ "Living Experience" ที่หลอมรวม 3D แบบเรียลไทม์, Generative AI และอารมณ์ความรู้สึก ' +
-    'ให้กลายเป็นโลกดิจิทัลที่ผู้คนจดจำได้', // EXAMPLE
-  bio:
-    'Creative Technologist ที่อยู่ตรงรอยต่อระหว่างศิลปะกับวิศวกรรม — ' +
-    'หลงใหลการใช้โค้ดเป็นเครื่องมือสื่อสารความรู้สึก (creative coding) ' +
-    'ทำงานกับ WebGPU, React Three Fiber และระบบ AI เพื่อสร้างประสบการณ์ที่ทั้งสวยและลื่นไหล ' +
-    '5+ ปีกับงาน interactive installation, web experience และ AR/XR.', // EXAMPLE
-  location: 'Bangkok, Thailand', // EXAMPLE
-  email: 'hello@peera.dev', // EXAMPLE
-  resumeUrl: '/resume.pdf', // EXAMPLE — วางไฟล์จริงใน public/resume.pdf หรือเอาออก
+  name: 'ปวสิทธิ์ ไชยรัตน์ (ซูม)',
+  handle: 'ZOOM',
+  role: 'AI-Powered Builder',
+  tagline: 'บอกสิ่งที่อยากได้ แล้วผมจะสร้างมันให้ — เว็บ แอป เกม ระบบอัตโนมัติ ทุกอย่างขับเคลื่อนด้วย AI',
+  bio: 'สวัสดีครับ ผมซูม — จบมนุษยศาสตร์ (ภาษาอังกฤษ) แต่ชีวิตพาเลี้ยวเยอะ: เคยเป็นครู เปิดร้านอาหาร เรียนทำอาหารไทย ผ่านงาน retail & hospitality มาหลายสาย ทุกประสบการณ์สอนให้เข้าใจคน เข้าใจระบบ และรู้ว่า "ปัญหาซ้ำๆ ต้องแก้ด้วยระบบ ไม่ใช่แรงคน"\n\nตอนนี้ทุ่มเต็มที่กับ AI & Automation — ใช้ AI เป็นเครื่องมือสร้างทุกอย่างตั้งแต่เว็บ แอป เกม ไปจนถึงระบบอัตโนมัติที่ลดงานจากหลายชั่วโมงเหลือไม่กี่คลิก มี cert ด้าน Cybersecurity จาก Future Skills & TryHackMe ถ้ามีโปรเจกต์ที่ท้าทาย — คุยกันได้เลยครับ',
+  location: 'Bangkok, Thailand · Remote-first',
+  email: 'zoomib420@gmail.com',
   socials: [
-    { label: 'GitHub', url: 'https://github.com/your-handle' }, // EXAMPLE
-    { label: 'Behance', url: 'https://www.behance.net/your-handle' }, // EXAMPLE
-    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/your-handle' }, // EXAMPLE
-    { label: 'Instagram', url: 'https://instagram.com/your-handle' }, // EXAMPLE
+    { label: 'GitHub', url: 'https://github.com/zoomib420/' },
   ],
 };

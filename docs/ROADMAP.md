@@ -16,7 +16,7 @@
 
 ## Phase 1 — Storyboarding & Vibe Mapping
 - [ ] กำหนด Emotional Resonance + Mood/Tone ต่อ section (→ `DESIGN.md`)
-- [ ] เลือกโมเดลการนำเสนอหลัก: Walk-through / Scroll-story / Floating Island
+- [x] เลือกโมเดลการนำเสนอหลัก: Elevator cutaway / floor navigation (ดู `PROZILLA_PLAN.md` Phase A)
 - [ ] เก็บ reference (Samsy.ninja เป็น gold standard ด้านความลื่น)
 - [ ] เติมเนื้อหาจริงลง `src/data/projects.ts` + `CONTENT.md`
 
@@ -27,7 +27,7 @@
 
 ## Phase 3 — Core 3D Development
 - [x] Lenis + GSAP ScrollTrigger smooth scroll & camera director cues (T-10)
-- [x] ครบ 3 โมเดลนำเสนอ: Island (T-32) · Walk-through (T-30) · Scroll-story (T-31) + ปุ่มสลับ
+- [x] Refocus เป็นฉากลิฟต์เดียว: `ElevatorScene` + `floors.ts` + ElevatorNav data-driven (ดู `PROZILLA_PLAN.md` PZ-A)
 - [x] WebGPU rendering จริงบน tier high (T-12 renderer) · TSL shader + shadow ยัง
 - [x] Audio-reactive crystal + Solfeggio ต่อผลงาน (T-11 v1)
 - [x] Runtime fps downgrade (T-13)

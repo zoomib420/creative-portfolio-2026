@@ -1,6 +1,8 @@
 import { projects } from '../../data/projects';
+import { games } from '../../data/games';
 import { profile } from '../../data/profile';
 import { ProjectCard } from '../ui/ProjectCard';
+import { GameCard } from '../ui/GameCard';
 
 /**
  * Basic (2D/Static) tier — the graceful fallback for low-power devices,
@@ -11,7 +13,7 @@ export function Grid2D() {
   return (
     <main id="top" className="content-layer mx-auto max-w-5xl px-6 pt-32 pb-24 md:px-10">
       {/* Hero */}
-      <section className="mb-28">
+      <section id="hero" className="mb-28">
         <p className="mb-4 font-[var(--font-label)] text-xs tracking-[0.3em] text-[var(--color-accent)] uppercase">
           {profile.role} · 2026
         </p>
@@ -26,10 +28,20 @@ export function Grid2D() {
 
       {/* Work */}
       <section id="work" className="mb-28">
-        <h2 className="mb-8 font-[var(--font-display)] text-2xl font-semibold">ผลงานที่คัดสรร</h2>
+        <h2 className="mb-8 font-[var(--font-display)] text-2xl font-semibold">ผลงานของผม</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
             <ProjectCard key={p.id} project={p} />
+          ))}
+        </div>
+      </section>
+
+      {/* Arcade */}
+      <section id="arcade" className="mb-28">
+        <h2 className="mb-8 font-[var(--font-display)] text-2xl font-semibold text-[#c7a6e6]">พักเล่นเกมสักหน่อยไหม?</h2>
+        <div className="grid gap-6 sm:grid-cols-2 max-w-3xl">
+          {games.map((g) => (
+            <GameCard key={g.id} game={g} />
           ))}
         </div>
       </section>

@@ -1,6 +1,8 @@
 import { projects } from '../../data/projects';
+import { games } from '../../data/games';
 import { profile } from '../../data/profile';
 import { ProjectCard } from './ProjectCard';
+import { GameCard } from './GameCard';
 import { Squiggle } from './Squiggle';
 
 /**
@@ -17,9 +19,9 @@ export function Overlay() {
             {profile.role} · 2026
           </p>
           <h1 className="font-[var(--font-display)] text-5xl leading-[1.05] font-medium text-balance md:text-7xl">
-            Living{' '}
+            ผมคือซูม{' '}
             <span className="relative inline-block text-[var(--color-accent)] italic">
-              Experience
+              นักสร้าง
               <Squiggle className="absolute -bottom-2 left-0 h-3 w-full" />
             </span>
           </h1>
@@ -33,11 +35,23 @@ export function Overlay() {
       {/* Work */}
       <section id="work" className="px-6 py-24 md:px-16">
         <h2 data-reveal className="mb-10 font-[var(--font-display)] text-3xl font-semibold">
-          ผลงานที่คัดสรร
+          ผลงานของผม
         </h2>
         <div data-reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
             <ProjectCard key={p.id} project={p} glass />
+          ))}
+        </div>
+      </section>
+
+      {/* Arcade */}
+      <section id="arcade" className="px-6 py-24 md:px-16">
+        <h2 data-reveal className="mb-10 font-[var(--font-display)] text-3xl font-semibold text-[#c7a6e6]">
+          พักเล่นเกมสักหน่อยไหม?
+        </h2>
+        <div data-reveal className="grid gap-6 sm:grid-cols-2 max-w-3xl">
+          {games.map((g) => (
+            <GameCard key={g.id} game={g} glass />
           ))}
         </div>
       </section>

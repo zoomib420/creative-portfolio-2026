@@ -68,24 +68,23 @@ AI เลือก component สำเร็จรูปมาแสดงตา
 อัปโหลดภาพ → แปลงสไตล์ผ่าน Replicate (proxy) หรือ TensorFlow.js (ฝั่ง client)
 - **Acceptance**: จำกัดขนาด/ชนิดไฟล์; แสดง before/after; จัดการ error
 
-### T-30 · โมเดล 3D Walk-through 🔴 — `status: done (v1)`
-เดินผ่านห้อง (ห้องละผลงาน) กล้อง dolly ตาม scroll
-- **ไฟล์**: `src/components/three/scenes/WalkthroughScene.tsx`
-- **ทำแล้ว**: corridor + ห้อง/พาเนลเรืองแสงคลิกเปิด modal, กล้องเดินหน้าตาม scroll, fallback 2D
-- **ต่อยอด**: streaming GLB ต่อห้อง, เพลงต่อห้อง, ผนัง/บรรยากาศรวยขึ้น
+### T-30 · โมเดล 3D Walk-through 🔴 — `status: superseded by PZ-A`
+แนวคิด walk-through ถูกยุบเข้าแกนลิฟต์เดียวใน `PROZILLA_PLAN.md` Phase A แล้ว
+- **ไฟล์เดิม**: `src/components/three/scenes/WalkthroughScene.tsx` ถูกลบออก
+- **แทนที่ด้วย**: `src/components/three/ElevatorScene.tsx` + `src/data/floors.ts`
+- **ต่อยอด**: ถ้าจะกลับมาใช้แนวห้องเดินผ่าน ให้ทำเป็น floor/room ภายใน elevator scene ไม่ใช่ presentation mode แยก
 
-### T-31 · โมเดล Scroll-driven story 🟡 — `status: done (v1)`
-ตัวละคร orb เคลื่อนไปข้างหน้า ฉาก/สีเปลี่ยนตาม scroll
-- **ไฟล์**: `src/components/three/scenes/ScrollstoryScene.tsx`
-- **ทำแล้ว**: orb นำทาง, กล้องตามหลัง, mood color lerp ตาม progress, floating shapes, fallback 2D
-- **ต่อยอด**: ตัวละครจริง (GLB rigged), เหตุการณ์ต่อ section, reduced-motion narrative
+### T-31 · โมเดล Scroll-driven story 🟡 — `status: superseded by PZ-A`
+แนวคิด scroll-story ถูกยุบเข้าแกนลิฟต์เดียวใน `PROZILLA_PLAN.md` Phase A แล้ว
+- **ไฟล์เดิม**: `src/components/three/scenes/ScrollstoryScene.tsx` ถูกลบออก
+- **แทนที่ด้วย**: camera waypoints แนวตั้งใน `src/lib/scroll.ts`
+- **ต่อยอด**: story beat ใหม่ควรผูกกับแต่ละ floor ผ่าน DOM section + waypoint
 
-### T-32 · โมเดล Floating Island 🔴 — `status: done (v1)`
-เกาะลอยฟ้า + องค์ประกอบธรรมชาติ (procedural ไม่ใช้ไฟล์โมเดล)
-- **ไฟล์**: `src/components/three/Island.tsx` (base + grass สั่นไหว + motes ลอย + rocks),
-  detail ตาม tier, นำทางด้วย camera waypoints (T-10)
-- **ทำแล้ว**: เกาะ, หญ้า instanced สั่นไหว, แสง motes ลอย, idle rotation, fallback 2D
-- **ต่อยอด**: น้ำตก (shader), ผีเสื้อ (sprite), fixed-point click navigation, GLB props
+### T-32 · โมเดล Floating Island 🔴 — `status: superseded by PZ-A`
+แนวคิด island ถูกยุบเข้าแกนลิฟต์เดียวใน `PROZILLA_PLAN.md` Phase A แล้ว
+- **ไฟล์เดิม**: `src/components/three/Island.tsx` ถูกลบออก
+- **แทนที่ด้วย**: procedural cutaway building ใน `src/components/three/ElevatorScene.tsx`
+- **ต่อยอด**: asset/prop ธรรมชาติควรกลับมาเป็น prop เฉพาะ floor หรือ GLB ใน PZ-L1/T-14
 
 ### T-40 · Blockchain certificate verify 🔴 — `status: todo`
 เก็บ hash เกียรติบัตรบน ledger + ตรวจสอบผ่าน QR

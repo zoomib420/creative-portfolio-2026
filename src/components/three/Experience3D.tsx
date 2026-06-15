@@ -1,9 +1,8 @@
 import { useRef, type ComponentProps } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { AdaptiveDpr, AdaptiveEvents, Preload, SoftShadows } from '@react-three/drei';
-import { IslandScene } from './scenes/IslandScene';
-import { WalkthroughScene } from './scenes/WalkthroughScene';
-import { ScrollstoryScene } from './scenes/ScrollstoryScene';
+import { AdaptiveDpr, AdaptiveEvents, Preload } from '@react-three/drei';
+import { ElevatorScene } from './ElevatorScene';
+import { Particles } from './Particles';
 import { PostFX } from './PostFX';
 import { Overlay } from '../ui/Overlay';
 import { useAppStore } from '../../lib/store';
@@ -49,7 +48,6 @@ function PerfGuard() {
 
 export default function Experience3D() {
   const tier = useAppStore((s) => s.tier);
-  const mode = useAppStore((s) => s.presentationMode);
   const dpr: [number, number] = tier === 'high' ? [1, 2] : [1, 1.5];
 
   useSmoothScroll();
@@ -75,9 +73,8 @@ export default function Experience3D() {
           camera={{ position: [0, 0.6, 7], fov: 45 }}
           gl={gl}
         >
-          {/* keyed by mode so a scene's runtime colour mutations reset on switch */}
-          <color key={`bg-${mode}`} attach="background" args={['#fdf3e7']} />
-          <fog key={`fog-${mode}`} attach="fog" args={['#ffe6c9', 12, 34]} />
+          <color attach="background" args={['#fdf3e7']} />
+          <fog attach="fog" args={['#ffe6c9', 12, 34]} />
 
           {/* warm, soft daylight — cozy diorama lighting */}
           <ambientLight intensity={0.85} color="#fff3e0" />
@@ -99,11 +96,11 @@ export default function Experience3D() {
             shadow-bias={-0.0004}
           />
           <pointLight position={[-5, 1, -3]} intensity={0.5} color="#ffcf8a" />
-          {!useWebGPU && <SoftShadows size={28} samples={12} focus={0.9} />}
+          {/* Cozy toon look leans on the ink outlines + bands, not PCSS — drei
+              SoftShadows is far too heavy for a ~40-mesh diorama (esp. mobile). */}
 
-          {mode === 'island' && <IslandScene />}
-          {mode === 'walkthrough' && <WalkthroughScene />}
-          {mode === 'scrollstory' && <ScrollstoryScene />}
+          <ElevatorScene />
+          <Particles />
           <PerfGuard />
 
           {/* post-processing only on the WebGL path */}

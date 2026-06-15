@@ -5,6 +5,7 @@ import { Loader } from './components/ui/Loader';
 import { Nav } from './components/ui/Nav';
 import { FidelityBadge } from './components/ui/FidelityBadge';
 import { ProjectModal } from './components/ui/ProjectModal';
+import { GameModal } from './components/ui/GameModal';
 import { AIGuide } from './components/ui/AIGuide';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { ElevatorNav } from './components/ui/ElevatorNav';
@@ -66,8 +67,9 @@ export function App() {
         <Grid2D />
       )}
 
-      {use3D && <ElevatorNav />}
+      <ElevatorNav />
       <ProjectModal />
+      <GameModal />
       <AIGuide />
     </>
   );

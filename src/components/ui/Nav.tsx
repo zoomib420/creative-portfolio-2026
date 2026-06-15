@@ -14,6 +14,9 @@ export function Nav() {
         <a href="#work" className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline">
           Work
         </a>
+        <a href="#arcade" className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline">
+          Arcade
+        </a>
         <a href="#about" className="hidden transition-colors hover:text-[var(--color-accent)] sm:inline">
           About
         </a>
