@@ -9,6 +9,7 @@ export default function RoosterRun({ onExit }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   // Use refs for game state to avoid re-renders during the loop
   const gameState = useRef({
@@ -23,6 +24,7 @@ export default function RoosterRun({ onExit }: Props) {
     collectibles: [] as { x: number; y: number; active: boolean }[],
     frameCount: 0,
     groundY: 300,
+    paused: false,
   });
 
   const startGame = () => {
@@ -38,10 +40,12 @@ export default function RoosterRun({ onExit }: Props) {
       collectibles: [],
       frameCount: 0,
       groundY: 300,
+      paused: false,
     };
     setIsPlaying(true);
     setIsGameOver(false);
     setScore(0);
+    setIsPaused(false);
   };
 
   useEffect(() => {
@@ -59,7 +63,7 @@ export default function RoosterRun({ onExit }: Props) {
       ctx.fillStyle = '#fdf3e7'; // Cream background
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      if (state.isPlaying) {
+      if (state.isPlaying && !state.paused) {
         // Physics
         state.frameCount++;
         if (state.frameCount % 600 === 0) state.speed += 0.5;
@@ -110,7 +114,7 @@ export default function RoosterRun({ onExit }: Props) {
       ctx.fillStyle = '#ffd479';
       for (let i = state.collectibles.length - 1; i >= 0; i--) {
         const c = state.collectibles[i];
-        if (state.isPlaying) c.x -= state.speed;
+        if (state.isPlaying && !state.paused) c.x -= state.speed;
         
         if (c.active) {
           ctx.beginPath();
@@ -146,7 +150,7 @@ export default function RoosterRun({ onExit }: Props) {
       ctx.fillStyle = '#ff9a62';
       for (let i = state.obstacles.length - 1; i >= 0; i--) {
         const obs = state.obstacles[i];
-        if (state.isPlaying) obs.x -= state.speed;
+        if (state.isPlaying && !state.paused) obs.x -= state.speed;
         
         const obsY = obs.type === 'high' ? state.groundY - obs.h - 50 : state.groundY - obs.h;
         ctx.fillRect(obs.x, obsY, obs.w, obs.h);
@@ -252,6 +256,31 @@ export default function RoosterRun({ onExit }: Props) {
     };
   }, []);
 
+  // Pause when the tab/window loses focus, so you don't come back to a dead run.
+  useEffect(() => {
+    const pause = () => {
+      if (gameState.current.isPlaying && !gameState.current.paused) {
+        gameState.current.paused = true;
+        setIsPaused(true);
+      }
+    };
+    const resume = () => {
+      if (gameState.current.paused) {
+        gameState.current.paused = false;
+        setIsPaused(false);
+      }
+    };
+    const onVisibility = () => (document.hidden ? pause() : resume());
+    window.addEventListener('blur', pause);
+    window.addEventListener('focus', resume);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('blur', pause);
+      window.removeEventListener('focus', resume);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
   // Handle touch events
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!gameState.current.isPlaying) return;
@@ -291,6 +320,13 @@ export default function RoosterRun({ onExit }: Props) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       />
+
+      {isPaused && isPlaying && !isGameOver && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#fdf3e7]/80 backdrop-blur-sm">
+          <h2 className="font-[var(--font-display)] text-3xl font-bold text-[#4a3f37]">หยุดชั่วคราว</h2>
+          <p className="mt-2 text-[var(--color-muted)]">กลับมาที่หน้าต่างนี้เพื่อเล่นต่อ</p>
+        </div>
+      )}
 
       {!isPlaying && !isGameOver && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#fdf3e7]/80 backdrop-blur-sm">
