@@ -10,7 +10,7 @@
 
 ---
 
-### T-01 · เติมเนื้อหาจริง 🟢 — `status: todo`
+### T-01 · เติมเนื้อหาจริง 🟢 — `status: done`
 แทนที่ placeholder ทั้งหมด (`[ชื่อคุณ]`, `[อีเมลคุณ]`, คำโปรย) และเติมผลงานจริง
 - **ไฟล์**: `src/data/projects.ts`, `index.html`, `src/components/ui/{Nav,Overlay}.tsx`,
   `src/components/fallback/Grid2D.tsx`, `docs/CONTENT.md`
@@ -23,18 +23,18 @@ Smooth scroll (Lenis) + GSAP ScrollTrigger director cues (camera waypoint ต่
 - **ทำแล้ว**: smooth scroll, กล้องเปลี่ยนมุมต่อ section, content fade-in, ปิดเมื่อ reduced-motion
 - **ต่อยอด (ถ้าต้องการ)**: pinning, timeline แบบ scrubbed, parallax
 
-### T-11 · Audio reactive + Solfeggio 🟡 — `status: done (v1)`
+### T-11 · Audio reactive + Solfeggio 🟡 — `status: done (v2)`
 Web Audio API วิเคราะห์ความถี่ → ขับวัตถุ; เพลงต่อห้องใช้ `project.ambientHz`
-- **ทำแล้ว**: `audio.ts` (pad + LFO + `getLevel()` FFT), HeroObject pulse ตามเสียง,
-  ProjectModal สลับ `ambientHz` ตามผลงาน, AudioToggle เริ่มหลัง gesture
+- **ทำแล้ว**: โมเดล Super Rooster 3D ขยับตามเสียงดนตรีเรียบร้อย, AudioToggle ทำงานสมบูรณ์
 - **ต่อยอด**: ขับ WebGPU shader ด้วย FFT bins, Tone.js สำหรับ texture เสียงที่รวยขึ้น
 
 ### T-12 · WebGPU rendering + shader 🔴 — `status: partial (renderer done)`
 - **ทำแล้ว**: `src/lib/renderer.ts` — tier `high` render ด้วย `WebGPURenderer` จริง
   (dynamic import, fallback WebGL เมื่อ init fail) ใช้กับทุกฉาก
+- **ทำเพิ่ม**: เพิ่ม Interactive 3D ให้ตู้เกมคลิกแล้วเข้าหน้าเกมได้, เพิ่ม Particle System ลอยรอบตึก
 - **⚠️ ข้อควรรู้**: three/webgpu เวอร์ชันนี้ **shadow มาบั๊ก** (`ShadowNode setPipeline`) →
   ปิด shadow ทั้งหมดไว้ก่อน (ดูคอมเมนต์ใน `Experience3D.tsx`) เปิดกลับเมื่อ three เสถียร
-- **เหลือ**: TSL/node-material shader สวย ๆ สำหรับคริสตัลบน high; เปิด shadow กลับ
+- **เหลือ**: TSL/node-material shader สวย ๆ บน high; เปิด shadow กลับ
 
 ### T-13 · Runtime fps downgrade 🟡 — `status: done`
 วัด fps ถ้าตกต่อเนื่อง → `store.setTier()` ลดระดับ

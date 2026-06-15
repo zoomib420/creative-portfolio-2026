@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
+import { Html } from '@react-three/drei';
 import { Vector3, BackSide, type Group, type MeshStandardMaterial } from 'three';
 import { floors, floorsById, FLOOR_SPACING } from '../../data/floors';
 import { toonGradient } from '../../lib/toon';
@@ -82,6 +83,7 @@ function Rooster() {
 function FloorWindows({ level, accent }: { level: number; accent: string }) {
   const activeSection = useAppStore((s) => s.activeSection);
   const active = floorsById[activeSection]?.level === level;
+  const floor = floors.find((f) => f.level === level);
   const materials = useRef<(MeshStandardMaterial | null)[]>([]);
   const y = floorCenterY(level);
   const intensity = active ? 1.7 : 0.4;
@@ -104,6 +106,19 @@ function FloorWindows({ level, accent }: { level: number; accent: string }) {
 
   return (
     <>
+      {/* 3D Label overlay pinned to the front face (faces[0]) */}
+      <Html
+        position={[faces[0].pos[0], faces[0].pos[1] + 0.3, faces[0].pos[2]]}
+        center
+        className={`pointer-events-none transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0 md:opacity-40'}`}
+      >
+        <div className="flex flex-col items-center gap-1 drop-shadow-md">
+          <span className="rounded-full bg-[var(--color-ink)]/80 px-3 py-1 font-[var(--font-display)] text-sm font-bold tracking-widest text-[var(--color-mist)] backdrop-blur-sm">
+            {floor?.label.toUpperCase()}
+          </span>
+        </div>
+      </Html>
+
       {faces.map((f, i) => (
         <mesh key={i} position={f.pos} rotation={f.rot}>
           <planeGeometry args={[w, h]} />
@@ -194,7 +209,14 @@ function ScrollDirector({ buildingRef }: { buildingRef: { current: Group | null 
     const motion = Math.max(lag, velocity);
     const zoom = motion * motion * (3 - 2 * motion); // smoothstep: 0 settled → 1 moving
     let dist = NEAR + (FAR - NEAR) * zoom;
-    if (focused) dist = Math.min(dist, 5.2); // zoom right into the opened room
+    let focusLookX = 0;
+    let pyOffset = 1.0;
+    
+    if (focused) {
+      dist = 3.0; // zoom in much closer to the room
+      focusLookX = 1.2; // shift gaze towards ROOM_X
+      pyOffset = 0.2; // lower camera to eye level
+    }
 
     const cy = floorCenterY(f);
     const topBias = Math.max(0, 1 - f) * 1.1; // look up toward the rooster at the top
@@ -202,13 +224,13 @@ function ScrollDirector({ buildingRef }: { buildingRef: { current: Group | null 
 
     const px = Math.sin(AZ) * dist;
     const pz = Math.cos(AZ) * dist;
-    const py = lookY + 1.0 + zoom * 1.8;
+    const py = lookY + pyOffset + zoom * 1.8;
 
     camera.position.x += (px - camera.position.x) * 0.06;
     camera.position.y += (py - camera.position.y) * 0.06;
     camera.position.z += (pz - camera.position.z) * 0.06;
 
-    look.current.x += (0 - look.current.x) * 0.06;
+    look.current.x += (focusLookX - look.current.x) * 0.06;
     look.current.y += (lookY - look.current.y) * 0.06;
     look.current.z += (0 - look.current.z) * 0.06;
     camera.lookAt(look.current);
