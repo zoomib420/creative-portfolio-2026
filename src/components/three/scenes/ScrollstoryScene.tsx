@@ -12,8 +12,8 @@ import { scrollState } from '../../../lib/scroll';
  */
 
 const PATH_LENGTH = 60;
-const MOOD_START = new Color('#0a0f1f');
-const MOOD_END = new Color('#1f0f1a');
+const MOOD_START = new Color('#ffe6c9'); // warm peach dawn
+const MOOD_END = new Color('#d9ece2'); // soft mint dusk
 
 function FloatingShapes({ count }: { count: number }) {
   const ref = useRef<Group>(null);
@@ -25,7 +25,7 @@ function FloatingShapes({ count }: { count: number }) {
         z: -(i / count) * PATH_LENGTH - Math.random() * 4,
         s: 0.3 + Math.random() * 0.8,
         phase: Math.random() * Math.PI * 2,
-        accent: Math.random() > 0.5 ? '#6ee7ff' : '#b78bff',
+        accent: Math.random() > 0.5 ? '#ff9a62' : '#56c2b0',
       })),
     [count],
   );
@@ -42,7 +42,7 @@ function FloatingShapes({ count }: { count: number }) {
   return (
     <group ref={ref}>
       {shapes.map((s, i) => (
-        <mesh key={i} position={[s.x, s.y, s.z]} scale={s.s}>
+        <mesh key={i} position={[s.x, s.y, s.z]} scale={s.s} castShadow>
           <octahedronGeometry args={[1, 0]} />
           <meshStandardMaterial
             color={s.accent}
@@ -99,23 +99,23 @@ function StoryRig() {
   return (
     <>
       {/* ground */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -PATH_LENGTH / 2]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -PATH_LENGTH / 2]} receiveShadow>
         <planeGeometry args={[40, PATH_LENGTH + 20]} />
-        <meshStandardMaterial color="#070a12" roughness={0.9} metalness={0.1} />
+        <meshStandardMaterial color="#ecd9bb" roughness={0.95} />
       </mesh>
 
-      {/* the character orb */}
-      <mesh ref={orbRef} position={[0, 1.2, 2]}>
+      {/* the character orb — warm firefly */}
+      <mesh ref={orbRef} position={[0, 1.2, 2]} castShadow>
         <icosahedronGeometry args={[0.4, 2]} />
         <meshStandardMaterial
-          color="#6ee7ff"
-          emissive="#6ee7ff"
+          color="#ffd479"
+          emissive="#ff9a62"
           emissiveIntensity={1.4 + level * 0.6}
           toneMapped={false}
         />
       </mesh>
       <group ref={orbLight}>
-        <pointLight intensity={2.2} color="#6ee7ff" distance={12} />
+        <pointLight intensity={2.2} color="#ffb866" distance={12} />
       </group>
 
       <StoryRigShapesAnchor />

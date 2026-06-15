@@ -16,6 +16,8 @@ interface AppState {
   activeProjectId: string | null;
   /** Which 3D presentation model is active. */
   presentationMode: PresentationMode;
+  /** Section the visitor is currently viewing (drives the elevator panel). */
+  activeSection: string;
 
   setCapabilities: (caps: Capabilities) => void;
   setTier: (tier: FidelityTier) => void;
@@ -24,6 +26,7 @@ interface AppState {
   openProject: (id: string) => void;
   closeProject: () => void;
   setPresentationMode: (mode: PresentationMode) => void;
+  setActiveSection: (id: string) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -33,6 +36,7 @@ export const useAppStore = create<AppState>((set) => ({
   audioEnabled: false,
   activeProjectId: null,
   presentationMode: 'island',
+  activeSection: 'hero',
 
   setCapabilities: (caps) => set({ capabilities: caps, tier: caps.tier }),
   setTier: (tier) => set({ tier }),
@@ -41,4 +45,5 @@ export const useAppStore = create<AppState>((set) => ({
   openProject: (id) => set({ activeProjectId: id }),
   closeProject: () => set({ activeProjectId: null }),
   setPresentationMode: (mode) => set({ presentationMode: mode }),
+  setActiveSection: (id) => set({ activeSection: id }),
 }));

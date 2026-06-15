@@ -40,13 +40,13 @@ export function HeroObject() {
           <icosahedronGeometry args={[0.8, detail]} />
           <meshBasicMaterial color="#05060a" side={BackSide} />
         </mesh>
-        {/* cel-shaded body */}
-        <mesh>
+        {/* cel-shaded body — warm lantern glow */}
+        <mesh castShadow>
           <icosahedronGeometry args={[0.8, detail]} />
           <meshToonMaterial
             ref={matRef}
-            color="#6ee7ff"
-            emissive="#b78bff"
+            color="#ffd479"
+            emissive="#ff9a62"
             emissiveIntensity={0.4}
             gradientMap={gradient}
           />

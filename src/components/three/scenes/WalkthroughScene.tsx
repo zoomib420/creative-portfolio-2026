@@ -13,7 +13,7 @@ import { scrollState } from '../../../lib/scroll';
  */
 
 const SPACING = 7;
-const ACCENTS = ['#6ee7ff', '#b78bff', '#ffcf6e', '#6effa8'];
+const ACCENTS = ['#ff9a62', '#56c2b0', '#ffd479', '#c7a6e6'];
 
 function Room({ index, accent }: { index: number; accent: string }) {
   const z = -index * SPACING;
@@ -26,9 +26,9 @@ function Room({ index, accent }: { index: number; accent: string }) {
   return (
     <group position={[0, 0, z]}>
       {/* doorway frame */}
-      <mesh position={[side * 2.6, 1.4, 0]}>
+      <mesh position={[side * 2.6, 1.4, 0]} castShadow>
         <boxGeometry args={[0.15, 3, 2.4]} />
-        <meshStandardMaterial color="#11151f" />
+        <meshStandardMaterial color="#caa57f" roughness={0.8} />
       </mesh>
       {/* glowing project panel */}
       <mesh
@@ -88,15 +88,15 @@ export function WalkthroughScene() {
   const length = projects.length * SPACING;
   return (
     <>
-      {/* floor */}
+      {/* floor — warm wood */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -length / 2 + 3]} receiveShadow>
         <planeGeometry args={[8, length + 12]} />
-        <meshStandardMaterial color="#0a0d15" roughness={0.6} metalness={0.2} />
+        <meshStandardMaterial color="#e8d3b3" roughness={0.85} />
       </mesh>
-      {/* ceiling strip glow */}
+      {/* warm ceiling light strip */}
       <mesh position={[0, 3.2, -length / 2 + 3]}>
         <boxGeometry args={[0.4, 0.05, length + 12]} />
-        <meshStandardMaterial color="#1a2440" emissive="#3a4a7a" emissiveIntensity={0.6} />
+        <meshStandardMaterial color="#fff0cf" emissive="#ffdfa0" emissiveIntensity={0.7} />
       </mesh>
 
       {projects.map((p, i) => (

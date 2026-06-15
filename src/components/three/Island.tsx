@@ -58,7 +58,7 @@ function Grass({ count }: { count: number }) {
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, count]}>
       <coneGeometry args={[1, 1, 4]} />
-      <meshToonMaterial color="#3fa66a" gradientMap={toonGradient(3)} />
+      <meshToonMaterial color="#7fd093" gradientMap={toonGradient(3)} />
     </instancedMesh>
   );
 }
@@ -105,8 +105,8 @@ function Motes({ count }: { count: number }) {
     <instancedMesh ref={ref} args={[undefined, undefined, count]}>
       <icosahedronGeometry args={[1, 0]} />
       <meshStandardMaterial
-        color="#6ee7ff"
-        emissive="#6ee7ff"
+        color="#ffd479"
+        emissive="#ffb259"
         emissiveIntensity={2}
         toneMapped={false}
       />
@@ -128,11 +128,11 @@ function Rocks({ count }: { count: number }) {
       }),
     [count],
   );
-  const color = useMemo(() => new Color('#5b6478'), []);
+  const color = useMemo(() => new Color('#b9a48c'), []);
   return (
     <>
       {rocks.map((r, i) => (
-        <mesh key={i} position={[r.x, 1.04, r.z]} rotation={[0, r.rot, 0]}>
+        <mesh key={i} position={[r.x, 1.04, r.z]} rotation={[0, r.rot, 0]} castShadow>
           <dodecahedronGeometry args={[r.s, 0]} />
           <meshToonMaterial color={color} gradientMap={toonGradient(3)} />
         </mesh>
@@ -166,14 +166,14 @@ export function Island() {
       </group>
 
       {/* grassy top */}
-      <mesh position={[0, 1, 0]}>
+      <mesh position={[0, 1, 0]} receiveShadow castShadow>
         <cylinderGeometry args={[4, 3.8, 0.4, 48]} />
-        <meshToonMaterial color="#2f8f5b" gradientMap={toonGradient(3)} />
+        <meshToonMaterial color="#86d29a" gradientMap={toonGradient(3)} />
       </mesh>
-      {/* rocky underside (inverted cone) */}
-      <mesh position={[0, -0.4, 0]}>
+      {/* earthy underside (inverted cone) */}
+      <mesh position={[0, -0.4, 0]} castShadow>
         <coneGeometry args={[3.8, 3, 12]} />
-        <meshToonMaterial color="#4a3f3a" gradientMap={toonGradient(3)} />
+        <meshToonMaterial color="#caa57f" gradientMap={toonGradient(3)} />
       </mesh>
 
       {detail.rocks > 0 && <Rocks count={detail.rocks} />}

@@ -1,6 +1,6 @@
 import { useRef, type ComponentProps } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { AdaptiveDpr, AdaptiveEvents, Preload } from '@react-three/drei';
+import { AdaptiveDpr, AdaptiveEvents, Preload, SoftShadows } from '@react-three/drei';
 import { IslandScene } from './scenes/IslandScene';
 import { WalkthroughScene } from './scenes/WalkthroughScene';
 import { ScrollstoryScene } from './scenes/ScrollstoryScene';
@@ -70,19 +70,36 @@ export default function Experience3D() {
     <>
       <div className="canvas-root">
         <Canvas
+          shadows={!useWebGPU}
           dpr={dpr}
           camera={{ position: [0, 0.6, 7], fov: 45 }}
           gl={gl}
         >
           {/* keyed by mode so a scene's runtime colour mutations reset on switch */}
-          <color key={`bg-${mode}`} attach="background" args={['#05060a']} />
-          <fog key={`fog-${mode}`} attach="fog" args={['#05060a', 8, 26]} />
-          <ambientLight intensity={0.5} />
-          {/* NOTE: no shadow casting — three's WebGPU shadow path crashes in
-              this version (ShadowNode setPipeline). Lighting + emissive carry
-              the look; revisit shadows when three/webgpu stabilises (T-12). */}
-          <directionalLight position={[5, 8, 5]} intensity={1.3} color="#ffffff" />
-          <pointLight position={[-5, -1, -3]} intensity={0.9} color="#b78bff" />
+          <color key={`bg-${mode}`} attach="background" args={['#fdf3e7']} />
+          <fog key={`fog-${mode}`} attach="fog" args={['#ffe6c9', 12, 34]} />
+
+          {/* warm, soft daylight — cozy diorama lighting */}
+          <ambientLight intensity={0.85} color="#fff3e0" />
+          <hemisphereLight args={['#fff4dd', '#e7c9a6', 0.6]} />
+          {/* NOTE: soft shadows only on the WebGL path — three/webgpu's shadow
+              node crashes in this version (re-enable for WebGPU when stable). */}
+          <directionalLight
+            position={[6, 9, 4]}
+            intensity={1.5}
+            color="#fff1d6"
+            castShadow={!useWebGPU}
+            shadow-mapSize={[1024, 1024]}
+            shadow-camera-near={1}
+            shadow-camera-far={40}
+            shadow-camera-left={-12}
+            shadow-camera-right={12}
+            shadow-camera-top={12}
+            shadow-camera-bottom={-12}
+            shadow-bias={-0.0004}
+          />
+          <pointLight position={[-5, 1, -3]} intensity={0.5} color="#ffcf8a" />
+          {!useWebGPU && <SoftShadows size={28} samples={12} focus={0.9} />}
 
           {mode === 'island' && <IslandScene />}
           {mode === 'walkthrough' && <WalkthroughScene />}

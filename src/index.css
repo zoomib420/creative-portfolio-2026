@@ -5,24 +5,27 @@
   See docs/DESIGN.md. Tailwind v4 reads these via the @theme block.
 */
 @theme {
-  --color-void: #05060a;
-  --color-ink: #0b0e16;
-  --color-mist: #e8eaf2;
-  --color-muted: #8b90a6;
-  --color-accent: #6ee7ff;
-  --color-accent-2: #b78bff;
-  --color-glow: #1a2440;
+  /* Cozy / warm palette (prozilla-inspired): soft cream page, warm coral +
+     mint accents, gentle brown text. Light, friendly, hand-made feel. */
+  --color-void: #fdf3e7; /* warm cream page background */
+  --color-ink: #fffaf2; /* card / raised surface */
+  --color-mist: #4a3f37; /* primary text (warm dark brown) */
+  --color-muted: #9b8b7b; /* secondary text */
+  --color-accent: #ff9a62; /* warm coral */
+  --color-accent-2: #56c2b0; /* soft mint/teal */
+  --color-glow: #ecdcc6; /* soft border */
+  --color-butter: #ffd479; /* warm highlight */
 
-  /* Fraunces = expressive editorial serif for headings (gallery/art-book feel).
-     Space Grotesk = eyebrows/labels. Inter/IBM Plex = body. */
-  --font-display: 'Fraunces', 'IBM Plex Sans Thai', Georgia, serif;
-  --font-label: 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-thai: 'IBM Plex Sans Thai', system-ui, sans-serif;
+  /* Rounded, friendly type. Baloo (+ Baloo Thai 2) for headings/labels,
+     Nunito for body. Cute and readable in both Thai and Latin. */
+  --font-display: 'Baloo 2', 'Baloo Thai 2', system-ui, sans-serif;
+  --font-label: 'Baloo 2', 'Baloo Thai 2', system-ui, sans-serif;
+  --font-body: 'Nunito', 'Baloo Thai 2', system-ui, sans-serif;
+  --font-thai: 'Baloo Thai 2', 'Nunito', system-ui, sans-serif;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
@@ -34,10 +37,11 @@ body,
 body {
   margin: 0;
   background-color: var(--color-void);
-  /* subtle radial depth so flat (2D) views don't feel like a plain dark slab */
+  /* soft warm "sky": peach up top, mint glow bottom-corner — cozy depth */
   background-image:
-    radial-gradient(120% 80% at 50% -10%, rgba(110, 231, 255, 0.08), transparent 60%),
-    radial-gradient(100% 90% at 90% 110%, rgba(183, 139, 255, 0.07), transparent 55%);
+    radial-gradient(120% 80% at 50% -10%, rgba(255, 212, 121, 0.35), transparent 60%),
+    radial-gradient(100% 90% at 90% 110%, rgba(86, 194, 176, 0.22), transparent 55%),
+    radial-gradient(90% 80% at 8% 100%, rgba(255, 154, 98, 0.18), transparent 55%);
   background-attachment: fixed;
   color: var(--color-mist);
   font-family: var(--font-thai), var(--font-body);
@@ -46,22 +50,22 @@ body {
   overflow-x: hidden;
 }
 
-/* Film/paper grain over the whole page — organic texture that breaks the
-   "clean digital render" look. Pointer-events:none so it never blocks input. */
+/* Very subtle paper grain — keeps the hand-made feel without muddying the
+   bright cozy palette. Pointer-events:none so it never blocks input. */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.05;
-  mix-blend-mode: overlay;
+  opacity: 0.03;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {
   body::after {
-    opacity: 0.035;
+    opacity: 0.02;
   }
 }
 

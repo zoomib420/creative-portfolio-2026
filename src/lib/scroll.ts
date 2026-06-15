@@ -2,8 +2,20 @@ import { useEffect } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useAppStore } from './store';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Module-level Lenis handle so the elevator panel can drive smooth scroll.
+let lenisInstance: Lenis | null = null;
+
+/** Smooth-scroll to a section by id (used by the elevator nav). */
+export function scrollToSection(id: string): void {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (lenisInstance) lenisInstance.scrollTo(el, { offset: 0 });
+  else el.scrollIntoView({ behavior: 'smooth' });
+}
 
 /**
  * Smooth scroll (Lenis) + GSAP ScrollTrigger "director cues" (Task T-10).
@@ -62,6 +74,7 @@ export function useSmoothScroll(): void {
     }
 
     const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    lenisInstance = lenis;
     lenis.on('scroll', (e: { progress: number; velocity: number }) => {
       scrollState.progress = e.progress;
       scrollState.velocity = e.velocity;
@@ -83,6 +96,7 @@ export function useSmoothScroll(): void {
           end: 'bottom center',
           onToggle: (self) => {
             if (self.isActive) {
+              useAppStore.getState().setActiveSection(id);
               gsap.to(cameraState, {
                 ...wp,
                 duration: 1.6,
@@ -117,6 +131,7 @@ export function useSmoothScroll(): void {
       gsap.ticker.remove(tick);
       ctx.revert();
       lenis.destroy();
+      lenisInstance = null;
     };
   }, []);
 }
