@@ -3,25 +3,27 @@
 > เป้าหมายสูงสุดคือ **Emotional Resonance** — ให้ผู้ชม (กรรมการ/ผู้จ้าง) "รู้สึก" และจำตัวตนเราได้
 > ไม่ใช่แค่ดูรายการผลงาน
 
-## 1. Core vibe
-- **โทน**: ลึก สงบ แต่ล้ำ — อวกาศ/ห้วงดิจิทัลยามค่ำ มี accent เรืองแสง
-- **มาตรฐานความลื่น**: Samsy.ninja (gold standard) — ทุก interaction ต้องไม่สะดุด
-- **อารมณ์เป้าหมายต่อช่วง**: Hero = ทึ่ง/อยากสำรวจ → Work = ภูมิใจ/น่าเชื่อถือ → About = เชื่อมโยง/ไว้ใจ
+## 1. Core vibe — Cozy / Cute (prozilla.dev-inspired)
+- **โทน**: อบอุ่น สว่าง น่ารัก เป็นมิตร — ไดโอรามาของเล่น/diorama, voxel/low-poly,
+  เงานุ่ม, ลายเส้นวาดมือ (toon + ink outline) แทนลุค dark/neon เดิม
+- **Signature**: navigation แบบ **แผงลิฟต์ (ElevatorNav)** — เลือก "ชั้น" ไปแต่ละ section
+- **อารมณ์เป้าหมาย**: น่ารัก เข้าถึงง่าย playful — อยากกดเล่น ไม่ใช่อลังเท่
 
 ## 2. Design tokens (แก้ที่เดียว: `src/index.css` → `@theme`)
 
 | Token | ค่า | ใช้ทำอะไร |
 | --- | --- | --- |
-| `--color-void` | `#05060a` | พื้นหลังหลัก (ห้วงลึก) |
-| `--color-ink` | `#0b0e16` | การ์ด/พื้นผิวยกระดับ |
-| `--color-mist` | `#e8eaf2` | ตัวอักษรหลัก |
-| `--color-muted` | `#8b90a6` | ตัวอักษรรอง |
-| `--color-accent` | `#6ee7ff` | ไฮไลต์หลัก (cyan เรืองแสง) |
-| `--color-accent-2` | `#b78bff` | ไฮไลต์รอง (ม่วง) |
-| `--color-glow` | `#1a2440` | เส้นขอบ/แสงนวล |
+| `--color-void` | `#fdf3e7` | พื้นหลังหลัก (ครีมอุ่น) |
+| `--color-ink` | `#fffaf2` | การ์ด/พื้นผิว |
+| `--color-mist` | `#4a3f37` | ตัวอักษรหลัก (น้ำตาลอุ่น) |
+| `--color-muted` | `#9b8b7b` | ตัวอักษรรอง |
+| `--color-accent` | `#ff9a62` | ไฮไลต์หลัก (coral) |
+| `--color-accent-2` | `#56c2b0` | ไฮไลต์รอง (mint) |
+| `--color-butter` | `#ffd479` | ไฮไลต์อุ่น |
+| `--color-glow` | `#ecdcc6` | เส้นขอบนุ่ม |
 
-ฟอนต์: display = Space Grotesk, body = Inter, ไทย = IBM Plex Sans Thai
-(ปัจจุบันยังไม่ได้โหลด webfont จริง — เป็น task เสริม: เพิ่ม `@font-face`/preconnect และ self-host)
+ฟอนต์ (โหลดผ่าน Google Fonts ใน `index.html`): display/label = **Baloo 2 + Baloo Thai 2** (มน น่ารัก),
+body = **Nunito** + Baloo Thai 2 (ไทย). โทนภาพ: post นุ่ม (bloom เบา + vignette อ่อน), grain บางมาก
 
 ## 3. Motion principles
 - **Director's cue**: กล้องเคลื่อนเหมือนผู้กำกับเล่า ไม่ใช่ผู้ใช้ควบคุมอิสระมั่ว
