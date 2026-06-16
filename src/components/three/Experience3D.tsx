@@ -2,7 +2,6 @@ import { useRef, type ComponentProps } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { AdaptiveDpr, AdaptiveEvents, Preload } from '@react-three/drei';
 import { ElevatorScene } from './ElevatorScene';
-import { RoomInterior } from './RoomInterior';
 import { Particles } from './Particles';
 import { PostFX } from './PostFX';
 import { Overlay } from '../ui/Overlay';
@@ -49,7 +48,6 @@ function PerfGuard() {
 
 export default function Experience3D() {
   const tier = useAppStore((s) => s.tier);
-  const focusedFloor = useAppStore((s) => s.focusedFloor);
   const dpr: [number, number] = tier === 'high' ? [1, 2] : [1, 1.5];
 
   useSmoothScroll();
@@ -101,15 +99,8 @@ export default function Experience3D() {
           {/* Cozy toon look leans on the ink outlines + bands, not PCSS — drei
               SoftShadows is far too heavy for a ~40-mesh diorama (esp. mobile). */}
 
-          {/* Enter a floor → swap the exterior tower for that room's 3D interior. */}
-          {focusedFloor ? (
-            <RoomInterior id={focusedFloor} />
-          ) : (
-            <>
-              <ElevatorScene />
-              <Particles />
-            </>
-          )}
+          <ElevatorScene />
+          <Particles />
           <PerfGuard />
 
           {/* post-processing only on the WebGL path */}

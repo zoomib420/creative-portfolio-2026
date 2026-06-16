@@ -1,32 +1,41 @@
 import { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import { Vector3, BackSide, type Group, type MeshStandardMaterial } from 'three';
-import { floors, floorsById, FLOOR_SPACING } from '../../data/floors';
+import { Vector3, BackSide, type Group } from 'three';
+import { floors, floorsById, type Floor } from '../../data/floors';
 import { toonGradient } from '../../lib/toon';
 import { useAppStore } from '../../lib/store';
 import { scrollState } from '../../lib/scroll';
+import { Furniture } from './RoomInterior';
 
 /**
- * The single 3D world: a cozy "toy building" with a rooster mascot on the roof.
- * The camera + the building's rotation are SCROLL-DRIVEN (prozilla-style): while
- * you scroll between sections the camera zooms OUT and the tower rotates; when
- * you settle on a section it zooms IN on that floor (its window band lit). The
- * lobby (top floor) frames the rooftop rooster up close; scrolling descends the
- * tower top→bottom. Solid exterior so it reads from any angle — interiors later.
+ * The single 3D world: a cozy 4-sided "cutaway building". Each side is an OPEN
+ * furnished room for one section, so you see the rooms from outside the whole
+ * time. Scrolling rotates the building 90° per section to bring each room to the
+ * front (prozilla-style); after a full turn the front side swaps to the 5th
+ * room. Click a floor → the camera zooms into that room. A rooster sits on the
+ * roof. Furniture is shared with the standalone rooms (RoomInterior.Furniture).
  */
 
-const W = 2.4;
-const D = 2.4;
-const SP = FLOOR_SPACING;
-const COUNT = floors.length;
-const TOTAL_H = COUNT * SP;
+// Section rooms in face order (about, work, tech, contact, thanks).
+const rooms: Floor[] = floors.filter((f) => f.ready && f.id !== 'hero');
+const roomIndexOf = (id: string): number => Math.max(0, (floorsById[id]?.level ?? 1) - 1);
 
-// top → bottom: the first section (hero) sits at the TOP slot, last at ground.
-const slotOf = (level: number) => COUNT - 1 - level;
-const floorCenterY = (level: number) => slotOf(level) * SP + SP / 2;
+const CORE_W = 3.0;
+const CORE_H = 3.4;
+const CORE_D = 3.0;
+const FACE = CORE_D / 2; // outer face plane
+const FURN_SCALE = 0.5;
 
-/** Cute low-poly rooster mascot on the rooftop (gentle idle bob). */
+// Shared, written by the rig each frame, read by the swappable faces.
+const buildingState = { cur: 0 };
+
+function smoothstep(x: number, a: number, b: number): number {
+  const t = Math.min(Math.max((x - a) / (b - a), 0), 1);
+  return t * t * (3 - 2 * t);
+}
+
+/** Cute rooster mascot on the rooftop (gentle idle bob). */
 function Rooster() {
   const ref = useRef<Group>(null);
   const grad = toonGradient(3);
@@ -39,141 +48,52 @@ function Rooster() {
         <sphereGeometry args={[0.32, 16, 12]} />
         <meshToonMaterial color="#fffaf2" gradientMap={grad} />
       </mesh>
-      <mesh position={[0.22, 0.3, 0]}>
+      <mesh position={[-0.22, 0.3, 0]}>
         <sphereGeometry args={[0.18, 16, 12]} />
         <meshToonMaterial color="#fffaf2" gradientMap={grad} />
       </mesh>
-      {/* comb + wattle */}
-      <mesh position={[0.24, 0.5, 0]}>
+      <mesh position={[-0.24, 0.5, 0]}>
         <boxGeometry args={[0.16, 0.12, 0.05]} />
         <meshToonMaterial color="#ff4a4a" gradientMap={grad} />
       </mesh>
-      <mesh position={[0.4, 0.18, 0]}>
-        <boxGeometry args={[0.05, 0.1, 0.04]} />
-        <meshToonMaterial color="#ff4a4a" gradientMap={grad} />
-      </mesh>
-      {/* beak */}
-      <mesh position={[0.44, 0.3, 0]} rotation={[0, 0, -0.35]}>
+      <mesh position={[-0.44, 0.3, 0]} rotation={[0, 0, 0.35]}>
         <coneGeometry args={[0.07, 0.16, 4]} />
         <meshToonMaterial color="#ffb13b" gradientMap={grad} />
       </mesh>
-      {/* eye */}
-      <mesh position={[0.34, 0.36, 0.11]}>
+      <mesh position={[-0.32, 0.36, 0.11]}>
         <sphereGeometry args={[0.03, 8, 8]} />
         <meshBasicMaterial color="#3a322b" />
       </mesh>
-      {/* tail */}
-      <mesh position={[-0.3, 0.2, 0]} rotation={[0, 0, 0.7]}>
+      <mesh position={[0.3, 0.2, 0]} rotation={[0, 0, -0.7]}>
         <coneGeometry args={[0.18, 0.44, 4]} />
         <meshToonMaterial color="#56c2b0" gradientMap={grad} />
       </mesh>
-      {/* legs */}
-      {[-0.09, 0.09].map((z) => (
-        <mesh key={z} position={[0.06, -0.42, z]}>
-          <cylinderGeometry args={[0.03, 0.03, 0.34, 6]} />
-          <meshToonMaterial color="#ffb13b" gradientMap={grad} />
-        </mesh>
-      ))}
     </group>
   );
 }
 
-/** A glowing window band for one floor, on all four faces (so it's lit while
- *  the tower rotates). Brighter when this floor is the active section. */
-function FloorWindows({ level, accent }: { level: number; accent: string }) {
-  const activeSection = useAppStore((s) => s.activeSection);
-  const active = floorsById[activeSection]?.level === level;
-  const floor = floors.find((f) => f.level === level);
-  const materials = useRef<(MeshStandardMaterial | null)[]>([]);
-  const y = floorCenterY(level);
-  const intensity = active ? 1.7 : 0.4;
-  const w = W * 0.55;
-  const h = SP * 0.5;
-  const faces: { pos: [number, number, number]; rot: [number, number, number] }[] = [
-    { pos: [0, y, D / 2 + 0.02], rot: [0, 0, 0] },
-    { pos: [0, y, -D / 2 - 0.02], rot: [0, Math.PI, 0] },
-    { pos: [W / 2 + 0.02, y, 0], rot: [0, Math.PI / 2, 0] },
-    { pos: [-W / 2 - 0.02, y, 0], rot: [0, -Math.PI / 2, 0] },
-  ];
-
-  useFrame((s) => {
-    const pulse = active ? 0.25 + Math.sin(s.clock.elapsedTime * 2.4) * 0.18 : 0;
-    const nextIntensity = intensity + pulse;
-    materials.current.forEach((mat) => {
-      if (mat) mat.emissiveIntensity += (nextIntensity - mat.emissiveIntensity) * 0.12;
-    });
-  });
-
-  return (
-    <>
-      {/* 3D Label overlay pinned to the front face (faces[0]) */}
-      <Html
-        position={[faces[0].pos[0], faces[0].pos[1] + 0.3, faces[0].pos[2]]}
-        center
-        className={`pointer-events-none transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0 md:opacity-40'}`}
-      >
-        <div className="flex flex-col items-center gap-1 drop-shadow-md">
-          <span className="rounded-full bg-[var(--color-ink)]/80 px-3 py-1 font-[var(--font-display)] text-sm font-bold tracking-widest text-[var(--color-mist)] backdrop-blur-sm">
-            {floor?.label.toUpperCase()}
-          </span>
-        </div>
-      </Html>
-
-      {faces.map((f, i) => (
-        <mesh key={i} position={f.pos} rotation={f.rot}>
-          <planeGeometry args={[w, h]} />
-          <meshStandardMaterial
-            ref={(mat) => {
-              materials.current[i] = mat;
-            }}
-            color={accent}
-            emissive={accent}
-            emissiveIntensity={intensity}
-            toneMapped={false}
-          />
-        </mesh>
-      ))}
-    </>
-  );
-}
-
-function Tower() {
+/** The solid box core + base + roof + rooster (the building mass). */
+function Core() {
   const grad = toonGradient(3);
-  const trims = Array.from({ length: COUNT - 1 }, (_, i) => (i + 1) * SP);
   return (
     <group>
-      {/* ink outline (inverted hull) */}
-      <mesh position={[0, TOTAL_H / 2, 0]} scale={1.04}>
-        <boxGeometry args={[W, TOTAL_H, D]} />
+      <mesh position={[0, CORE_H / 2, 0]} scale={1.04}>
+        <boxGeometry args={[CORE_W, CORE_H, CORE_D]} />
         <meshBasicMaterial color="#3a322b" side={BackSide} />
       </mesh>
-      {/* solid body */}
-      <mesh position={[0, TOTAL_H / 2, 0]} castShadow>
-        <boxGeometry args={[W, TOTAL_H, D]} />
+      <mesh position={[0, CORE_H / 2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[CORE_W, CORE_H, CORE_D]} />
         <meshToonMaterial color="#f3e2c8" gradientMap={grad} />
       </mesh>
-      {/* floor trim lines */}
-      {trims.map((y) => (
-        <mesh key={y} position={[0, y, 0]}>
-          <boxGeometry args={[W + 0.06, 0.06, D + 0.06]} />
-          <meshToonMaterial color="#caa57f" gradientMap={grad} />
-        </mesh>
-      ))}
-      {/* glowing window bands per floor */}
-      {floors.map((f) => (
-        <FloorWindows key={f.id} level={f.level} accent={f.accent} />
-      ))}
-      {/* base plinth */}
-      <mesh position={[0, -0.15, 0]}>
-        <boxGeometry args={[W + 0.3, 0.3, D + 0.3]} />
+      <mesh position={[0, -0.15, 0]} receiveShadow>
+        <boxGeometry args={[CORE_W + 1.8, 0.3, CORE_D + 1.8]} />
         <meshToonMaterial color="#caa57f" gradientMap={grad} />
       </mesh>
-      {/* roof slab + rooster on the rooftop */}
-      <mesh position={[0, TOTAL_H + 0.08, 0]} castShadow>
-        <boxGeometry args={[W + 0.2, 0.16, D + 0.2]} />
+      <mesh position={[0, CORE_H + 0.1, 0]} castShadow>
+        <boxGeometry args={[CORE_W + 0.3, 0.2, CORE_D + 0.3]} />
         <meshToonMaterial color="#ffd479" gradientMap={grad} />
       </mesh>
-      <group position={[0, TOTAL_H + 0.5, 0]}>
+      <group position={[0, CORE_H + 0.55, 0]}>
         <Rooster />
       </group>
     </group>
@@ -181,75 +101,94 @@ function Tower() {
 }
 
 /**
- * Drives the camera + tower rotation from scroll progress. Active section still
- * controls the lit window, but the camera follows the actual scroll position
- * continuously so the ride feels like one smooth elevator trip instead of
- * snapping between section triggers. Reads the store imperatively to avoid
- * re-renders.
+ * One open room set on a building face. `vis` returns 0..1 from the current
+ * (eased) section index — used to swap the two rooms that share the front face.
  */
-function ScrollDirector({ buildingRef }: { buildingRef: { current: Group | null } }) {
+function FaceSet({ room, angle, vis }: { room: Floor; angle: number; vis: (cur: number) => number }) {
+  const ref = useRef<Group>(null);
+  useFrame(() => {
+    const g = ref.current;
+    if (!g) return;
+    const v = vis(buildingState.cur);
+    g.visible = v > 0.01;
+    g.scale.setScalar(Math.max(v, 0.001));
+  });
+  return (
+    <group rotation={[0, angle, 0]}>
+      <group ref={ref} position={[0, 0, FACE]}>
+        {/* floor ledge the furniture sits on */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0.95]} receiveShadow>
+          <planeGeometry args={[CORE_W, 2.0]} />
+          <meshToonMaterial color="#e8d3b3" gradientMap={toonGradient(3)} />
+        </mesh>
+        <group scale={FURN_SCALE} position={[0, 0, 1.35]}>
+          <Furniture id={room.id} />
+        </group>
+        {/* short exterior label (hidden when the face turns to the back) */}
+        <Html position={[0, CORE_H + 0.15, 0.2]} center occlude className="pointer-events-none select-none">
+          <div className="flex flex-col items-center gap-1 text-center">
+            <span className="rounded-full bg-[var(--color-ink)] px-3 py-1 font-[var(--font-display)] text-sm font-bold tracking-wide text-[var(--color-mist)] shadow">
+              {room.label}
+            </span>
+            {room.teaser && (
+              <span className="max-w-[180px] text-[11px] leading-tight text-[var(--color-muted)]">
+                {room.teaser}
+              </span>
+            )}
+          </div>
+        </Html>
+      </group>
+    </group>
+  );
+}
+
+function Rig({ buildingRef }: { buildingRef: { current: Group | null } }) {
   const { camera } = useThree();
   const cur = useRef(0);
-  const look = useRef(new Vector3(0, floorCenterY(0) + 1.2, 0));
-  const AZ = 0.5; // fixed camera azimuth — the tower rotates, not the camera
-  const NEAR = 6.2; // pulled back a bit (was too close)
-  const FAR = 11;
+  const look = useRef(new Vector3(0, 1.6, 0));
 
   useFrame(() => {
     const st = useAppStore.getState();
     const focused = st.focusedFloor;
-    const focusedLevel = focused ? floorsById[focused]?.level : undefined;
-    const scrollLevel = scrollState.progress * (COUNT - 1);
-    const target = focusedLevel ?? scrollLevel;
-    cur.current += (target - cur.current) * 0.045;
-    const f = cur.current;
+    const last = rooms.length - 1;
+    const target = focused ? roomIndexOf(focused) : scrollState.progress * last;
+    cur.current += (target - cur.current) * 0.05;
+    buildingState.cur = cur.current;
 
-    const lag = Math.min(Math.abs(target - f), 1);
-    const velocity = Math.min(Math.abs(scrollState.velocity) / 2.5, 1);
-    const motion = Math.max(lag, velocity);
-    const zoom = motion * motion * (3 - 2 * motion); // smoothstep: 0 settled → 1 moving
-    let dist = NEAR + (FAR - NEAR) * zoom;
-    let focusLookX = 0;
-    let pyOffset = 1.0;
-    
-    if (focused) {
-      dist = 3.0; // zoom in much closer to the room
-      focusLookX = 1.2; // shift gaze towards ROOM_X
-      pyOffset = 0.2; // lower camera to eye level
-    }
+    if (buildingRef.current) buildingRef.current.rotation.y = -cur.current * (Math.PI / 2);
 
-    const cy = floorCenterY(f);
-    const topBias = Math.max(0, 1 - f) * 1.1; // look up toward the rooster at the top
-    const lookY = cy + 0.3 + topBias;
-
-    const px = Math.sin(AZ) * dist;
-    const pz = Math.cos(AZ) * dist;
-    const py = lookY + pyOffset + zoom * 1.8;
-
+    const dist = focused ? 4.4 : 6.6;
+    const px = focused ? 0.4 : 1.1;
+    const py = focused ? 1.7 : 2.4;
     camera.position.x += (px - camera.position.x) * 0.06;
     camera.position.y += (py - camera.position.y) * 0.06;
-    camera.position.z += (pz - camera.position.z) * 0.06;
-
-    look.current.x += (focusLookX - look.current.x) * 0.06;
-    look.current.y += (lookY - look.current.y) * 0.06;
-    look.current.z += (0 - look.current.z) * 0.06;
+    camera.position.z += (dist - camera.position.z) * 0.06;
+    look.current.y += (1.6 - look.current.y) * 0.06;
     camera.lookAt(look.current);
-
-    // rotation follows the scroll position directly (mouse wheel / finger drag)
-    if (buildingRef.current) buildingRef.current.rotation.y = scrollState.progress * Math.PI * 2;
   });
 
   return null;
 }
+
+// the two rooms that share the front face crossfade by scroll index
+const aboutVis = (cur: number) => 1 - smoothstep(cur, 2.9, 3.6);
+const thanksVis = (cur: number) => smoothstep(cur, 3.3, 4.0);
+const always = () => 1;
 
 export function ElevatorScene() {
   const buildingRef = useRef<Group>(null);
   return (
     <>
       <group ref={buildingRef}>
-        <Tower />
+        <Core />
+        {rooms.map((room) => {
+          const idx = roomIndexOf(room.id);
+          const angle = (idx % 4) * (Math.PI / 2);
+          const vis = room.id === 'about' ? aboutVis : room.id === 'thanks' ? thanksVis : always;
+          return <FaceSet key={room.id} room={room} angle={angle} vis={vis} />;
+        })}
       </group>
-      <ScrollDirector buildingRef={buildingRef} />
+      <Rig buildingRef={buildingRef} />
     </>
   );
 }

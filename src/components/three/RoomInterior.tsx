@@ -111,7 +111,7 @@ function Shell({ accent }: { accent: string }) {
   );
 }
 
-function Furniture({ id }: { id: string }) {
+export function Furniture({ id }: { id: string }) {
   const g = toonGradient(3);
   switch (id) {
     case 'about':
