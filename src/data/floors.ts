@@ -8,13 +8,15 @@
  * floor out of the nav while its section is still being built (none right now).
  */
 
+import type { LocalizedString } from './profile';
+
 export interface Floor {
   /** Stable key — also the DOM section id and the `activeSection` value. */
   id: string;
   /** Elevator button label (the "floor number"). */
   n: string;
   /** Display name. */
-  label: string;
+  label: LocalizedString;
   /** Accent colour for this floor (from the cozy token palette). */
   accent: string;
   /** Vertical index in the shaft (0 = ground). Drives the 3D ride height. */
@@ -22,55 +24,77 @@ export interface Floor {
   /** Shown in the elevator nav. false = scaffolded for a later phase. */
   ready: boolean;
   /** Short blurb shown on the building front (click "เข้าไปดู" to open the room). */
-  teaser?: string;
+  teaser?: LocalizedString;
 }
 
 export const floors: Floor[] = [
-  { id: 'hero', n: 'L', label: 'Lobby', accent: '#ffd479', level: 0, ready: true },
+  { 
+    id: 'hero', 
+    n: 'L', 
+    label: { th: 'ล็อบบี้', en: 'Lobby' }, 
+    accent: '#ffd479', 
+    level: 0, 
+    ready: true 
+  },
   {
     id: 'about',
     n: '1',
-    label: 'เกี่ยวกับผม',
+    label: { th: 'เกี่ยวกับผม', en: 'About Me' },
     accent: '#56c2b0',
     level: 1,
     ready: true,
-    teaser: 'ซูม — สายมนุษยศาสตร์ที่เลี้ยวมาสร้างของด้วย AI',
+    teaser: { 
+      th: 'ซูม — สายมนุษยศาสตร์ที่เลี้ยวมาสร้างของด้วย AI', 
+      en: 'Zoom — Humanities major turned AI Builder' 
+    },
   },
   {
     id: 'work',
     n: '2',
-    label: 'ผลงาน',
+    label: { th: 'ผลงาน', en: 'Works' },
     accent: '#ff9a62',
     level: 2,
     ready: true,
-    teaser: 'Automation · เว็บไซต์ · แอป · เกม',
+    teaser: { 
+      th: 'Automation · เว็บไซต์ · แอป · เกม', 
+      en: 'Automation · Websites · Apps · Games' 
+    },
   },
   {
     id: 'tech',
     n: '3',
-    label: 'เทค & เครื่องมือ',
+    label: { th: 'เทค & เครื่องมือ', en: 'Tech & Tools' },
     accent: '#c7a6e6',
     level: 3,
     ready: true,
-    teaser: 'สแต็ก/เครื่องมือที่ใช้ + แวะเล่นเกมตรงนี้',
+    teaser: { 
+      th: 'สแต็ก/เครื่องมือที่ใช้ + แวะเล่นเกมตรงนี้', 
+      en: 'Tech stack / Tools + Play games here' 
+    },
   },
   {
     id: 'contact',
     n: '4',
-    label: 'ติดต่อ',
+    label: { th: 'ติดต่อ', en: 'Contact' },
     accent: '#7fd093',
     level: 4,
     ready: true,
-    teaser: 'อยากคุยหรือจ้างงาน ทักมาได้เลย',
+    teaser: { 
+      th: 'อยากคุยหรือจ้างงาน ทักมาได้เลย', 
+      en: 'Let\'s talk or work together' 
+    },
   },
   {
     id: 'thanks',
     n: '5',
-    label: 'ขอบคุณ',
+    label: { th: 'ขอบคุณ', en: 'Thanks' },
     accent: '#f4a3c0',
     level: 5,
     ready: true,
-    teaser: 'ขอบคุณที่แวะเข้ามาชม',
+    teaser: { 
+      th: 'ขอบคุณที่แวะเข้ามาชม', 
+      en: 'Thanks for dropping by' 
+    },
   },
 ];
 

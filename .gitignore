@@ -32,3 +32,8 @@ logs
 *.blend
 *.blend1
 src-assets/
+
+# scratch / experiments — never deploy these
+scratch/
+scratch_test/
+public/fonts.html

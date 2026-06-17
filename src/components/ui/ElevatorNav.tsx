@@ -16,7 +16,8 @@ import { scrollToSection } from '../../lib/scroll';
 export function ElevatorNav() {
   const activeSection = useAppStore((s) => s.activeSection);
   const setActiveSection = useAppStore((s) => s.setActiveSection);
-  const openFloor = useAppStore((s) => s.openFloor);
+  const openRoomPanel = useAppStore((s) => s.openRoomPanel);
+  const language = useAppStore((s) => s.language);
   const activeFloor = floorsById[activeSection] ?? floorsById.hero;
 
   // Top floor (Lobby) at the top, ground (Contact) at the bottom — matches the
@@ -44,9 +45,9 @@ export function ElevatorNav() {
             <button
               key={f.id}
               onClick={() => go(f.id)}
-              aria-label={`ไปยังชั้น ${f.label}`}
+              aria-label={`ไปยังชั้น ${f.label.th}`}
               aria-current={active ? 'true' : undefined}
-              title={f.label}
+              title={f.label[language]}
               className={[
                 'flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full font-[var(--font-display)] text-xs sm:text-sm font-bold transition-all',
                 active
@@ -62,12 +63,12 @@ export function ElevatorNav() {
         {activeSection !== 'hero' && (
           <button
             type="button"
-            onClick={() => openFloor(activeSection)}
+            onClick={() => openRoomPanel(activeSection)}
             className="mt-1 rounded-full bg-[var(--color-butter)] px-2 py-1 sm:px-2.5 sm:py-1 font-[var(--font-label)] text-[9px] sm:text-[10px] font-bold text-[var(--color-mist)] shadow-[0_0_0_3px_rgba(255,212,121,0.18)] transition-transform hover:scale-105"
-            aria-label={`เปิดห้อง ${activeFloor.label}`}
-            title={`เปิดห้อง ${activeFloor.label}`}
+            aria-label={`เปิดห้อง ${activeFloor.label.th}`}
+            title={`เปิดห้อง ${activeFloor.label[language]}`}
           >
-            ดูห้อง
+            {language === 'th' ? 'ดูห้อง' : 'View'}
           </button>
         )}
       </div>

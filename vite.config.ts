@@ -5,6 +5,8 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Honour the PORT env when set (e.g. the preview harness assigns a free port).
+  server: process.env.PORT ? { port: Number(process.env.PORT) } : undefined,
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

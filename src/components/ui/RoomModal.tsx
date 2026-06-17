@@ -10,8 +10,9 @@ import { FloorContent } from './FloorContent';
  * transparent click-catcher closes the room (so does Esc / the ✕).
  */
 export function RoomModal() {
-  const id = useAppStore((s) => s.focusedFloor);
+  const id = useAppStore((s) => s.roomPanel);
   const close = useAppStore((s) => s.closeFloor);
+  const language = useAppStore((s) => s.language);
   const floor = id ? floorsById[id] : null;
 
   useEffect(() => {
@@ -30,33 +31,38 @@ export function RoomModal() {
 
   if (!floor) return null;
 
+  const exitLabel = language === 'th' ? 'ออกจากห้อง' : 'Exit room';
+
   return (
     <div
-      className="content-layer fixed inset-0 z-50 flex items-end md:items-stretch md:justify-end"
+      className="content-layer fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:justify-end sm:pr-8"
       role="dialog"
       aria-modal="true"
-      aria-label={floor.label}
+      aria-label={floor.label[language]}
     >
       {/* transparent catcher — keeps the 3D room visible, click to leave */}
-      <button type="button" className="absolute inset-0 cursor-default" onClick={close} aria-label="ออกจากห้อง" />
+      <button type="button" className="absolute inset-0 cursor-default" onClick={close} aria-label={exitLabel} />
 
-      <div className="relative z-10 flex max-h-[60vh] w-full flex-col overflow-hidden rounded-t-3xl border border-[var(--color-glow)] bg-[var(--color-ink)] shadow-[0_-10px_40px_-12px_rgba(122,90,60,0.55)] md:h-full md:max-h-none md:w-[420px] md:rounded-none md:rounded-l-3xl md:border-l">
-        <div className="flex shrink-0 items-center justify-between border-b border-[var(--color-glow)] px-6 py-4">
+      <div className="relative z-10 flex max-h-[70vh] w-full flex-col overflow-hidden rounded-t-3xl border-4 border-[#3d281c] bg-[#4a3224] shadow-[0_15px_30px_rgba(0,0,0,0.6)] sm:max-h-[80vh] sm:w-[400px] sm:rounded-3xl">
+        <div className="flex shrink-0 items-center justify-between border-b-2 border-[#3d281c] px-6 py-4 bg-[#3d281c]/50">
           <div className="flex items-center gap-2">
-            <span aria-hidden className="text-sm">🚪</span>
-            <h2 className="font-[var(--font-display)] text-2xl font-bold text-[var(--color-mist)]">
-              {floor.label}
+            <span aria-hidden className="text-xl">🚪</span>
+            <h2 className="font-[var(--font-display)] text-2xl font-bold text-[#ffbc61]">
+              {floor.label[language]}
             </h2>
           </div>
           <button
             onClick={close}
-            aria-label="ออกจากห้อง"
-            className="rounded-full p-2 text-[var(--color-muted)] transition-colors hover:bg-[var(--color-glow)] hover:text-[var(--color-mist)]"
+            aria-label={exitLabel}
+            className="rounded-full p-2 text-[#ffbc61]/70 transition-colors hover:bg-[#ffbc61]/20 hover:text-[#ffbc61]"
           >
             ✕
           </button>
         </div>
-        <div className="overflow-y-auto px-6 py-6">
+        <div 
+          className="overflow-y-auto px-6 py-6"
+          data-lenis-prevent="true"
+        >
           <FloorContent id={floor.id} />
         </div>
       </div>

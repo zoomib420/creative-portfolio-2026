@@ -8,28 +8,53 @@ export interface SocialLink {
   url: string;
 }
 
+export interface LocalizedString {
+  th: string;
+  en: string;
+}
+
+export interface SocialLink {
+  label: string;
+  url: string;
+}
+
 export interface Profile {
-  name: string;
+  name: LocalizedString;
   /** ชื่อแบรนด์/handle สั้น ๆ ที่โชว์บน nav */
   handle: string;
-  role: string;
+  role: LocalizedString;
   /** คำโปรย hero สั้น ๆ — บอกตัวตนใน 1–2 ประโยค */
-  tagline: string;
+  tagline: LocalizedString;
   /** ประวัติย่อสำหรับ section About */
-  bio: string;
-  location: string;
+  bio: LocalizedString;
+  location: LocalizedString;
   email: string;
   resumeUrl?: string;
   socials: SocialLink[];
 }
 
 export const profile: Profile = {
-  name: 'ปวสิทธิ์ ไชยรัตน์ (ซูม)',
+  name: { 
+    th: 'ปวสิทธิ์ ไชยรัตน์ (ซูม)', 
+    en: 'Pawasit Chairat (Zoom)' 
+  },
   handle: 'ZOOM',
-  role: 'AI-Powered Builder',
-  tagline: 'บอกสิ่งที่อยากได้ แล้วผมจะสร้างมันให้ — เว็บ แอป เกม ระบบอัตโนมัติ ทุกอย่างขับเคลื่อนด้วย AI',
-  bio: 'สวัสดีครับ ผมซูม — จบมนุษยศาสตร์ (ภาษาอังกฤษ) แต่ชีวิตพาเลี้ยวเยอะ: เคยเป็นครู เปิดร้านอาหาร เรียนทำอาหารไทย ผ่านงาน retail & hospitality มาหลายสาย ทุกประสบการณ์สอนให้เข้าใจคน เข้าใจระบบ และรู้ว่า "ปัญหาซ้ำๆ ต้องแก้ด้วยระบบ ไม่ใช่แรงคน"\n\nตอนนี้ทุ่มเต็มที่กับ AI & Automation — ใช้ AI เป็นเครื่องมือสร้างทุกอย่างตั้งแต่เว็บ แอป เกม ไปจนถึงระบบอัตโนมัติที่ลดงานจากหลายชั่วโมงเหลือไม่กี่คลิก มี cert ด้าน Cybersecurity จาก Future Skills & TryHackMe ถ้ามีโปรเจกต์ที่ท้าทาย — คุยกันได้เลยครับ',
-  location: 'Bangkok, Thailand · Remote-first',
+  role: { 
+    th: 'AI-Powered Builder', 
+    en: 'AI-Powered Builder' 
+  },
+  tagline: { 
+    th: 'บอกสิ่งที่อยากได้ แล้วผมจะสร้างมันให้ — เว็บ แอป เกม ระบบอัตโนมัติ\nทุกอย่างขับเคลื่อนด้วย AI ทำทุกอย่างให้กลายเป็นเรื่องง่าย ที่คุณก็ทำได้\nแต่ถ้าทำไม่ได้ เอามาให้ผมทำให้ครับ', 
+    en: 'Tell me what you want, and I will build it — Web, Apps, Games, Automations.\nAll powered by AI, making everything so easy that even you can do it.\nBut if you can\'t, leave it to me.' 
+  },
+  bio: { 
+    th: 'สวัสดีครับ ผมชื่อซูม ปวสิทธิ์ ไชยรัตน์ หรือเรียกผมว่า สุดยอดไก่ชน ก็ได้ครับ — จบมนุษยศาสตร์ (ภาษาอังกฤษ) แต่ชีวิตพาเลี้ยวเยอะ: เคยเป็นครู เปิดร้านอาหาร เรียนทำอาหารไทย ผ่านงาน retail & hospitality มาหลายสาย ทุกประสบการณ์สอนให้เข้าใจคน เข้าใจระบบ และรู้ว่า "ปัญหาซ้ำๆ ต้องแก้ด้วยระบบ ไม่ใช่แรงคน"\n\nตอนนี้ทุ่มเต็มที่กับ AI & Automation — ใช้ AI เป็นเครื่องมือสร้างทุกอย่างตั้งแต่เว็บ แอป เกม ไปจนถึงระบบอัตโนมัติที่ลดงานจากหลายชั่วโมงเหลือไม่กี่คลิก มี cert ด้าน Cybersecurity จาก Future Skills & TryHackMe ถ้ามีโปรเจกต์ที่ท้าทาย — คุยกันได้เลยครับ', 
+    en: 'Hi, my name is Zoom Pawasit Chairat, or you can call me "Super Rooster". I graduated in Humanities (English) but my life took many turns: I\'ve been a teacher, opened a restaurant, studied Thai cooking, and worked across retail & hospitality. Every experience taught me to understand people, systems, and the truth that "repetitive problems must be solved by systems, not human effort."\n\nNow I am fully dedicated to AI & Automation. I use AI to build everything from websites and apps to games and automations that reduce hours of work to just a few clicks. I hold a Cybersecurity certificate from Future Skills & TryHackMe. If you have a challenging project — let\'s talk!'
+  },
+  location: { 
+    th: 'Bangkok, Thailand · Remote-first', 
+    en: 'Bangkok, Thailand · Remote-first' 
+  },
   email: 'zoomib420@gmail.com',
   socials: [
     { label: 'GitHub', url: 'https://github.com/zoomib420/' },

@@ -8,8 +8,8 @@ import { ProjectModal } from './components/ui/ProjectModal';
 import { GameModal } from './components/ui/GameModal';
 import { RoomModal } from './components/ui/RoomModal';
 import { AIGuide } from './components/ui/AIGuide';
+import { ElevatorPanel } from './components/ui/ElevatorPanel';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
-import { ElevatorNav } from './components/ui/ElevatorNav';
 import { Grid2D } from './components/fallback/Grid2D';
 
 // Heavy 3D experience is code-split: the basic (2D) tier never downloads it.
@@ -44,6 +44,18 @@ export function App() {
     };
   }, [markUserGesture]);
 
+  // Lock scrolling when a room is focused
+  const focusedFloor = useAppStore((s) => s.focusedFloor);
+  useEffect(() => {
+    import('./lib/scroll').then(({ setScrollLocked }) => {
+      setScrollLocked(focusedFloor !== null);
+    });
+    return () => {
+      // Ensure we unlock if the component unmounts for any reason
+      import('./lib/scroll').then(({ setScrollLocked }) => setScrollLocked(false));
+    };
+  }, [focusedFloor]);
+
   if (!capabilities) {
     return <Loader label="กำลังตรวจสอบอุปกรณ์ของคุณ…" />;
   }
@@ -68,11 +80,11 @@ export function App() {
         <Grid2D />
       )}
 
-      <ElevatorNav />
       <RoomModal />
       <ProjectModal />
       <GameModal />
       <AIGuide />
+      <ElevatorPanel />
     </>
   );
 }

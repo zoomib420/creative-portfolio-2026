@@ -27,13 +27,16 @@ function Callout({ text }: { text?: string }): ReactElement {
   );
 }
 
+import { useAppStore } from './store';
+
 function ProjectList({ ids }: { ids?: string[] }): ReactElement {
+  const language = useAppStore((s) => s.language);
   const list = (ids?.length ? projects.filter((p) => ids.includes(p.id)) : projects).slice(0, 5);
   return (
     <ul className="space-y-1 text-sm">
       {list.map((p) => (
         <li key={p.id} className="text-[var(--color-muted)]">
-          <span className="text-[var(--color-accent)]">{p.title}</span> — {p.tagline}
+          <span className="text-[var(--color-accent)]">{p.title}</span> — {p.tagline[language]}
         </li>
       ))}
     </ul>
@@ -41,12 +44,13 @@ function ProjectList({ ids }: { ids?: string[] }): ReactElement {
 }
 
 function ContactCard(): ReactElement {
+  const language = useAppStore((s) => s.language);
   return (
     <a
       href={`mailto:${profile.email}`}
       className="inline-block rounded-lg border border-[var(--color-accent)] px-4 py-2 text-sm text-[var(--color-accent)]"
     >
-      ติดต่อ {profile.name} ↗
+      {language === 'th' ? 'ติดต่อ' : 'Contact'} {profile.name[language]} ↗
     </a>
   );
 }

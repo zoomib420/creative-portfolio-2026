@@ -1,6 +1,6 @@
 import { useRef, type ComponentProps } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { AdaptiveDpr, AdaptiveEvents, Preload } from '@react-three/drei';
+import { AdaptiveDpr, AdaptiveEvents, Preload, Stars } from '@react-three/drei';
 import { ElevatorScene } from './ElevatorScene';
 import { Particles } from './Particles';
 import { PostFX } from './PostFX';
@@ -47,10 +47,12 @@ function PerfGuard() {
 }
 
 export default function Experience3D() {
-  const tier = useAppStore((s) => s.tier);
-  const dpr: [number, number] = tier === 'high' ? [1, 2] : [1, 1.5];
-
+  // Smooth scroll logic lives in GSAP triggers + Lenis. This hook wires
+  // scroll position to an active 3D waypoint.
   useSmoothScroll();
+
+  const tier = useAppStore((s) => s.tier);
+  const dpr: [number, number] = tier === 'high' ? [1, 2] : [1, 1];
 
   // WebGPU is opt-in via ?webgpu=1 (post-processing is WebGL-only, and the
   // WebGL path is what delivers the bloom/grain look). The WebGPU renderer
@@ -73,20 +75,25 @@ export default function Experience3D() {
           camera={{ position: [0, 0.6, 7], fov: 45 }}
           gl={gl}
         >
-          <color attach="background" args={['#fdf3e7']} />
-          <fog attach="fog" args={['#ffe6c9', 12, 34]} />
+          {/* Night sky background */}
+          <color attach="background" args={['#1a1e36']} />
+          <fog attach="fog" args={['#24294a', 13, 36]} />
 
-          {/* warm, soft daylight — cozy diorama lighting */}
-          <ambientLight intensity={0.85} color="#fff3e0" />
-          <hemisphereLight args={['#fff4dd', '#e7c9a6', 0.6]} />
+          {/* Stars! (radius, depth, count, factor, saturation, fade, speed) */}
+          <Stars radius={20} depth={20} count={3000} factor={4} saturation={0.5} fade speed={1} />
+
+          {/* cool, soft moonlight — cozy night lighting. */}
+          <ambientLight intensity={0.4} color="#a6bbed" />
+          <hemisphereLight args={['#d9e2ff', '#24294a', 0.5]} />
           {/* NOTE: soft shadows only on the WebGL path — three/webgpu's shadow
               node crashes in this version (re-enable for WebGPU when stable). */}
           <directionalLight
-            position={[6, 9, 4]}
-            intensity={1.5}
-            color="#fff1d6"
+            position={[5.5, 19.5, -20]}  // Matching the moon position
+            intensity={2.8}
+            color="#fff5cc"
             castShadow={!useWebGPU}
-            shadow-mapSize={[1024, 1024]}
+            shadow-mapSize={[2048, 2048]}
+            shadow-radius={4}
             shadow-camera-near={1}
             shadow-camera-far={40}
             shadow-camera-left={-12}

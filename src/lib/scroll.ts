@@ -20,6 +20,15 @@ export function scrollToSection(id: string): void {
   }
 }
 
+/** Lock or unlock scrolling (used when a room modal is open). */
+export function setScrollLocked(locked: boolean): void {
+  if (lenisInstance) {
+    if (locked) lenisInstance.stop();
+    else lenisInstance.start();
+  }
+  document.body.style.overflow = locked ? 'hidden' : '';
+}
+
 /**
  * Smooth scroll (Lenis) + GSAP ScrollTrigger "director cues" (Task T-10).
  *
@@ -84,7 +93,13 @@ export function useSmoothScroll(): void {
       return () => window.removeEventListener('scroll', onScroll);
     }
 
-    const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    const lenis = new Lenis({
+      duration: 1.35,
+      easing: (t: number) => Math.min(1, 1.001 - 2 ** (-10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 0.82,
+      touchMultiplier: 0.9,
+    });
     lenisInstance = lenis;
     lenis.on('scroll', (e: { progress: number; velocity: number }) => {
       scrollState.progress = e.progress;

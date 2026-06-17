@@ -2,8 +2,7 @@ import { useAppStore } from '../../lib/store';
 import { ambientAudio } from '../../lib/audio';
 
 /**
- * Mute/unmute the ambient Solfeggio pad. Off by default. Starting audio counts
- * as the user gesture, so it satisfies the browser autoplay policy.
+ * Mute/unmute the ambient Solfeggio pad and play a rooster crow!
  */
 export function AudioToggle() {
   const audioEnabled = useAppStore((s) => s.audioEnabled);
@@ -12,6 +11,7 @@ export function AudioToggle() {
 
   const toggle = async () => {
     markUserGesture();
+
     if (audioEnabled) {
       ambientAudio.stop();
       setAudioEnabled(false);
@@ -25,13 +25,11 @@ export function AudioToggle() {
     <button
       onClick={toggle}
       aria-pressed={audioEnabled}
-      aria-label={audioEnabled ? 'ปิดเสียง' : 'เปิดเสียงบรรยากาศ'}
-      title={audioEnabled ? 'ปิดเสียง' : 'เปิดเสียงบรรยากาศ (Solfeggio)'}
-      className="flex items-center gap-1.5 text-[var(--color-muted)] transition-colors hover:text-[var(--color-accent)]"
+      aria-label={audioEnabled ? 'ปิดเสียง' : 'เปิดเสียงไก่ขันและบรรยากาศ'}
+      title={audioEnabled ? 'ปิดเสียง' : 'เปิดเสียงไก่ขันและบรรยากาศ'}
+      className={`flex items-center justify-center text-lg transition-transform hover:scale-110 active:scale-95 ${audioEnabled ? '' : 'opacity-50 grayscale'}`}
     >
-      <span aria-hidden className={audioEnabled ? 'text-[var(--color-accent)]' : ''}>
-        {audioEnabled ? '♪' : '♪̸'}
-      </span>
+      <span aria-hidden>🐓</span>
     </button>
   );
 }
