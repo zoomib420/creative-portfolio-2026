@@ -1287,8 +1287,10 @@ export function Furniture({ id }: { id: string }) {
           <LongCounter p={[-0.65, 0, -2.72]} w={4.1} />
           {/* Wine / champagne shelf on the wall above the counter */}
           <WineShelf p={[-0.65, 1.5, -2.88]} />
-          {/* Fridge in the back-right corner (flush to the back wall) */}
-          <Fridge p={[1.9, 0, -2.6]} />
+          {/* Fridge in the back-right corner (flush to the back wall) — Sticky note for donation */}
+          <Hotspot room="thanks" act={() => useAppStore.getState().openRoomPanel('thanks')} hintOffset={[1.9, 2.5, -2.6]}>
+            <Fridge p={[1.9, 0, -2.6]} />
+          </Hotspot>
           {/* Chairs — a row behind (facing the visitor) + a row in front */}
           {([-1.0, -0.1, 0.8] as const).map((x) => (
             <CuteChair key={`b${x}`} p={[x, 0, -1.4]} ry={Math.PI} c="#ff9a62" />
@@ -1298,16 +1300,14 @@ export function Furniture({ id }: { id: string }) {
           ))}
           {/* Pendant lamp over the table */}
           <Pendant p={[-0.1, 2.4, -0.5]} />
-          {/* Dining table + the meal — click the table for the closing note */}
-          <Hotspot room="thanks" act={() => useAppStore.getState().openRoomPanel('thanks')} hintOffset={[-0.1, 1.4, -0.5]}>
-            <DiningTable p={[-0.1, 0, -0.5]} />
-            <PlateMango p={[-0.7, 1.07, -0.5]} />
-            <PlateKrapao p={[0.55, 1.07, -0.45]} />
-            <mesh position={[-0.05, 1.22, -0.75]} castShadow><cylinderGeometry args={[0.12, 0.14, 0.3, 14]} /><meshToonMaterial color="#7fd093" gradientMap={g} /></mesh>
-            {([-0.28, 0.2] as const).map((x) => (
-              <mesh key={`gl${x}`} position={[x, 1.13, -0.78]}><cylinderGeometry args={[0.06, 0.05, 0.16, 12]} /><meshToonMaterial color="#bfe6f0" gradientMap={g} /></mesh>
-            ))}
-          </Hotspot>
+          {/* Dining table + the meal (no longer clickable) */}
+          <DiningTable p={[-0.1, 0, -0.5]} />
+          <PlateMango p={[-0.7, 1.07, -0.5]} />
+          <PlateKrapao p={[0.55, 1.07, -0.45]} />
+          <mesh position={[-0.05, 1.22, -0.75]} castShadow><cylinderGeometry args={[0.12, 0.14, 0.3, 14]} /><meshToonMaterial color="#7fd093" gradientMap={g} /></mesh>
+          {([-0.28, 0.2] as const).map((x) => (
+            <mesh key={`gl${x}`} position={[x, 1.13, -0.78]}><cylinderGeometry args={[0.06, 0.05, 0.16, 12]} /><meshToonMaterial color="#bfe6f0" gradientMap={g} /></mesh>
+          ))}
         </>
       );
 

@@ -130,15 +130,18 @@ export function FloorContent({ id }: { id: string }) {
               ? 'ขอบคุณที่สละเวลาแวะเข้ามาชมพอร์ตของผมนะครับ — ถ้าชอบงานของผม หรืออยากร่วมงานกัน ทักมาได้เลย! 🙏' 
               : 'Thank you for taking the time to visit my portfolio. If you like my work or want to collaborate, feel free to reach out! 🙏'}
           </p>
-          {/* TODO(user): ใส่ช่องทางสนับสนุนจริง (PromptPay / Ko-fi / ฯลฯ) เมื่อพร้อม */}
-          <button
-            type="button"
-            disabled
-            title={language === 'th' ? 'เร็ว ๆ นี้' : 'Coming soon'}
-            className="cursor-not-allowed rounded-full border border-[#ffbc61]/30 px-5 py-2 text-sm text-[#fffaf2]/50 bg-[#3d281c]/50"
-          >
-            {language === 'th' ? '♥ สนับสนุนผม (เร็ว ๆ นี้)' : '♥ Support me (Coming soon)'}
-          </button>
+          <div className="mt-6 flex flex-col items-center space-y-3 rounded-xl bg-[#fffaf2] p-4 text-[#2a2233]">
+            <p className="text-center font-bold">
+              {language === 'th' ? '♥ เลี้ยงกาแฟผม (PromptPay)' : '♥ Buy me a coffee (PromptPay)'}
+            </p>
+            {/* The user should save the QR code image as public/promptpay-qr.jpg */}
+            <img 
+              src="/promptpay-qr.jpg" 
+              alt="PromptPay QR Code" 
+              className="w-48 max-w-full rounded-lg border-2 border-[#56c2b0]"
+            />
+            <p className="text-sm">นาย ปวสิทธิ์ ไชยรัตน์</p>
+          </div>
         </div>
       );
 
