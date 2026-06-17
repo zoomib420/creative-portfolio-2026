@@ -35,10 +35,10 @@ export function Overlay() {
           className="pointer-events-auto max-w-[min(14rem,48vw)] drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)] sm:max-w-[22rem] md:max-w-3xl"
           data-reveal
         >
-          <p className="mb-4 font-[var(--font-label)] text-xs tracking-[0.3em] text-[#ffd479] font-bold uppercase">
+          <p className="mb-4 hidden font-[var(--font-label)] text-xs tracking-[0.3em] text-[#ffd479] font-bold uppercase md:block">
             {profile.role[language]} · 2026
           </p>
-          <h1 className="font-[var(--font-display)] text-3xl leading-[1.05] font-extrabold text-[#fffaf2] text-balance sm:text-4xl md:text-7xl">
+          <h1 className="hidden font-[var(--font-display)] text-3xl leading-[1.05] font-extrabold text-[#fffaf2] text-balance sm:text-4xl md:block md:text-7xl">
             {language === 'th' ? 'ผมคือ สุดยอดไก่ชน ' : 'I am Super Rooster '}
             <span className="relative block text-[#ffbc61] italic sm:inline-block">
               {/* Background Glow */}
@@ -47,7 +47,7 @@ export function Overlay() {
               <Squiggle className="absolute -bottom-2 left-0 h-3 w-full z-10 opacity-80" />
             </span>
           </h1>
-          <p className="mt-6 max-w-xl text-sm font-normal leading-[1.8] text-[#fffaf2]/90 whitespace-pre-line md:mt-8 md:text-base">
+          <p className="mt-6 hidden max-w-xl text-sm font-normal leading-[1.8] text-[#fffaf2]/90 whitespace-pre-line md:mt-8 md:block md:text-base">
             {profile.tagline[language]}
           </p>
           <p className="mt-7 text-[10px] font-bold tracking-widest text-[#ffd479] uppercase md:mt-8 md:text-xs">

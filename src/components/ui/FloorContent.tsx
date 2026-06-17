@@ -30,22 +30,37 @@ export function FloorContent({ id }: { id: string }) {
     case 'work':
       return (
         <div className="space-y-10">
-          {projectCategories.map((cat) => {
-            const items = projects.filter((p) => p.category === cat.id);
-            if (!items.length) return null;
-            return (
-              <div key={cat.id}>
-                <h3 className="mb-4 font-[var(--font-label)] text-xs tracking-[0.3em] text-[#ffbc61] uppercase">
-                  {cat.label[language]}
-                </h3>
-                <div className="grid gap-5 sm:grid-cols-2">
-                  {items.map((p) => (
-                    <ProjectCard key={p.id} project={p} />
-                  ))}
+          {projectCategories
+            .filter((cat) => cat.id !== 'games')
+            .map((cat) => {
+              const items = projects.filter((p) => p.category === cat.id);
+              if (!items.length) return null;
+              return (
+                <div key={cat.id}>
+                  <h3 className="mb-4 font-[var(--font-label)] text-xs tracking-[0.3em] text-[#ffbc61] uppercase">
+                    {cat.label[language]}
+                  </h3>
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    {items.map((p) => (
+                      <ProjectCard key={p.id} project={p} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+        </div>
+      );
+
+    case 'work-games':
+      return (
+        <div className="space-y-4">
+          <div className="grid gap-5 sm:grid-cols-2">
+            {projects
+              .filter((p) => p.category === 'games')
+              .map((p) => (
+                <ProjectCard key={p.id} project={p} />
+              ))}
+          </div>
         </div>
       );
 
@@ -67,15 +82,19 @@ export function FloorContent({ id }: { id: string }) {
               ))}
             </ul>
           </div>
-          <div>
-            <h3 className="mb-4 font-[var(--font-label)] text-xs tracking-[0.3em] text-[#ffbc61] uppercase">
-              {language === 'th' ? 'พักเล่นเกมสักหน่อยไหม?' : 'Wanna play some games?'}
-            </h3>
-            <div className="grid gap-5 sm:grid-cols-2">
-              {games.map((g) => (
-                <GameCard key={g.id} game={g} />
-              ))}
-            </div>
+        </div>
+      );
+
+    case 'tech-games':
+      return (
+        <div className="space-y-4">
+          <p className="text-sm text-[#fffaf2]/70">
+            {language === 'th' ? 'เลือกเกมที่จะเล่น:' : 'Choose a game to play:'}
+          </p>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {games.map((g) => (
+              <GameCard key={g.id} game={g} />
+            ))}
           </div>
         </div>
       );

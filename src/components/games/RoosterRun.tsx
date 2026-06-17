@@ -15,7 +15,7 @@ export default function RoosterRun({ onExit }: Props) {
   const gameState = useRef({
     isPlaying: false,
     score: 0,
-    speed: 5,
+    speed: 2,
     roosterY: 0,
     roosterVy: 0,
     isJumping: false,
@@ -31,7 +31,7 @@ export default function RoosterRun({ onExit }: Props) {
     gameState.current = {
       isPlaying: true,
       score: 0,
-      speed: 5,
+      speed: 2,
       roosterY: 300,
       roosterVy: 0,
       isJumping: false,
@@ -66,7 +66,7 @@ export default function RoosterRun({ onExit }: Props) {
       if (state.isPlaying && !state.paused) {
         // Physics
         state.frameCount++;
-        if (state.frameCount % 600 === 0) state.speed += 0.5;
+        if (state.frameCount % 240 === 0) state.speed += 0.2;
 
         // Rooster Y logic
         if (state.isJumping) {

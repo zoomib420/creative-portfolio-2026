@@ -427,7 +427,7 @@ function RooftopLobby() {
 }
 
 function Rig({ buildingRef }: { buildingRef: { current: Group | null } }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const cur = useRef(0); // eased continuous stop position (0 = rooftop lobby)
   const look = useRef(new Vector3(0, TOTAL_H + 0.5, 0));
   const anchors = useRef<number[]>([]);
@@ -507,8 +507,15 @@ function Rig({ buildingRef }: { buildingRef: { current: Group | null } }) {
                      (isRoom ? basePx + settle * (0.6 - basePx)
                              : basePx);
 
+    // The camera uses a fixed vertical FOV, so narrow (portrait/mobile) viewports
+    // crop the tower horizontally and it reads as "too zoomed in". Pull the camera
+    // back as the aspect drops below square to restore horizontal headroom. Wide
+    // (desktop) viewports keep factor = 1, so desktop framing is untouched.
+    const aspect = size.width / Math.max(1, size.height);
+    const zoomOut = aspect < 1 ? Math.min(1.5, 1 / aspect) : 1;
+
     const px = targetPx;
-    const dist = targetDist;
+    const dist = targetDist * zoomOut;
 
     camera.position.x += (px - camera.position.x) * camEase;
     camera.position.y += (cy - camera.position.y) * camEase;

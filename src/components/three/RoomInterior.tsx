@@ -4,7 +4,6 @@ import { RoundedBox } from '@react-three/drei';
 import { Vector3, type Group } from 'three';
 import { toonGradient } from '../../lib/toon';
 import { floorsById } from '../../data/floors';
-import { games } from '../../data/games';
 import { useAppStore } from '../../lib/store';
 
 /**
@@ -339,10 +338,10 @@ function Laptop({ p, ry = 0, c = "#e0e0e0", sc = "#ff9a62" }: { p: Vec3; ry?: nu
     <group position={p} rotation={[0, ry, 0]}>
       {/* Base */}
       <B p={[0, 0.02, 0.1]} s={[0.6, 0.04, 0.4]} c={c} />
-      {/* Keyboard indent */}
-      <B p={[0, 0.03, 0.1]} s={[0.5, 0.02, 0.2]} c="#a0a0a0" cast={false} />
+      {/* Keyboard indent — y offset clears base top face (0.04) to avoid Z-fighting */}
+      <B p={[0, 0.043, 0.1]} s={[0.5, 0.006, 0.2]} c="#a0a0a0" cast={false} />
       {/* Trackpad */}
-      <B p={[0, 0.03, 0.25]} s={[0.15, 0.02, 0.08]} c="#c0c0c0" cast={false} />
+      <B p={[0, 0.043, 0.25]} s={[0.15, 0.006, 0.08]} c="#c0c0c0" cast={false} />
       {/* Screen (tilted back slightly) */}
       <group position={[0, 0.04, -0.08]} rotation={[-0.2, 0, 0]}>
         <B p={[0, 0.2, 0]} s={[0.6, 0.4, 0.04]} c={c} />
@@ -568,6 +567,363 @@ function HangingHeadphones({ p, ry = 0 }: { p: Vec3; ry?: number }) {
   );
 }
 
+/**
+ * Cute two-seater toon sofa — crisp sharp-cornered cushions (matches the room's
+ * faceted look). Faces +z (toward the camera) by default; pass `ry` to turn it.
+ */
+function Sofa({ p, ry = 0, c = '#56c2b0', cushion = '#fff2d9', leg = '#4a3224', pillow = '#ff9a62' }: { p: Vec3; ry?: number; c?: string; cushion?: string; leg?: string; pillow?: string }) {
+  return (
+    <group position={p} rotation={[0, ry, 0]}>
+      {/* seat plinth + backrest + arms (frame) */}
+      <B p={[0, 0.35, 0]} s={[1.8, 0.3, 0.85]} c={c} />
+      <B p={[0, 0.8, -0.34]} s={[1.8, 0.7, 0.22]} c={c} />
+      <B p={[-0.82, 0.55, 0.02]} s={[0.22, 0.5, 0.82]} c={c} />
+      <B p={[0.82, 0.55, 0.02]} s={[0.22, 0.5, 0.82]} c={c} />
+      {/* seat cushions */}
+      <B p={[-0.42, 0.57, 0.06]} s={[0.72, 0.16, 0.66]} c={cushion} />
+      <B p={[0.42, 0.57, 0.06]} s={[0.72, 0.16, 0.66]} c={cushion} />
+      {/* back cushions */}
+      <B p={[-0.42, 0.84, -0.26]} s={[0.72, 0.44, 0.16]} c={cushion} cast={false} />
+      <B p={[0.42, 0.84, -0.26]} s={[0.72, 0.44, 0.16]} c={cushion} cast={false} />
+      {/* little throw pillow for charm */}
+      <group position={[-0.42, 0.78, 0.08]} rotation={[0.2, 0, 0.5]}>
+        <B p={[0, 0, 0]} s={[0.34, 0.34, 0.12]} c={pillow} cast={false} />
+      </group>
+      {/* stubby legs */}
+      {([[-0.78, 0.34], [0.78, 0.34], [-0.78, -0.34], [0.78, -0.34]] as const).map(([x, z], i) => (
+        <B key={i} p={[x, 0.1, z]} s={[0.12, 0.2, 0.12]} c={leg} cast={false} />
+      ))}
+    </group>
+  );
+}
+
+/**
+ * Slouchy bean bag — reads clearly as a bean bag: saggy faceted base that bulges
+ * at the floor, a taller back lump to lean into, a sunken seat, a tie-knot on
+ * top and a stitched seam. Low poly counts keep the crisp toon edges.
+ */
+function BeanBag({ p, c, c2, r = 0.55 }: { p: Vec3; c: string; c2: string; r?: number }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p}>
+      {/* main saggy body */}
+      <mesh position={[0, r * 0.5, 0]} scale={[1, 0.62, 1]} castShadow>
+        <sphereGeometry args={[r, 11, 8]} />
+        <meshToonMaterial color={c} gradientMap={grad} />
+      </mesh>
+      {/* wider sag where it meets the floor */}
+      <mesh position={[0, r * 0.22, 0]} scale={[1.14, 0.42, 1.14]} castShadow>
+        <sphereGeometry args={[r, 11, 8]} />
+        <meshToonMaterial color={c2} gradientMap={grad} />
+      </mesh>
+      {/* back lump to lean on */}
+      <mesh position={[0, r * 0.72, -r * 0.4]} scale={[0.86, 0.98, 0.7]} castShadow>
+        <sphereGeometry args={[r * 0.8, 11, 8]} />
+        <meshToonMaterial color={c} gradientMap={grad} />
+      </mesh>
+      {/* sunken seat dimple */}
+      <mesh position={[0, r * 0.62, r * 0.12]} rotation={[-0.32, 0, 0]} scale={[0.68, 0.26, 0.6]}>
+        <sphereGeometry args={[r, 11, 8]} />
+        <meshToonMaterial color={c2} gradientMap={grad} />
+      </mesh>
+      {/* stitched seam round the middle */}
+      <mesh position={[0, r * 0.34, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[r * 0.96, 0.022, 6, 18]} />
+        <meshToonMaterial color={c2} gradientMap={grad} />
+      </mesh>
+      {/* tie-knot handle */}
+      <mesh position={[0, r * 1.02, -r * 0.32]} castShadow>
+        <sphereGeometry args={[r * 0.13, 8, 8]} />
+        <meshToonMaterial color={c2} gradientMap={grad} />
+      </mesh>
+    </group>
+  );
+}
+
+/**
+ * Reception desk. Built facing +z (toward the visitor): a tall front facade with
+ * an accent panel + a transaction shelf the visitor faces, and a lower work
+ * surface + monitor on the far side where the receptionist stands.
+ */
+function Counter({ p, ry = 0, body = '#caa57f', top = '#8a6240', panel = '#7fd093' }: { p: Vec3; ry?: number; body?: string; top?: string; panel?: string }) {
+  return (
+    <group position={p} rotation={[0, ry, 0]}>
+      {/* lower desk mass */}
+      <B p={[0, 0.5, 0]} s={[2.4, 1.0, 0.8]} c={body} />
+      {/* tall FRONT facade facing the visitor (+z) + accent panel down its face */}
+      <B p={[0, 1.2, 0.36]} s={[2.5, 0.5, 0.1]} c={body} />
+      <B p={[0, 0.66, 0.42]} s={[2.2, 1.28, 0.04]} c={panel} cast={false} />
+      {/* transaction shelf jutting toward the visitor at the top of the facade */}
+      <B p={[0, 1.42, 0.5]} s={[2.5, 0.08, 0.34]} c={top} />
+      {/* work surface behind the facade (receptionist side) */}
+      <B p={[0, 1.06, -0.12]} s={[2.4, 0.1, 0.54]} c={top} />
+      {/* service bell on the visitor's shelf */}
+      <mesh position={[0.9, 1.53, 0.5]} castShadow>
+        <sphereGeometry args={[0.1, 14, 12]} />
+        <meshStandardMaterial color="#ffd479" emissive="#ffd479" emissiveIntensity={0.25} metalness={0.4} roughness={0.4} />
+      </mesh>
+      <B p={[0.9, 1.48, 0.5]} s={[0.15, 0.03, 0.15]} c="#e0b84a" cast={false} />
+      {/* receptionist's monitor — screen faces the receptionist (-z) */}
+      <group position={[-0.7, 1.12, -0.16]} rotation={[0, Math.PI, 0]}>
+        <B p={[0, 0.2, 0]} s={[0.52, 0.34, 0.05]} c="#2a2233" />
+        <Screen p={[0, 0.2, 0.04]} s={[0.44, 0.26]} c="#56c2b0" i={0.8} />
+        <B p={[0, 0.0, 0]} s={[0.1, 0.08, 0.1]} c="#2a2233" cast={false} />
+      </group>
+      {/* keyboard / guest cards on the work surface */}
+      <B p={[0.25, 1.13, -0.1]} s={[0.4, 0.04, 0.2]} c="#fffaf2" cast={false} />
+    </group>
+  );
+}
+
+/** A cute toon receptionist (standing). Faces +z by default. */
+function Receptionist({ p, ry = 0, scale = 1, skin = '#f1c9a5', hair = '#4a3224', blouse = '#f4a3c0', skirt = '#3a587a' }: { p: Vec3; ry?: number; scale?: number; skin?: string; hair?: string; blouse?: string; skirt?: string }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p} rotation={[0, ry, 0]} scale={scale}>
+      {/* shoes */}
+      <B p={[-0.1, 0.04, 0.05]} s={[0.14, 0.08, 0.24]} c="#3d281c" />
+      <B p={[0.1, 0.04, 0.05]} s={[0.14, 0.08, 0.24]} c="#3d281c" />
+      {/* legs */}
+      <mesh position={[-0.1, 0.33, 0]} castShadow><cylinderGeometry args={[0.06, 0.06, 0.5, 10]} /><meshToonMaterial color={skin} gradientMap={grad} /></mesh>
+      <mesh position={[0.1, 0.33, 0]} castShadow><cylinderGeometry args={[0.06, 0.06, 0.5, 10]} /><meshToonMaterial color={skin} gradientMap={grad} /></mesh>
+      {/* A-line skirt */}
+      <mesh position={[0, 0.74, 0]} castShadow><coneGeometry args={[0.34, 0.52, 16]} /><meshToonMaterial color={skirt} gradientMap={grad} /></mesh>
+      {/* blouse / torso — wide at the shoulders, nipped in at the waist */}
+      <mesh position={[0, 1.12, 0]} castShadow><cylinderGeometry args={[0.235, 0.2, 0.44, 20]} /><meshToonMaterial color={blouse} gradientMap={grad} /></mesh>
+      {/* small, low shoulder fillet — rounds the top without swallowing the neck */}
+      <mesh position={[0, 1.3, 0]} scale={[1.04, 0.34, 0.82]} castShadow><sphereGeometry args={[0.2, 18, 14]} /><meshToonMaterial color={blouse} gradientMap={grad} /></mesh>
+      {/* waistline */}
+      <mesh position={[0, 0.9, 0]}><cylinderGeometry args={[0.205, 0.205, 0.06, 20]} /><meshToonMaterial color={skirt} gradientMap={grad} /></mesh>
+      {/* name tag */}
+      <B p={[0.13, 1.16, 0.2]} s={[0.08, 0.05, 0.02]} c="#ffd479" cast={false} />
+      {/* shoulder caps + sleeved arms tucked close to the body (joined, not overhanging) */}
+      <mesh position={[-0.2, 1.31, 0.01]}><sphereGeometry args={[0.075, 14, 12]} /><meshToonMaterial color={blouse} gradientMap={grad} /></mesh>
+      <mesh position={[0.2, 1.31, 0.01]}><sphereGeometry args={[0.075, 14, 12]} /><meshToonMaterial color={blouse} gradientMap={grad} /></mesh>
+      <mesh position={[-0.24, 1.08, 0.02]} rotation={[0, 0, 0.1]} castShadow><cylinderGeometry args={[0.058, 0.052, 0.46, 14]} /><meshToonMaterial color={blouse} gradientMap={grad} /></mesh>
+      <mesh position={[0.24, 1.08, 0.02]} rotation={[0, 0, -0.1]} castShadow><cylinderGeometry args={[0.058, 0.052, 0.46, 14]} /><meshToonMaterial color={blouse} gradientMap={grad} /></mesh>
+      {/* hands */}
+      <mesh position={[-0.265, 0.85, 0.04]} castShadow><sphereGeometry args={[0.056, 12, 12]} /><meshToonMaterial color={skin} gradientMap={grad} /></mesh>
+      <mesh position={[0.265, 0.85, 0.04]} castShadow><sphereGeometry args={[0.056, 12, 12]} /><meshToonMaterial color={skin} gradientMap={grad} /></mesh>
+      {/* neck (slim + clearly visible) + head, raised so the neck shows */}
+      <mesh position={[0, 1.45, 0]} castShadow><cylinderGeometry args={[0.058, 0.064, 0.2, 12]} /><meshToonMaterial color={skin} gradientMap={grad} /></mesh>
+      <mesh position={[0, 1.64, 0]} castShadow><sphereGeometry args={[0.16, 18, 16]} /><meshToonMaterial color={skin} gradientMap={grad} /></mesh>
+      {/* hair — crown + fringe (หน้าม้า) + shoulder-length side locks (face stays open) */}
+      <mesh position={[0, 1.69, -0.04]} scale={[1.08, 1.05, 1.04]} castShadow><sphereGeometry args={[0.18, 16, 14]} /><meshToonMaterial color={hair} gradientMap={grad} /></mesh>
+      <B p={[0, 1.72, 0.1]} s={[0.32, 0.13, 0.12]} c={hair} cast={false} />
+      <B p={[-0.13, 1.66, 0.12]} s={[0.1, 0.1, 0.08]} c={hair} cast={false} />
+      <B p={[0.13, 1.66, 0.12]} s={[0.1, 0.1, 0.08]} c={hair} cast={false} />
+      {/* shoulder-length side locks */}
+      <B p={[-0.17, 1.44, -0.02]} s={[0.09, 0.46, 0.14]} c={hair} cast={false} />
+      <B p={[0.17, 1.44, -0.02]} s={[0.09, 0.46, 0.14]} c={hair} cast={false} />
+      {/* eyes + little smile */}
+      <mesh position={[-0.06, 1.63, 0.15]}><sphereGeometry args={[0.022, 8, 8]} /><meshBasicMaterial color="#2a2233" /></mesh>
+      <mesh position={[0.06, 1.63, 0.15]}><sphereGeometry args={[0.022, 8, 8]} /><meshBasicMaterial color="#2a2233" /></mesh>
+      <B p={[0, 1.56, 0.15]} s={[0.07, 0.02, 0.02]} c="#c4607a" cast={false} />
+    </group>
+  );
+}
+
+/** Long dining table with four chunky legs. */
+function DiningTable({ p, c = '#caa57f', leg = '#8c613e' }: { p: Vec3; c?: string; leg?: string }) {
+  return (
+    <group position={p}>
+      <B p={[0, 1.0, 0]} s={[2.8, 0.12, 1.1]} c={c} />
+      {/* aprons */}
+      <B p={[0, 0.9, 0.5]} s={[2.7, 0.12, 0.06]} c={c} cast={false} />
+      <B p={[0, 0.9, -0.5]} s={[2.7, 0.12, 0.06]} c={c} cast={false} />
+      {/* legs */}
+      {([[-1.3, -0.45], [1.3, -0.45], [-1.3, 0.45], [1.3, 0.45]] as const).map(([x, z], i) => (
+        <B key={i} p={[x, 0.5, z]} s={[0.12, 1.0, 0.12]} c={leg} />
+      ))}
+    </group>
+  );
+}
+
+/** Two-door fridge with handles + a cute magnet note. */
+function Fridge({ p }: { p: Vec3 }) {
+  return (
+    <group position={p}>
+      <B p={[0, 1.05, 0]} s={[0.92, 2.1, 0.82]} c="#eef3f0" />
+      {/* freezer / fridge door split */}
+      <B p={[0, 1.42, 0.42]} s={[0.86, 0.04, 0.04]} c="#c4d2cc" cast={false} />
+      {/* inset door panels */}
+      <B p={[0, 1.74, 0.42]} s={[0.78, 0.48, 0.03]} c="#f7faf8" cast={false} />
+      <B p={[0, 0.9, 0.42]} s={[0.78, 0.92, 0.03]} c="#f7faf8" cast={false} />
+      {/* handles */}
+      <B p={[-0.34, 1.74, 0.46]} s={[0.05, 0.34, 0.06]} c="#9fb0a8" cast={false} />
+      <B p={[-0.34, 0.95, 0.46]} s={[0.05, 0.5, 0.06]} c="#9fb0a8" cast={false} />
+      {/* magnet note */}
+      <B p={[0.22, 1.82, 0.44]} s={[0.16, 0.2, 0.02]} c="#ffd479" cast={false} />
+    </group>
+  );
+}
+
+/** Mango sticky rice — white rice mound + bright mango slices + a coconut dollop. */
+function PlateMango({ p }: { p: Vec3 }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p}>
+      <mesh position={[0, 0, 0]} receiveShadow><cylinderGeometry args={[0.32, 0.28, 0.04, 20]} /><meshToonMaterial color="#fffaf2" gradientMap={grad} /></mesh>
+      <mesh position={[-0.08, 0.09, 0]} castShadow><sphereGeometry args={[0.15, 14, 12]} /><meshToonMaterial color="#fbf3df" gradientMap={grad} /></mesh>
+      <B p={[0.14, 0.07, 0.07]} s={[0.22, 0.1, 0.1]} c="#ffc24b" />
+      <B p={[0.16, 0.07, -0.08]} s={[0.2, 0.1, 0.1]} c="#ffb733" />
+      <mesh position={[-0.08, 0.17, 0]}><sphereGeometry args={[0.055, 10, 10]} /><meshToonMaterial color="#ffffff" gradientMap={grad} /></mesh>
+    </group>
+  );
+}
+
+/** Krapao + fried egg — rice mound, basil stir-fry, and an unmistakable fried egg. */
+function PlateKrapao({ p }: { p: Vec3 }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p}>
+      <mesh position={[0, 0, 0]} receiveShadow><cylinderGeometry args={[0.34, 0.3, 0.04, 20]} /><meshToonMaterial color="#fffaf2" gradientMap={grad} /></mesh>
+      {/* rice */}
+      <mesh position={[-0.1, 0.09, 0]} castShadow><sphereGeometry args={[0.16, 14, 12]} /><meshToonMaterial color="#fdfaf2" gradientMap={grad} /></mesh>
+      {/* basil stir-fry on the rice */}
+      <B p={[-0.1, 0.21, 0]} s={[0.22, 0.08, 0.22]} c="#5a7d34" cast={false} />
+      <B p={[-0.04, 0.25, 0.06]} s={[0.07, 0.06, 0.07]} c="#8a3b2a" cast={false} />
+      <B p={[-0.16, 0.24, -0.05]} s={[0.06, 0.06, 0.06]} c="#3d5a24" cast={false} />
+      {/* fried egg */}
+      <mesh position={[0.17, 0.06, 0.02]} scale={[1, 0.4, 1]} castShadow><sphereGeometry args={[0.16, 14, 12]} /><meshToonMaterial color="#fffdf6" gradientMap={grad} /></mesh>
+      <mesh position={[0.17, 0.11, 0.02]}><sphereGeometry args={[0.06, 12, 12]} /><meshToonMaterial color="#ffcf33" gradientMap={grad} /></mesh>
+    </group>
+  );
+}
+
+/** Hanging pendant lamp — cord, shade and a warm glowing bulb. */
+function Pendant({ p, c = '#ff9a62' }: { p: Vec3; c?: string }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p}>
+      <mesh position={[0, 0.65, 0]}><cylinderGeometry args={[0.02, 0.02, 1.3, 6]} /><meshToonMaterial color="#3d281c" gradientMap={grad} /></mesh>
+      <mesh position={[0, 0, 0]} castShadow><coneGeometry args={[0.32, 0.3, 18, 1, true]} /><meshToonMaterial color={c} gradientMap={grad} side={2} /></mesh>
+      <mesh position={[0, -0.08, 0]}><sphereGeometry args={[0.1, 12, 12]} /><meshStandardMaterial color="#ffe9b8" emissive="#ffd479" emissiveIntensity={1.2} toneMapped={false} /></mesh>
+    </group>
+  );
+}
+
+/** A wine / champagne bottle standing on its base (origin at the bottom). */
+function WineBottle({ p, c = '#3a5a2a', tall = false }: { p: Vec3; c?: string; tall?: boolean }) {
+  const grad = toonGradient(3);
+  const bh = tall ? 0.5 : 0.4;
+  return (
+    <group position={p}>
+      <mesh position={[0, bh / 2, 0]} castShadow><cylinderGeometry args={[0.06, 0.065, bh, 14]} /><meshToonMaterial color={c} gradientMap={grad} /></mesh>
+      <mesh position={[0, bh + 0.07, 0]} castShadow><cylinderGeometry args={[0.022, 0.032, 0.16, 10]} /><meshToonMaterial color={c} gradientMap={grad} /></mesh>
+      {tall
+        ? <mesh position={[0, bh + 0.17, 0]}><cylinderGeometry args={[0.034, 0.034, 0.07, 10]} /><meshToonMaterial color="#d9b44a" gradientMap={grad} /></mesh>
+        : <mesh position={[0, bh + 0.16, 0]}><cylinderGeometry args={[0.022, 0.022, 0.04, 8]} /><meshToonMaterial color="#2a1a12" gradientMap={grad} /></mesh>}
+    </group>
+  );
+}
+
+/** A stemmed wine glass (origin at the base). */
+function WineGlass({ p }: { p: Vec3 }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p}>
+      <mesh position={[0, 0.04, 0]}><cylinderGeometry args={[0.055, 0.055, 0.012, 14]} /><meshToonMaterial color="#dff2ff" transparent opacity={0.5} gradientMap={grad} /></mesh>
+      <mesh position={[0, 0.13, 0]}><cylinderGeometry args={[0.009, 0.009, 0.18, 8]} /><meshToonMaterial color="#dff2ff" transparent opacity={0.5} gradientMap={grad} /></mesh>
+      <mesh position={[0, 0.27, 0]}><cylinderGeometry args={[0.07, 0.025, 0.16, 14]} /><meshToonMaterial color="#dff2ff" transparent opacity={0.45} gradientMap={grad} /></mesh>
+    </group>
+  );
+}
+
+/** Wall-mounted shelf displaying wine + champagne bottles and stemmed glasses. */
+function WineShelf({ p }: { p: Vec3 }) {
+  return (
+    <group position={p}>
+      {/* brackets + two shelf planks */}
+      <B p={[-1.15, 0.3, -0.02]} s={[0.06, 0.74, 0.28]} c="#6b4e3d" cast={false} />
+      <B p={[1.15, 0.3, -0.02]} s={[0.06, 0.74, 0.28]} c="#6b4e3d" cast={false} />
+      <B p={[0, 0.0, 0]} s={[2.42, 0.06, 0.32]} c="#8c613e" />
+      <B p={[0, 0.62, 0]} s={[2.42, 0.06, 0.32]} c="#8c613e" />
+      {/* bottles on the lower shelf */}
+      <WineBottle p={[-0.85, 0.03, 0]} c="#3a5a2a" />
+      <WineBottle p={[-0.5, 0.03, 0]} c="#5a1a1a" />
+      <WineBottle p={[0, 0.03, 0]} c="#2f3b2a" tall />
+      <WineBottle p={[0.5, 0.03, 0]} c="#5a1a1a" />
+      <WineBottle p={[0.85, 0.03, 0]} c="#3a5a2a" />
+      {/* stemmed glasses on the upper shelf */}
+      <WineGlass p={[-0.7, 0.65, 0]} />
+      <WineGlass p={[-0.35, 0.65, 0]} />
+      <WineGlass p={[0.35, 0.65, 0]} />
+      <WineGlass p={[0.7, 0.65, 0]} />
+    </group>
+  );
+}
+
+/** Long low sideboard counter (origin centred on the floor). */
+function LongCounter({ p, w = 4.0, body = '#caa57f', top = '#8a6240' }: { p: Vec3; w?: number; body?: string; top?: string }) {
+  const doors = Math.max(2, Math.round(w / 1.0));
+  return (
+    <group position={p}>
+      <B p={[0, 0.5, 0]} s={[w, 1.0, 0.55]} c={body} />
+      <B p={[0, 1.04, 0.02]} s={[w + 0.08, 0.1, 0.62]} c={top} />
+      {/* door seams + handles */}
+      {Array.from({ length: doors - 1 }).map((_, i) => {
+        const x = -w / 2 + (w / doors) * (i + 1);
+        return <B key={`s${i}`} p={[x, 0.5, 0.29]} s={[0.02, 0.9, 0.02]} c="#9b7c5a" cast={false} />;
+      })}
+      {Array.from({ length: doors }).map((_, i) => {
+        const x = -w / 2 + (w / doors) * (i + 0.5);
+        return <B key={`h${i}`} p={[x, 0.62, 0.31]} s={[0.04, 0.14, 0.03]} c="#6b4e3d" cast={false} />;
+      })}
+    </group>
+  );
+}
+
+/** Round wall clock — rim, face, 12/3/6/9 ticks and two hands. */
+function WallClock({ p, face = '#fffaf2', rim = '#4a3224' }: { p: Vec3; face?: string; rim?: string }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p}>
+      <mesh rotation={[Math.PI / 2, 0, 0]} castShadow>
+        <cylinderGeometry args={[0.34, 0.34, 0.06, 24]} />
+        <meshToonMaterial color={rim} gradientMap={grad} />
+      </mesh>
+      <mesh position={[0, 0, 0.035]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.29, 0.29, 0.02, 24]} />
+        <meshToonMaterial color={face} gradientMap={grad} />
+      </mesh>
+      {/* hour ticks at 12 / 3 / 6 / 9 */}
+      {([[0, 0.22], [0.22, 0], [0, -0.22], [-0.22, 0]] as const).map(([x, y], i) => (
+        <B key={i} p={[x, y, 0.05]} s={[0.035, 0.035, 0.02]} c={rim} cast={false} />
+      ))}
+      {/* hands */}
+      <B p={[0, 0.07, 0.06]} s={[0.028, 0.18, 0.02]} c="#3d281c" cast={false} />
+      <group rotation={[0, 0, -1.1]}>
+        <B p={[0.09, 0, 0.06]} s={[0.2, 0.024, 0.02]} c="#3d281c" cast={false} />
+      </group>
+      <mesh position={[0, 0, 0.07]}><sphereGeometry args={[0.032, 10, 10]} /><meshToonMaterial color="#ff4a4a" gradientMap={grad} /></mesh>
+    </group>
+  );
+}
+
+/** Tall potted plant — a reception "tree" with a chunky pot and layered foliage. */
+function FloorPlant({ p, s = 1 }: { p: Vec3; s?: number }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p} scale={s}>
+      {/* pot */}
+      <B p={[0, 0.28, 0]} s={[0.44, 0.56, 0.44]} c="#e07a5f" />
+      <B p={[0, 0.56, 0]} s={[0.5, 0.08, 0.5]} c="#d4654a" />
+      <B p={[0, 0.58, 0]} s={[0.4, 0.02, 0.4]} c="#6b4e3d" cast={false} />
+      {/* trunk */}
+      <mesh position={[0, 0.95, 0]} castShadow>
+        <cylinderGeometry args={[0.06, 0.085, 0.72, 8]} />
+        <meshToonMaterial color="#6b4e3d" gradientMap={grad} />
+      </mesh>
+      {/* layered foliage */}
+      <B p={[0, 1.3, 0]} s={[0.72, 0.52, 0.72]} c="#52b788" />
+      <B p={[-0.24, 1.52, 0.12]} s={[0.46, 0.46, 0.46]} c="#7fd093" />
+      <B p={[0.22, 1.56, -0.06]} s={[0.5, 0.5, 0.5]} c="#40916c" />
+      <B p={[0.04, 1.78, 0.05]} s={[0.4, 0.4, 0.4]} c="#7fd093" />
+    </group>
+  );
+}
+
 export function Furniture({ id }: { id: string }) {
   const g = toonGradient(3);
   switch (id) {
@@ -693,17 +1049,17 @@ export function Furniture({ id }: { id: string }) {
     case 'work':
       return (
         <>
-          {/* Project Shelf — pushed deep to match About Me bookshelf visual flush (z=-2.85, back panel reaches building wall) */}
-          <Hotspot room="work" act={() => useAppStore.getState().openRoomPanel('work')} hintOffset={[1.9, 2.0, -2.6]}>
+          {/* Project Shelf — games only */}
+          <Hotspot room="work" act={() => useAppStore.getState().openRoomPanel('work-games')} hintOffset={[1.9, 2.0, -2.6]}>
             <ProjectShelf p={[1.9, 0.06, -3.0]} ry={0} />
           </Hotspot>
 
-          {/* Desk — flush to back wall z=-2.45 (same as About Me desk), on floor y=0.06 */}
-          <Desk pos={[-0.8, 0.06, -2.45]} color="#b9905f" />
-          
-          {/* Laptops on the desk */}
-          <Laptop p={[-1.35, 1.12, -2.45]} ry={0.15} c="#e0e0e0" sc="#ff9a62" />
-          <Laptop p={[-0.15, 1.12, -2.45]} ry={-0.15} c="#333333" sc="#56c2b0" />
+          {/* Desk + Laptops — all non-game projects */}
+          <Hotspot room="work" act={() => useAppStore.getState().openRoomPanel('work')} hintOffset={[-0.75, 2.3, -2.0]}>
+            <Desk pos={[-0.8, 0.06, -2.45]} color="#b9905f" />
+            <Laptop p={[-1.35, 1.12, -2.45]} ry={0.15} c="#e0e0e0" sc="#ff9a62" />
+            <Laptop p={[-0.15, 1.12, -2.45]} ry={-0.15} c="#333333" sc="#56c2b0" />
+          </Hotspot>
 
           {/* Gaming Chair facing desk */}
           <GamingChair p={[-0.8, 0.06, -1.45]} ry={0} c1="#1a1a1a" c2="#56c2b0" />
@@ -717,15 +1073,22 @@ export function Furniture({ id }: { id: string }) {
       return (
         <>
           {/* ===== TECH PEGBOARD — recognizable tool icons ===== */}
-          <Hotspot room="tech" act={() => useAppStore.getState().openRoomPanel('tech')} hintOffset={[-0.5, 3.2, -2.44]}>
-            {/* Board background */}
-            <B p={[-0.5, 2.1, -RD / 2 + 0.05]} s={[3.8, 1.6, 0.06]} c="#3d281c" cast={false} />
-            {/* Board trim */}
-            <B p={[-0.5, 2.85, -RD / 2 + 0.06]} s={[3.9, 0.06, 0.08]} c="#ffd479" cast={false} />
-            <B p={[-0.5, 1.35, -RD / 2 + 0.06]} s={[3.9, 0.06, 0.08]} c="#ffd479" cast={false} />
+          <Hotspot room="tech" act={() => useAppStore.getState().openRoomPanel('tech')} hintOffset={[-1.0, 3.35, -2.44]}>
+           {/* Whole pegboard nudged right (off the window wall) + pressed back against the wall.
+               NB: furniture is rendered at scale 0.6 + z-offset 0.2, so reaching the real back
+               wall needs local z ≈ -3.08 (hence the big -0.63 z push here). */}
+           <group position={[0, 0.1, -0.63]}>
+            {/* Board background (widened a touch so no icon overhangs the edge) */}
+            <B p={[-0.5, 2.1, -RD / 2 + 0.05]} s={[4.0, 1.6, 0.06]} c="#3d281c" cast={false} />
+            {/* Board trim — top + bottom rails */}
+            <B p={[-0.5, 2.85, -RD / 2 + 0.06]} s={[4.1, 0.06, 0.08]} c="#ffd479" cast={false} />
+            <B p={[-0.5, 1.35, -RD / 2 + 0.06]} s={[4.1, 0.06, 0.08]} c="#ffd479" cast={false} />
+            {/* Board trim — left + right edge rails */}
+            <B p={[-2.5, 2.1, -RD / 2 + 0.06]} s={[0.08, 1.56, 0.08]} c="#ffd479" cast={false} />
+            <B p={[1.5, 2.1, -RD / 2 + 0.06]} s={[0.08, 1.56, 0.08]} c="#ffd479" cast={false} />
 
             {/* --- React (Atom icon: circle + 3 orbits) --- */}
-            <group position={[-2.0, 2.4, -RD / 2 + 0.14]}>
+            <group position={[-2.14, 2.4, -RD / 2 + 0.14]} scale={1.18}>
               {/* Nucleus */}
               <mesh><sphereGeometry args={[0.08, 12, 12]} /><meshStandardMaterial color="#61dafb" emissive="#61dafb" emissiveIntensity={0.8} toneMapped={false} /></mesh>
               {/* Orbit rings (3 crossed ellipses) */}
@@ -737,7 +1100,7 @@ export function Furniture({ id }: { id: string }) {
             </group>
 
             {/* --- Node.js (Green hexagon shape) --- */}
-            <group position={[-1.0, 2.4, -RD / 2 + 0.14]}>
+            <group position={[-1.32, 2.4, -RD / 2 + 0.14]} scale={1.18}>
               {/* Hexagon approximation */}
               <B p={[0, 0, 0]} s={[0.4, 0.45, 0.06]} c="#68a063" />
               <B p={[0, 0, 0.01]} s={[0.35, 0.4, 0.04]} c="#3c873a" cast={false} />
@@ -750,7 +1113,7 @@ export function Furniture({ id }: { id: string }) {
             </group>
 
             {/* --- AI / Brain icon --- */}
-            <group position={[0, 2.4, -RD / 2 + 0.14]}>
+            <group position={[-0.5, 2.4, -RD / 2 + 0.14]} scale={1.18}>
               {/* Brain shape (two rounded halves) */}
               <B p={[-0.08, 0.05, 0]} s={[0.2, 0.3, 0.1]} c="#c7a6e6" />
               <B p={[0.08, 0.05, 0]} s={[0.2, 0.3, 0.1]} c="#c7a6e6" />
@@ -766,7 +1129,7 @@ export function Furniture({ id }: { id: string }) {
             </group>
 
             {/* --- Roblox (Tilted cube with O) --- */}
-            <group position={[1.0, 2.4, -RD / 2 + 0.14]}>
+            <group position={[0.32, 2.4, -RD / 2 + 0.14]} scale={1.18}>
               <group rotation={[0.3, 0.5, 0.2]}>
                 <B p={[0, 0, 0]} s={[0.3, 0.3, 0.3]} c="#e2231a" />
                 {/* O hole */}
@@ -778,7 +1141,7 @@ export function Furniture({ id }: { id: string }) {
             </group>
 
             {/* --- Tailwind (Wind swooshes) --- */}
-            <group position={[2.0, 2.4, -RD / 2 + 0.14]}>
+            <group position={[1.14, 2.4, -RD / 2 + 0.14]} scale={1.18}>
               <B p={[0, 0.1, 0]} s={[0.45, 0.06, 0.06]} c="#38bdf8" />
               <B p={[0.08, 0, 0]} s={[0.35, 0.06, 0.06]} c="#38bdf8" />
               <B p={[-0.04, -0.1, 0]} s={[0.4, 0.06, 0.06]} c="#38bdf8" />
@@ -791,7 +1154,7 @@ export function Furniture({ id }: { id: string }) {
             </group>
 
             {/* --- Google Apps Script (Gear) --- bottom row */}
-            <group position={[-1.5, 1.65, -RD / 2 + 0.14]}>
+            <group position={[-1.73, 1.65, -RD / 2 + 0.14]} scale={1.18}>
               <B p={[0, 0, 0]} s={[0.3, 0.3, 0.06]} c="#4285f4" />
               <B p={[0, 0, 0]} s={[0.35, 0.1, 0.06]} c="#4285f4" />
               <B p={[0, 0, 0]} s={[0.1, 0.35, 0.06]} c="#4285f4" />
@@ -804,7 +1167,7 @@ export function Furniture({ id }: { id: string }) {
             </group>
 
             {/* --- Cybersecurity (Shield) --- bottom row */}
-            <group position={[0, 1.65, -RD / 2 + 0.14]}>
+            <group position={[-0.5, 1.65, -RD / 2 + 0.14]} scale={1.18}>
               {/* Shield body */}
               <B p={[0, 0.05, 0]} s={[0.35, 0.35, 0.06]} c="#56c2b0" />
               <B p={[0, -0.1, 0]} s={[0.25, 0.15, 0.06]} c="#56c2b0" />
@@ -815,7 +1178,7 @@ export function Furniture({ id }: { id: string }) {
             </group>
 
             {/* --- Three.js / R3F (3D cube wireframe) --- bottom row */}
-            <group position={[1.5, 1.65, -RD / 2 + 0.14]}>
+            <group position={[0.73, 1.65, -RD / 2 + 0.14]} scale={1.18}>
               {/* Wireframe cube edges */}
               <B p={[0, 0.15, 0.15]} s={[0.3, 0.02, 0.02]} c="#ffffff" />
               <B p={[0, -0.15, 0.15]} s={[0.3, 0.02, 0.02]} c="#ffffff" />
@@ -830,18 +1193,18 @@ export function Furniture({ id }: { id: string }) {
               <B p={[0.15, -0.15, 0]} s={[0.02, 0.02, 0.3]} c="#cccccc" />
               <B p={[-0.15, -0.15, 0]} s={[0.02, 0.02, 0.3]} c="#cccccc" />
             </group>
+           </group>
           </Hotspot>
 
           {/* ===== ARCADE CABINET ===== */}
           <Hotspot
             room="tech"
-            act={() => {
-              const first = games[0]?.id;
-              if (first) useAppStore.getState().openGame(first);
-            }}
-            hintOffset={[1.7, 2.6, -2.15]}
+            act={() => useAppStore.getState().openRoomPanel('tech-games')}
+            hintOffset={[2.25, 2.6, -2.0]}
           >
-            <group position={[1.7, 0.06, -2.15]}>
+            {/* Pushed flush to the real back wall (local z ~-2.70 → body back hits the wall after
+                the 0.6 scale + 0.2 z-offset) and over to the right, clear of the board. */}
+            <group position={[2.25, 0.06, -2.70]}>
               <B p={[0, 0.08, 0.05]} s={[1.1, 0.16, 0.85]} c="#2a2233" />
               <B p={[0, 0.95, 0]} s={[1.0, 1.6, 0.75]} c="#c7a6e6" />
               <B p={[-0.48, 0.95, 0]} s={[0.06, 1.5, 0.7]} c="#9b7cc4" cast={false} />
@@ -871,123 +1234,80 @@ export function Furniture({ id }: { id: string }) {
             </group>
           </Hotspot>
 
-          {/* Bean bag (left side, where desk was) */}
-          <mesh position={[-1.3, 0.35, -0.8]} castShadow>
-            <sphereGeometry args={[0.55, 18, 14]} />
-            <meshToonMaterial color="#ff9a62" gradientMap={g} />
-          </mesh>
-          <mesh position={[-1.3, 0.08, -0.8]} castShadow>
-            <cylinderGeometry args={[0.58, 0.6, 0.16, 20]} />
-            <meshToonMaterial color="#e88a55" gradientMap={g} />
-          </mesh>
+          {/* Cute crisp two-seater sofa pressed against the real back wall (local z ~-2.63), facing the camera. */}
+          <Sofa p={[-1.0, 0, -2.63]} c="#56c2b0" cushion="#fff2d9" pillow="#ff9a62" />
 
-          {/* Bean bag (right side) */}
-          <mesh position={[0.2, 0.28, 0.7]} castShadow>
-            <sphereGeometry args={[0.45, 18, 14]} />
-            <meshToonMaterial color="#7fd093" gradientMap={g} />
-          </mesh>
-          <mesh position={[0.2, 0.08, 0.7]} castShadow>
-            <cylinderGeometry args={[0.48, 0.5, 0.16, 20]} />
-            <meshToonMaterial color="#6ab882" gradientMap={g} />
-          </mesh>
+          {/* Bean bags — now clearly bean-bag shaped (saggy base, lean-back, tie-knot). */}
+          {/* Orange one moved to the front-left corner. */}
+          <BeanBag p={[-1.7, 0, 0.95]} c="#ff9a62" c2="#e07a45" r={0.6} />
+          <BeanBag p={[0.5, 0, 0.8]} c="#7fd093" c2="#5fa874" r={0.52} />
 
-          {/* Dice stack */}
-          <B p={[-1.0, 0.18, 0.6]} s={[0.24, 0.24, 0.24]} c="#ff9a62" />
-          <B p={[-1.0, 0.18, 0.6]} s={[0.06, 0.06, 0.25]} c="#ffffff" cast={false} />
-          <B p={[-0.98, 0.42, 0.62]} s={[0.2, 0.2, 0.2]} c="#ffd479" />
-          <B p={[-0.98, 0.42, 0.62]} s={[0.05, 0.05, 0.21]} c="#ffffff" cast={false} />
+          {/* Dice stack — centred between the two bean bags */}
+          <B p={[-0.6, 0.18, 0.875]} s={[0.24, 0.24, 0.24]} c="#ff9a62" />
+          <B p={[-0.6, 0.18, 0.875]} s={[0.06, 0.06, 0.25]} c="#ffffff" cast={false} />
+          <B p={[-0.58, 0.42, 0.895]} s={[0.2, 0.2, 0.2]} c="#ffd479" />
+          <B p={[-0.58, 0.42, 0.895]} s={[0.05, 0.05, 0.21]} c="#ffffff" cast={false} />
         </>
       );
 
     case 'contact':
       return (
         <>
-          <Desk pos={[0, 0, -1.4]} />
-          {/* big envelope — click to get in touch */}
-          <Hotspot room="contact" act={() => useAppStore.getState().openRoomPanel('contact')} hintOffset={[0, 2.0, -1.3]}>
-            <B p={[0, 1.35, -1.4]} s={[1.1, 0.75, 0.06]} c="#fffaf2" />
-            <mesh position={[0, 1.45, -1.36]} rotation={[0, 0, Math.PI / 4]}>
-              <planeGeometry args={[0.55, 0.55]} />
+          {/* ===== RECEPTION ===== counter + receptionist + clock + waiting sofa + a potted tree */}
+          {/* Reception counter — warm terracotta panel so it pops off the green rug */}
+          <Counter p={[-0.3, 0, -1.9]} panel="#e07a5f" />
+          {/* Receptionist standing behind the counter, facing the visitor (taller so her
+              head + shoulders clear the counter). She is the click target — talk to her to
+              open the contact panel. */}
+          <Hotspot room="contact" act={() => useAppStore.getState().openRoomPanel('contact')} hintOffset={[-0.4, 2.55, -2.7]}>
+            <Receptionist p={[-0.4, 0, -2.7]} scale={1.25} />
+          </Hotspot>
+          {/* Wall clock hung high above the counter (flush to the back wall) */}
+          <WallClock p={[-0.3, 2.95, -3.0]} />
+          {/* Waiting sofa — lavender so it stands out from the green rug, not blends in */}
+          <Sofa p={[-2.3, 0, 0.4]} ry={Math.PI / 2} c="#c7a6e6" cushion="#fff2d9" pillow="#ff9a62" />
+          {/* Potted tree in the back-right corner */}
+          <FloorPlant p={[1.7, 0, -2.3]} />
+          {/* Envelope as the counter's logo — flat, centred on the green front panel */}
+          <group position={[-0.3, 0.7, -1.43]}>
+            <B p={[0, 0, 0]} s={[0.9, 0.56, 0.04]} c="#fffaf2" cast={false} />
+            <mesh position={[0, 0.02, 0.03]} rotation={[0, 0, Math.PI / 4]}>
+              <planeGeometry args={[0.36, 0.36]} />
               <meshToonMaterial color="#56c2b0" gradientMap={g} side={2} />
             </mesh>
-          </Hotspot>
-          {/* desk lamp */}
-          <mesh position={[0.7, 1.18, -1.4]}>
-            <cylinderGeometry args={[0.07, 0.09, 0.32, 12]} />
-            <meshToonMaterial color="#caa57f" gradientMap={g} />
-          </mesh>
-          <mesh position={[0.7, 1.4, -1.4]}>
-            <sphereGeometry args={[0.16, 14, 14]} />
-            <meshStandardMaterial color="#ffe9b8" emissive="#ffd479" emissiveIntensity={1.3} toneMapped={false} />
-          </mesh>
-          {/* stool */}
-          <mesh position={[0, 0.25, 0.2]} castShadow>
-            <cylinderGeometry args={[0.26, 0.26, 0.5, 16]} />
-            <meshToonMaterial color="#ff9a62" gradientMap={g} />
-          </mesh>
-          {/* little paper plane + a pen for that "drop me a line" charm */}
-          <mesh position={[-0.85, 1.35, -1.1]} rotation={[0, 0.5, 0.3]} castShadow>
-            <coneGeometry args={[0.12, 0.32, 4]} />
-            <meshToonMaterial color="#fffaf2" gradientMap={g} />
-          </mesh>
-          <mesh position={[-0.3, 1.12, -1.0]} rotation={[0, 0, Math.PI / 2.2]}>
-            <cylinderGeometry args={[0.02, 0.02, 0.34, 8]} />
-            <meshToonMaterial color="#56c2b0" gradientMap={g} />
-          </mesh>
+          </group>
         </>
       );
 
     case 'thanks':
       return (
         <>
-          {/* armchair (solid block touching floor) */}
-          <B p={[0, 0.35, -0.6]} s={[1.3, 0.7, 1.0]} c="#ff9a62" />
-          <B p={[0, 1.0, -1.05]} s={[1.3, 0.7, 0.2]} c="#ff9a62" />
-          <B p={[-0.65, 0.85, -0.6]} s={[0.2, 0.5, 1.0]} c="#ffb184" />
-          <B p={[0.65, 0.85, -0.6]} s={[0.2, 0.5, 1.0]} c="#ffb184" />
-          {/* "thank you" banner — click for the closing note */}
-          <Hotspot room="thanks" act={() => useAppStore.getState().openRoomPanel('thanks')} hintOffset={[0, 3.0, -1.2]}>
-            <B p={[0, 2.4, -RD / 2 + 0.06]} s={[2.4, 0.7, 0.06]} c="#f4a3c0" cast={false} />
-            <Screen p={[0, 2.4, -RD / 2 + 0.1]} s={[2.2, 0.5]} c="#ffd479" i={0.5} />
-          </Hotspot>
-          {/* gift box */}
-          <group position={[-1.9, 0, -0.5]}>
-            <B p={[0, 0.3, 0]} s={[0.6, 0.6, 0.6]} c="#56c2b0" />
-            <B p={[0, 0.62, 0]} s={[0.66, 0.12, 0.66]} c="#ffd479" />
-            <B p={[0, 0.4, 0]} s={[0.1, 0.62, 0.62]} c="#ff9a62" cast={false} />
-            {/* floating shelves */}
-            <B p={[2.2, 1.6, -2.25]} s={[1.1, 0.08, 0.5]} c="#4a3224" cast={false} />
-            <B p={[2.2, 0.8, -2.25]} s={[1.1, 0.08, 0.5]} c="#4a3224" cast={false} />
-            <B p={[1.5, 0.2, -2.25]} s={[2.2, 0.4, 0.5]} c="#4a3224" cast={false} />
-          </group>
-          {/* a little celebration cupcake */}
-          <group position={[1.9, 0.55, -0.4]}>
-            <mesh castShadow>
-              <cylinderGeometry args={[0.2, 0.16, 0.22, 16]} />
-              <meshToonMaterial color="#4a3224" gradientMap={g} />
-            </mesh>
-            <mesh position={[0, 0.18, 0]} castShadow>
-              <sphereGeometry args={[0.22, 16, 12]} />
-              <meshToonMaterial color="#f4a3c0" gradientMap={g} />
-            </mesh>
-            <mesh position={[0, 0.4, 0]}>
-              <sphereGeometry args={[0.05, 10, 10]} />
-              <meshStandardMaterial color="#ff4a4a" emissive="#ff4a4a" emissiveIntensity={0.5} toneMapped={false} />
-            </mesh>
-          </group>
-          {/* balloons */}
-          {([['#ff9a62', 1.7], ['#c7a6e6', 2.05]] as const).map(([c, x], i) => (
-            <group key={i} position={[x, 0, -0.8]}>
-              <mesh position={[0, 2.0, 0]} castShadow>
-                <sphereGeometry args={[0.28, 16, 16]} />
-                <meshToonMaterial color={c} gradientMap={g} />
-              </mesh>
-              <mesh position={[0, 1.2, 0]}>
-                <cylinderGeometry args={[0.03, 0.03, 1.4, 8]} />
-                <meshToonMaterial color="#9b8b7b" gradientMap={g} />
-              </mesh>
-            </group>
+          {/* ===== DINING ROOM ===== table (click target), chairs, fridge, back bar */}
+          {/* Long sideboard counter running from the window (left) wall to the fridge */}
+          <LongCounter p={[-0.65, 0, -2.72]} w={4.1} />
+          {/* Wine / champagne shelf on the wall above the counter */}
+          <WineShelf p={[-0.65, 1.5, -2.88]} />
+          {/* Fridge in the back-right corner (flush to the back wall) */}
+          <Fridge p={[1.9, 0, -2.6]} />
+          {/* Chairs — a row behind (facing the visitor) + a row in front */}
+          {([-1.0, -0.1, 0.8] as const).map((x) => (
+            <CuteChair key={`b${x}`} p={[x, 0, -1.4]} ry={Math.PI} c="#ff9a62" />
           ))}
+          {([-1.0, -0.1, 0.8] as const).map((x) => (
+            <CuteChair key={`f${x}`} p={[x, 0, 0.4]} ry={0} c="#56c2b0" />
+          ))}
+          {/* Pendant lamp over the table */}
+          <Pendant p={[-0.1, 2.4, -0.5]} />
+          {/* Dining table + the meal — click the table for the closing note */}
+          <Hotspot room="thanks" act={() => useAppStore.getState().openRoomPanel('thanks')} hintOffset={[-0.1, 2.0, -0.5]}>
+            <DiningTable p={[-0.1, 0, -0.5]} />
+            <PlateMango p={[-0.7, 1.07, -0.5]} />
+            <PlateKrapao p={[0.55, 1.07, -0.45]} />
+            <mesh position={[-0.05, 1.22, -0.75]} castShadow><cylinderGeometry args={[0.12, 0.14, 0.3, 14]} /><meshToonMaterial color="#7fd093" gradientMap={g} /></mesh>
+            {([-0.28, 0.2] as const).map((x) => (
+              <mesh key={`gl${x}`} position={[x, 1.13, -0.78]}><cylinderGeometry args={[0.06, 0.05, 0.16, 12]} /><meshToonMaterial color="#bfe6f0" gradientMap={g} /></mesh>
+            ))}
+          </Hotspot>
         </>
       );
 

@@ -85,6 +85,22 @@ export const floors: Floor[] = [
     },
   },
   {
+    id: 'work-games',
+    n: '2',
+    label: { th: 'ผลงาน — เกม', en: 'Works — Games' },
+    accent: '#ff9a62',
+    level: 2,
+    ready: false,
+  },
+  {
+    id: 'tech-games',
+    n: '3',
+    label: { th: 'เลือกเกม', en: 'Pick a Game' },
+    accent: '#c7a6e6',
+    level: 3,
+    ready: false,
+  },
+  {
     id: 'thanks',
     n: '5',
     label: { th: 'ขอบคุณ', en: 'Thanks' },
