@@ -1050,12 +1050,12 @@ export function Furniture({ id }: { id: string }) {
       return (
         <>
           {/* Project Shelf — games only */}
-          <Hotspot room="work" act={() => useAppStore.getState().openRoomPanel('work-games')} hintOffset={[1.9, 2.0, -2.6]}>
+          <Hotspot room="work" act={() => useAppStore.getState().openRoomPanel('work-games')} hintOffset={[1.9, 2.0, -2.9]}>
             <ProjectShelf p={[1.9, 0.06, -3.0]} ry={0} />
           </Hotspot>
 
           {/* Desk + Laptops — all non-game projects */}
-          <Hotspot room="work" act={() => useAppStore.getState().openRoomPanel('work')} hintOffset={[-0.75, 2.3, -2.0]}>
+          <Hotspot room="work" act={() => useAppStore.getState().openRoomPanel('work')} hintOffset={[-0.75, 2.3, -2.4]}>
             <Desk pos={[-0.8, 0.06, -2.45]} color="#b9905f" />
             <Laptop p={[-1.35, 1.12, -2.45]} ry={0.15} c="#e0e0e0" sc="#ff9a62" />
             <Laptop p={[-0.15, 1.12, -2.45]} ry={-0.15} c="#333333" sc="#56c2b0" />
@@ -1073,7 +1073,7 @@ export function Furniture({ id }: { id: string }) {
       return (
         <>
           {/* ===== TECH PEGBOARD — recognizable tool icons ===== */}
-          <Hotspot room="tech" act={() => useAppStore.getState().openRoomPanel('tech')} hintOffset={[-1.0, 3.35, -2.44]}>
+          <Hotspot room="tech" act={() => useAppStore.getState().openRoomPanel('tech')} hintOffset={[-0.5, 3.35, -2.8]}>
            {/* Whole pegboard nudged right (off the window wall) + pressed back against the wall.
                NB: furniture is rendered at scale 0.6 + z-offset 0.2, so reaching the real back
                wall needs local z ≈ -3.08 (hence the big -0.63 z push here). */}
@@ -1200,7 +1200,7 @@ export function Furniture({ id }: { id: string }) {
           <Hotspot
             room="tech"
             act={() => useAppStore.getState().openRoomPanel('tech-games')}
-            hintOffset={[2.25, 2.6, -2.0]}
+            hintOffset={[2.25, 2.6, -2.5]}
           >
             {/* Pushed flush to the real back wall (local z ~-2.70 → body back hits the wall after
                 the 0.6 scale + 0.2 z-offset) and over to the right, clear of the board. */}
@@ -1299,7 +1299,7 @@ export function Furniture({ id }: { id: string }) {
           {/* Pendant lamp over the table */}
           <Pendant p={[-0.1, 2.4, -0.5]} />
           {/* Dining table + the meal — click the table for the closing note */}
-          <Hotspot room="thanks" act={() => useAppStore.getState().openRoomPanel('thanks')} hintOffset={[-0.1, 2.0, -0.5]}>
+          <Hotspot room="thanks" act={() => useAppStore.getState().openRoomPanel('thanks')} hintOffset={[-0.1, 1.4, -0.5]}>
             <DiningTable p={[-0.1, 0, -0.5]} />
             <PlateMango p={[-0.7, 1.07, -0.5]} />
             <PlateKrapao p={[0.55, 1.07, -0.45]} />
