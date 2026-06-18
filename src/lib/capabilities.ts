@@ -101,12 +101,12 @@ export async function detectCapabilities(): Promise<Capabilities> {
   } else if (hasWebGPU && !lowPower) {
     tier = 'high';
     reason = 'WebGPU available';
-  } else if (hasWebGL2 && !lowPower) {
+  } else if (hasWebGL2) {
     tier = 'standard';
-    reason = hasWebGPU ? 'WebGPU present but low-power device' : 'WebGL2 only';
+    reason = (hasWebGPU && lowPower) ? 'WebGPU present but low-power device -> standard' : 'WebGL2 available';
   } else {
     tier = 'basic';
-    reason = lowPower ? 'low-power device' : 'no WebGL2/WebGPU';
+    reason = 'no WebGL2/WebGPU';
   }
 
   // Mobile / touch devices: cap at 'standard' to save battery and avoid

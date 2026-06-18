@@ -692,7 +692,7 @@ export function ElevatorScene() {
       {/* Grassy ground island, static so it doesn't spin, sized nicely so it doesn't cover the horizon from the top floor */}
       <mesh position={[0, -0.45, 0]} receiveShadow>
         <cylinderGeometry args={[10, 8, 0.3, 48]} />
-        <meshToonMaterial color="#2d3b5c" gradientMap={grad} />
+        <meshToonMaterial color="#163b27" gradientMap={grad} />
       </mesh>
       
       {/* Scattered static rocks on the ground */}

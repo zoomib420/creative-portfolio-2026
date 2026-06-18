@@ -104,14 +104,14 @@ export default function MemoryMatch({ onExit }: Props) {
   }
 
   return (
-    <div className="flex h-full flex-col p-4 md:p-8">
-      <div className="mb-6 flex justify-between text-sm tracking-widest text-[var(--color-muted)] uppercase">
+    <div className="flex h-full flex-col p-4 md:p-8 overflow-y-auto pb-12">
+      <div className="mb-6 flex justify-between text-sm tracking-widest text-[var(--color-muted)] uppercase shrink-0">
         <div>Moves: <span className="text-[var(--color-accent)]">{moves}</span></div>
         {bestScore && <div>Best: <span className="text-[var(--color-accent)]">{bestScore}</span></div>}
       </div>
 
-      <div className="mx-auto flex flex-1 w-full max-w-2xl items-center justify-center">
-        <div className="grid w-full grid-cols-4 gap-2 md:gap-4 lg:gap-6">
+      <div className="mx-auto flex flex-1 w-full items-center justify-center min-h-0">
+        <div className="grid w-full grid-cols-4 gap-2 md:gap-4 lg:gap-6" style={{ maxWidth: 'min(100%, 60vh)' }}>
           {cards.map((card, i) => (
             <button
               key={card.id}

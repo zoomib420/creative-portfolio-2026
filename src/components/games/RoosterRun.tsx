@@ -71,7 +71,7 @@ export default function RoosterRun({ onExit }: Props) {
         // Rooster Y logic
         if (state.isJumping) {
           state.roosterY += state.roosterVy;
-          state.roosterVy += 0.8; // Gravity
+          state.roosterVy += 0.5; // Gravity (was 0.8) - lowered to give more hang time
           if (state.roosterY >= state.groundY) {
             state.roosterY = state.groundY;
             state.isJumping = false;
@@ -79,22 +79,39 @@ export default function RoosterRun({ onExit }: Props) {
           }
         }
 
-        // Spawn obstacles
-        if (state.frameCount % 100 === 0 && Math.random() > 0.3) {
+        // Spawn obstacles and helpful coin guides
+        if (state.frameCount % 100 === 0 && Math.random() > 0.2) {
           const type = Math.random() > 0.5 ? 'high' : 'low';
+          const spawnX = canvas.width + 50; // Spawn slightly off-screen to prevent popping
+          
           state.obstacles.push({
-            x: canvas.width,
+            x: spawnX,
             type,
             w: 30,
             h: type === 'high' ? 80 : 40,
           });
+
+          // 60% chance to spawn guide coins along the correct path
+          if (Math.random() > 0.4) {
+            if (type === 'low') {
+              // Jump arc over the low obstacle
+              state.collectibles.push({ x: spawnX - 50, y: state.groundY - 70, active: true });
+              state.collectibles.push({ x: spawnX + 15, y: state.groundY - 140, active: true });
+              state.collectibles.push({ x: spawnX + 80, y: state.groundY - 70, active: true });
+            } else {
+              // Ducking path under the high obstacle
+              state.collectibles.push({ x: spawnX - 30, y: state.groundY - 20, active: true });
+              state.collectibles.push({ x: spawnX + 15, y: state.groundY - 20, active: true });
+              state.collectibles.push({ x: spawnX + 60, y: state.groundY - 20, active: true });
+            }
+          }
         }
 
-        // Spawn collectibles
-        if (state.frameCount % 80 === 0 && Math.random() > 0.5) {
+        // Spawn random stray collectibles in the safe gap between obstacles
+        if (state.frameCount % 100 === 50 && Math.random() > 0.3) {
           state.collectibles.push({
-            x: canvas.width,
-            y: state.groundY - 60 - Math.random() * 80,
+            x: canvas.width + 50,
+            y: state.groundY - 30 - Math.random() * 80, // Random height
             active: true,
           });
         }
@@ -232,12 +249,12 @@ export default function RoosterRun({ onExit }: Props) {
       if (e.code === 'Space' || e.code === 'ArrowUp') {
         if (!state.isJumping && !state.isDucking) {
           state.isJumping = true;
-          state.roosterVy = -12;
+          state.roosterVy = -12; // Initial jump velocity
         }
         e.preventDefault();
       } else if (e.code === 'ArrowDown') {
         state.isDucking = true;
-        if (state.isJumping) state.roosterVy += 5; // fast fall
+        if (state.isJumping) state.roosterVy += 8; // fast fall (was 5)
         e.preventDefault();
       }
     };
