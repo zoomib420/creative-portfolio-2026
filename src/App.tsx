@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { useAppStore } from './lib/store';
 import { detectCapabilities } from './lib/capabilities';
-import { Loader } from './components/ui/Loader';
+import { Loader, ElevatorLoader } from './components/ui/Loader';
 import { Nav } from './components/ui/Nav';
 import { FidelityBadge } from './components/ui/FidelityBadge';
 import { ProjectModal } from './components/ui/ProjectModal';
@@ -67,12 +67,15 @@ export function App() {
       <a className="skip-link" href="#work">
         ข้ามไปยังเนื้อหา
       </a>
+
+      {use3D && <ElevatorLoader />}
+
       <Nav />
       <FidelityBadge />
 
       {use3D ? (
         <ErrorBoundary fallback={<Grid2D />}>
-          <Suspense fallback={<Loader label="กำลังโหลดโลก 3D…" />}>
+          <Suspense fallback={null}>
             <Experience3D />
           </Suspense>
         </ErrorBoundary>

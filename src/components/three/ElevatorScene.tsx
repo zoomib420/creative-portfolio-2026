@@ -431,6 +431,7 @@ function Rig({ buildingRef }: { buildingRef: { current: Group | null } }) {
   const cur = useRef(0); // eased continuous stop position (0 = rooftop lobby)
   const look = useRef(new Vector3(0, TOTAL_H + 0.5, 0));
   const anchors = useRef<number[]>([]);
+  const isFirstFrame = useRef(true);
 
   // Measure each section's centre (in document coords) so the tower can turn
   // CONTINUOUSLY with the scroll instead of snapping when a heading goes active.
@@ -458,7 +459,8 @@ function Rig({ buildingRef }: { buildingRef: { current: Group | null } }) {
   // centres (0 = rooftop lobby, fractional = mid-way between two floors).
   const scrollStop = (): number => {
     const a = anchors.current;
-    if (a.length < 2) return 0;
+    // If sections haven't laid out properly yet, they'll all be at 0.
+    if (a.length < 2 || a[a.length - 1] <= a[0] + 10) return 0;
     const mid = window.scrollY + window.innerHeight / 2;
     const last = a.length - 1;
     if (mid <= a[0]) return 0;
@@ -473,6 +475,11 @@ function Rig({ buildingRef }: { buildingRef: { current: Group | null } }) {
     const st = useAppStore.getState();
     const focused = st.focusedFloor;
     const targetStop = focused ? roomIndexOf(focused) + 1 : scrollStop();
+
+    if (isFirstFrame.current) {
+      cur.current = targetStop;
+      isFirstFrame.current = false;
+    }
 
     // Frame-rate independent damping keeps the ride smooth on both desktop and
     // mobile while still tracking the user's scroll closely.
