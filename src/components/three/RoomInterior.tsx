@@ -947,61 +947,140 @@ export function Furniture({ id }: { id: string }) {
             <B p={[2.0, 0.90, -2.88]} s={[1.2, 0.08, 0.28]} c="#a67b51" />
             <B p={[2.0, 1.70, -2.88]} s={[1.2, 0.08, 0.28]} c="#a67b51" />
             
-            {/* Books on the shelves */}
-            {([
-              // Bottom shelf
-              ['#56c2b0', -0.4, 0.38], ['#ff9a62', -0.25, 0.38], ['#c7a6e6', -0.1, 0.38],
-              // Middle shelf
-              ['#ffd479', 0.2, 1.12], ['#7fd093', 0.35, 1.12], ['#ff6b6b', 0.5, 1.12],
-              // Top shelf
-              ['#8ab4f8', -0.3, 1.92], ['#f7eed8', -0.15, 1.92]
-            ] as const).map(
-              ([c, x, y], i) => (
-                <mesh key={`book-${i}`} position={[2.0 + (x as number), y as number, -2.83]} castShadow>
-                  <boxGeometry args={[0.12, 0.36, 0.22]} />
-                  <meshToonMaterial color={c as string} gradientMap={g} />
-                </mesh>
-              ),
-            )}
-            
-            {/* little "About me" name plate leaning on the middle shelf */}
+            {/* Books — varied heights, spine labels, page-edge cream strip */}
+            {/* Bottom shelf (y-base 0.19 = top of bottom panel) */}
+            {[
+              { c:'#56c2b0', lc:'#d8f5f0', x:-0.43, h:0.42, w:0.11 },
+              { c:'#ff6b6b', lc:'#ffe8e8', x:-0.30, h:0.36, w:0.10 },
+              { c:'#c7a6e6', lc:'#f0e8ff', x:-0.18, h:0.44, w:0.12 },
+              { c:'#ffd479', lc:'#fff5cc', x:-0.04, h:0.30, w:0.09 },
+              { c:'#7fd093', lc:'#d8f5e0', x: 0.07, h:0.40, w:0.11 },
+            ].map(({ c, lc, x, h, w }, i) => (
+              <group key={`bb${i}`} position={[2.0+x, 0.19+h/2, -2.83]}>
+                <mesh castShadow><boxGeometry args={[w, h, 0.22]}/><meshToonMaterial color={c} gradientMap={g}/></mesh>
+                <mesh position={[0,0,0.115]}><boxGeometry args={[w*0.55, h*0.46, 0.012]}/><meshToonMaterial color={lc} gradientMap={g}/></mesh>
+                <mesh position={[w/2+0.004,0,0]}><boxGeometry args={[0.006, h, 0.22]}/><meshToonMaterial color="#fffaf2" gradientMap={g}/></mesh>
+              </group>
+            ))}
+            {/* Middle shelf (y-base 0.93 = top of middle shelf) */}
+            {[
+              { c:'#ff9a62', lc:'#ffe5d0', x:-0.42, h:0.34, w:0.10 },
+              { c:'#8ab4f8', lc:'#e5f0ff', x:-0.30, h:0.42, w:0.12 },
+              { c:'#f7eed8', lc:'#ffffff', x:-0.15, h:0.38, w:0.11 },
+              { c:'#ff6b6b', lc:'#ffe0e0', x:-0.02, h:0.30, w:0.09 },
+              { c:'#56c2b0', lc:'#d8f5f0', x: 0.09, h:0.44, w:0.12 },
+            ].map(({ c, lc, x, h, w }, i) => (
+              <group key={`mb${i}`} position={[2.0+x, 0.93+h/2, -2.83]}>
+                <mesh castShadow><boxGeometry args={[w, h, 0.22]}/><meshToonMaterial color={c} gradientMap={g}/></mesh>
+                <mesh position={[0,0,0.115]}><boxGeometry args={[w*0.55, h*0.46, 0.012]}/><meshToonMaterial color={lc} gradientMap={g}/></mesh>
+                <mesh position={[w/2+0.004,0,0]}><boxGeometry args={[0.006, h, 0.22]}/><meshToonMaterial color="#fffaf2" gradientMap={g}/></mesh>
+              </group>
+            ))}
+            {/* Top shelf (y-base 1.73 = top of upper shelf) */}
+            {[
+              { c:'#c7a6e6', lc:'#eed8ff', x:-0.38, h:0.36, w:0.11 },
+              { c:'#ffd479', lc:'#fff5cc', x:-0.25, h:0.42, w:0.12 },
+              { c:'#7fd093', lc:'#d0f0dc', x:-0.10, h:0.30, w:0.09 },
+              { c:'#ff9a62', lc:'#ffe5d0', x: 0.02, h:0.38, w:0.10 },
+            ].map(({ c, lc, x, h, w }, i) => (
+              <group key={`tb${i}`} position={[2.0+x, 1.73+h/2, -2.83]}>
+                <mesh castShadow><boxGeometry args={[w, h, 0.22]}/><meshToonMaterial color={c} gradientMap={g}/></mesh>
+                <mesh position={[0,0,0.115]}><boxGeometry args={[w*0.55, h*0.46, 0.012]}/><meshToonMaterial color={lc} gradientMap={g}/></mesh>
+                <mesh position={[w/2+0.004,0,0]}><boxGeometry args={[0.006, h, 0.22]}/><meshToonMaterial color="#fffaf2" gradientMap={g}/></mesh>
+              </group>
+            ))}
+            {/* Bookend — right side of bottom shelf */}
+            <B p={[2.23, 0.30, -2.83]} s={[0.04, 0.26, 0.20]} c="#704e33" cast={false} />
+            {/* "About me" name plate on middle shelf */}
             <B p={[1.7, 1.06, -2.73]} s={[0.6, 0.2, 0.05]} c="#56c2b0" cast={false} />
           </Hotspot>
 
-          {/* White floating shelf with Certificates above the bookshelf */}
-          <group position={[2.0, 2.9, -2.98]}>
-            {/* The white shelf */}
-            <B p={[0, 0, 0]} s={[1.2, 0.06, 0.2]} c="#ffffff" />
-            
-            {/* Certificate 1 (left) */}
-            <group position={[-0.25, 0.25, -0.05]} rotation={[-0.1, 0, -0.05]}>
-              <B p={[0, 0, 0]} s={[0.35, 0.45, 0.03]} c="#e6bb7c" /> {/* Frame */}
-              <B p={[0, 0, 0.02]} s={[0.28, 0.38, 0.01]} c="#ffffff" /> {/* Paper */}
-              {/* Little gold seal */}
-              <mesh position={[0.08, -0.12, 0.03]}>
-                <cylinderGeometry args={[0.04, 0.04, 0.01, 16]} />
-                <meshToonMaterial color="#ff4a4a" />
+          {/* Floating shelf with Certificates — above desk on left wall, click to open cert viewer */}
+          <Hotspot room="about-certs" act={() => useAppStore.getState().openCertViewer()} hintOffset={[-1.8, 3.3, -2.8]}>
+          <group position={[-1.8, 2.5, -2.98]}>
+            {/* Shelf plank */}
+            <B p={[0, 0, 0]} s={[1.2, 0.06, 0.2]} c="#e8dcc8" />
+            <B p={[-0.57, -0.06, 0]} s={[0.06, 0.18, 0.18]} c="#d4c8a8" cast={false} />
+            <B p={[ 0.57, -0.06, 0]} s={[0.06, 0.18, 0.18]} c="#d4c8a8" cast={false} />
+
+            {/* Certificate 1 — portrait, gold frame */}
+            <group position={[-0.27, 0.30, -0.03]}>
+              {/* Gold outer frame */}
+              <B p={[0, 0, 0]} s={[0.36, 0.50, 0.04]} c="#c8932a" />
+              {/* Inner bevel line */}
+              <B p={[0, 0, 0.016]} s={[0.31, 0.45, 0.01]} c="#8b6320" cast={false} />
+              {/* Parchment paper */}
+              <B p={[0, 0, 0.024]} s={[0.27, 0.41, 0.010]} c="#fdf5e0" cast={false} />
+              {/* Title block */}
+              <B p={[0, 0.15, 0.032]} s={[0.21, 0.055, 0.008]} c="#2a5a8c" cast={false} />
+              {/* Name line */}
+              <B p={[0, 0.07, 0.032]} s={[0.15, 0.022, 0.008]} c="#444" cast={false} />
+              {/* Body text lines */}
+              <B p={[0,  0.01, 0.032]} s={[0.19, 0.014, 0.008]} c="#999" cast={false} />
+              <B p={[0, -0.03, 0.032]} s={[0.17, 0.014, 0.008]} c="#999" cast={false} />
+              <B p={[0, -0.07, 0.032]} s={[0.19, 0.014, 0.008]} c="#999" cast={false} />
+              {/* Gold seal disc */}
+              <mesh position={[-0.06, -0.16, 0.038]}>
+                <cylinderGeometry args={[0.044, 0.044, 0.014, 18]} />
+                <meshToonMaterial color="#ffd700" gradientMap={g} />
               </mesh>
+              {/* Seal star burst */}
+              <B p={[-0.06, -0.16, 0.048]} s={[0.042, 0.016, 0.008]} c="#e6a800" cast={false} />
+              <B p={[-0.06, -0.16, 0.048]} s={[0.016, 0.042, 0.008]} c="#e6a800" cast={false} />
+              {/* Signature line */}
+              <B p={[0.07, -0.16, 0.032]} s={[0.10, 0.008, 0.008]} c="#555" cast={false} />
             </group>
 
-            {/* Certificate 2 (right) */}
-            <group position={[0.25, 0.28, -0.05]} rotation={[-0.15, 0, 0.08]}>
-              <B p={[0, 0, 0]} s={[0.45, 0.35, 0.03]} c="#8b6540" /> {/* Frame (landscape) */}
-              <B p={[0, 0, 0.02]} s={[0.38, 0.28, 0.01]} c="#ffffff" /> {/* Paper */}
-              {/* Little ribbon */}
-              <mesh position={[-0.12, -0.08, 0.03]}>
-                <cylinderGeometry args={[0.03, 0.03, 0.01, 16]} />
-                <meshToonMaterial color="#56c2b0" />
+            {/* Certificate 2 — landscape, dark wood frame */}
+            <group position={[0.27, 0.26, -0.03]}>
+              {/* Dark wood outer frame */}
+              <B p={[0, 0, 0]} s={[0.52, 0.40, 0.04]} c="#5a3a1a" />
+              {/* Gold bevel inset */}
+              <B p={[0, 0, 0.016]} s={[0.47, 0.35, 0.010]} c="#c8932a" cast={false} />
+              {/* Parchment paper */}
+              <B p={[0, 0, 0.024]} s={[0.42, 0.30, 0.010]} c="#fdf5e0" cast={false} />
+              {/* Title bar */}
+              <B p={[0,  0.10, 0.032]} s={[0.34, 0.052, 0.008]} c="#c8932a" cast={false} />
+              {/* Name / institution line */}
+              <B p={[0,  0.04, 0.032]} s={[0.24, 0.022, 0.008]} c="#333" cast={false} />
+              {/* Body text lines */}
+              <B p={[0, -0.01, 0.032]} s={[0.30, 0.014, 0.008]} c="#999" cast={false} />
+              <B p={[0, -0.05, 0.032]} s={[0.28, 0.014, 0.008]} c="#999" cast={false} />
+              {/* Teal ribbon seal */}
+              <mesh position={[0.14, -0.11, 0.038]}>
+                <cylinderGeometry args={[0.038, 0.038, 0.014, 16]} />
+                <meshToonMaterial color="#56c2b0" gradientMap={g} />
               </mesh>
+              <mesh position={[0.14, -0.11, 0.050]}>
+                <cylinderGeometry args={[0.020, 0.020, 0.010, 8]} />
+                <meshToonMaterial color="#3aa08e" gradientMap={g} />
+              </mesh>
+              {/* Signature line left */}
+              <B p={[-0.09, -0.11, 0.032]} s={[0.12, 0.008, 0.008]} c="#555" cast={false} />
             </group>
           </group>
+          </Hotspot>
 
-          {/* plant (moved to the corner next to the desk) */}
+          {/* plant — corner accent, proper terracotta pot with foliage */}
           <group position={[-2.1, 0.06, -2.6]}>
-            <B p={[0, 0.15, 0]} s={[0.3, 0.3, 0.3]} c="#caa57f" /> {/* Pot */}
-            <B p={[0, 0.5, 0]} s={[0.5, 0.5, 0.5]} c="#7fd093" /> {/* Leaves */}
-            <B p={[0.15, 0.7, 0.1]} s={[0.3, 0.3, 0.3]} c="#7fd093" /> {/* Extra Leaves */}
-            <B p={[-0.15, 0.65, -0.1]} s={[0.25, 0.25, 0.25]} c="#7fd093" />
+            {/* Pot lower body (slightly narrower base) */}
+            <B p={[0, 0.10, 0]} s={[0.26, 0.20, 0.26]} c="#c96545" />
+            {/* Pot upper body (wider) */}
+            <B p={[0, 0.22, 0]} s={[0.30, 0.16, 0.30]} c="#e07a5f" />
+            {/* Pot rim */}
+            <B p={[0, 0.31, 0]} s={[0.34, 0.04, 0.34]} c="#d4654a" />
+            {/* Soil */}
+            <B p={[0, 0.335, 0]} s={[0.26, 0.018, 0.26]} c="#5a3a28" cast={false} />
+            {/* Trunk */}
+            <mesh position={[0, 0.55, 0]} castShadow>
+              <cylinderGeometry args={[0.038, 0.052, 0.44, 8]} />
+              <meshToonMaterial color="#6b4e3d" gradientMap={g} />
+            </mesh>
+            {/* Foliage — layered clusters */}
+            <B p={[0,    0.84, 0   ]} s={[0.50, 0.38, 0.50]} c="#52b788" />
+            <B p={[-0.18, 1.00, 0.12]} s={[0.34, 0.34, 0.34]} c="#7fd093" />
+            <B p={[ 0.18, 1.04,-0.10]} s={[0.36, 0.36, 0.36]} c="#40916c" />
+            <B p={[ 0.04, 1.22, 0.04]} s={[0.28, 0.30, 0.28]} c="#7fd093" />
           </group>
 
           {/* framed picture (Claude Icon) */}
@@ -1035,12 +1114,33 @@ export function Furniture({ id }: { id: string }) {
 
           {/* Litter Box (Moved up slightly to clear floor rounding) */}
           <group position={[-2.2, 0.10, 1.2]} rotation={[0, 0.4, 0]}>
-            <B p={[0, 0.1, 0]} s={[0.8, 0.2, 0.6]} c="#56c2b0" /> {/* Box outer */}
-            <B p={[0, 0.15, 0]} s={[0.7, 0.12, 0.5]} c="#fdf3e7" cast={false} /> {/* Sand */}
-            {/* Little poop scoop stuck in the sand */}
-            <group position={[0.2, 0.27, 0]} rotation={[0.2, 0.5, -0.3]}>
-              <B p={[0, 0, 0]} s={[0.02, 0.25, 0.05]} c="#ff9a62" />
-              <B p={[0, -0.1, 0]} s={[0.1, 0.15, 0.1]} c="#ff9a62" />
+            {/* Base tray */}
+            <B p={[0, 0.02, 0]} s={[0.88, 0.04, 0.68]} c="#90a4ae" />
+            {/* Back wall — tall so it reads as an enclosure */}
+            <B p={[0, 0.20, -0.31]} s={[0.88, 0.40, 0.06]} c="#90a4ae" />
+            {/* Left side wall */}
+            <B p={[-0.41, 0.16, 0]} s={[0.06, 0.32, 0.68]} c="#90a4ae" />
+            {/* Right side wall */}
+            <B p={[ 0.41, 0.16, 0]} s={[0.06, 0.32, 0.68]} c="#90a4ae" />
+            {/* Front wall — low entry step (cat steps over this) */}
+            <B p={[0, 0.08, 0.31]} s={[0.88, 0.16, 0.06]} c="#90a4ae" />
+            {/* Sand / litter fill */}
+            <B p={[0, 0.11, -0.02]} s={[0.74, 0.12, 0.52]} c="#e8d5a0" cast={false} />
+            {/* Sand surface layer */}
+            <B p={[0, 0.178, -0.02]} s={[0.72, 0.016, 0.50]} c="#f2e4b2" cast={false} />
+            {/* Paw impression marks */}
+            <B p={[-0.10, 0.188,  0.06]} s={[0.05, 0.010, 0.04]} c="#d8c890" cast={false} />
+            <B p={[-0.16, 0.188, -0.01]} s={[0.04, 0.010, 0.05]} c="#d8c890" cast={false} />
+            <B p={[ 0.12, 0.188,  0.05]} s={[0.05, 0.010, 0.04]} c="#d8c890" cast={false} />
+            {/* Scoop propped at back-right corner */}
+            <group position={[0.25, 0.22, -0.18]} rotation={[0.3, 0.3, -0.22]}>
+              {/* Handle */}
+              <B p={[0, 0.16, 0]} s={[0.025, 0.32, 0.025]} c="#ff9a62" />
+              {/* Scoop head */}
+              <B p={[0, -0.03, 0]} s={[0.14, 0.07, 0.14]} c="#ff9a62" />
+              {/* Slot holes to show it's a scoop not a shovel */}
+              <B p={[-0.03, -0.03, 0.05]} s={[0.022, 0.085, 0.016]} c="#d46b1c" cast={false} />
+              <B p={[ 0.03, -0.03, 0.05]} s={[0.022, 0.085, 0.016]} c="#d46b1c" cast={false} />
             </group>
           </group>
         </>

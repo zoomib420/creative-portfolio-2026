@@ -13,7 +13,8 @@ export function RoomModal() {
   const id = useAppStore((s) => s.roomPanel);
   const close = useAppStore((s) => s.closeFloor);
   const language = useAppStore((s) => s.language);
-  const floor = id ? floorsById[id] : null;
+  // cert viewer has its own modal — don't render the room drawer for it
+  const floor = (id && id !== 'about-certs') ? floorsById[id] : null;
 
   useEffect(() => {
     if (!floor) return;

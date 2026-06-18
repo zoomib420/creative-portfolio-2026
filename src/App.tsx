@@ -7,6 +7,7 @@ import { FidelityBadge } from './components/ui/FidelityBadge';
 import { ProjectModal } from './components/ui/ProjectModal';
 import { GameModal } from './components/ui/GameModal';
 import { RoomModal } from './components/ui/RoomModal';
+import { CertViewer } from './components/ui/CertViewer';
 import { AIGuide } from './components/ui/AIGuide';
 import { ElevatorPanel } from './components/ui/ElevatorPanel';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -84,6 +85,7 @@ export function App() {
       )}
 
       <RoomModal />
+      <CertViewer />
       <ProjectModal />
       <GameModal />
       <AIGuide />

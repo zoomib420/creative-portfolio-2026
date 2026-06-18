@@ -40,6 +40,7 @@ interface AppState {
   closeFloor: () => void;
   openRoomPanel: (id: string) => void;
   closeRoomPanel: () => void;
+  openCertViewer: () => void;
   setNavPanelOpen: (open: boolean) => void;
 }
 
@@ -78,5 +79,6 @@ export const useAppStore = create<AppState>((set) => ({
   closeFloor: () => set({ focusedFloor: null, roomPanel: null }),
   openRoomPanel: (id) => set({ focusedFloor: id, roomPanel: id }),
   closeRoomPanel: () => set({ roomPanel: null }),
+  openCertViewer: () => set({ roomPanel: 'about-certs' }),
   setNavPanelOpen: (open) => set({ isNavPanelOpen: open }),
 }));
