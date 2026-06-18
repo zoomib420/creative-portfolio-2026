@@ -298,28 +298,60 @@ export default function RoosterRun({ onExit }: Props) {
     };
   }, []);
 
+  // We need to track touch start data to detect swipes and quick taps
+  const touchStartData = useRef<{ y: number; time: number } | null>(null);
+
   // Handle touch events
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!gameState.current.isPlaying) return;
-    const touchY = e.touches[0].clientY;
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    touchStartData.current = { y: e.touches[0].clientY, time: Date.now() };
     
-    const relativeY = touchY - rect.top;
-    if (relativeY < rect.height / 2) {
-      // Jump
-      const state = gameState.current;
-      if (!state.isJumping && !state.isDucking) {
-        state.isJumping = true;
-        state.roosterVy = -12;
-      }
-    } else {
-      // Duck
+    // By default, touching the screen starts ducking immediately if on the ground
+    // so that "press and hold" feels responsive.
+    if (!gameState.current.isJumping) {
       gameState.current.isDucking = true;
     }
   };
 
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!gameState.current.isPlaying || !touchStartData.current) return;
+    
+    const touchY = e.touches[0].clientY;
+    const diffY = touchY - touchStartData.current.y;
+
+    // Swipe Up
+    if (diffY < -30) {
+      const state = gameState.current;
+      if (!state.isJumping) {
+        state.isDucking = false;
+        state.isJumping = true;
+        state.roosterVy = -12;
+      }
+      touchStartData.current = null; // Prevent multiple triggers
+    } 
+    // Swipe Down
+    else if (diffY > 30) {
+      gameState.current.isDucking = true;
+      if (gameState.current.isJumping) gameState.current.roosterVy += 8; // Fast fall
+      touchStartData.current = null;
+    }
+  };
+
   const handleTouchEnd = () => {
+    if (gameState.current.isPlaying && touchStartData.current) {
+      const duration = Date.now() - touchStartData.current.time;
+      // If it was a quick tap (under 200ms), treat it as a jump
+      if (duration < 200) {
+        const state = gameState.current;
+        if (!state.isJumping) {
+          state.isDucking = false;
+          state.isJumping = true;
+          state.roosterVy = -12;
+        }
+      }
+    }
+    
+    touchStartData.current = null;
     gameState.current.isDucking = false;
   };
 
@@ -333,8 +365,9 @@ export default function RoosterRun({ onExit }: Props) {
         ref={canvasRef}
         width={800}
         height={400}
-        className="max-w-full rounded-xl border border-[var(--color-glow)] bg-[#fdf3e7] shadow-lg"
+        className="max-w-full rounded-xl border border-[var(--color-glow)] bg-[#fdf3e7] shadow-lg touch-none"
         onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       />
 
@@ -348,7 +381,7 @@ export default function RoosterRun({ onExit }: Props) {
       {!isPlaying && !isGameOver && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#fdf3e7]/80 backdrop-blur-sm">
           <h2 className="mb-4 font-[var(--font-display)] text-4xl font-bold text-[#4a3f37]">Rooster Run</h2>
-          <p className="mb-8 text-[#4a3f37]">กด Spacebar (หรือแตะจอบน) เพื่อกระโดด<br/>กดลูกศรลง (หรือแตะจอล่าง) เพื่อก้ม</p>
+          <p className="mb-8 text-[#4a3f37] text-center">แตะจอ/ปัดขึ้น (หรือ Spacebar) เพื่อกระโดด<br/>กดค้าง/ปัดลง (หรือ ลูกศรลง) เพื่อก้ม</p>
           <button
             onClick={startGame}
             className="rounded-full bg-[#ff9a62] px-8 py-3 font-bold text-white transition-transform hover:scale-105"
