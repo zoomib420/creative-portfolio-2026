@@ -56,29 +56,40 @@ export function ProjectModal() {
       />
 
       <div 
-        className="relative z-10 max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-[var(--color-glow)] bg-[var(--color-ink)] p-6 md:p-8"
+        className="relative z-10 max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-[var(--color-glow)] bg-[var(--color-ink)] flex flex-col"
         data-lenis-prevent="true"
       >
         <button
-          className="absolute top-4 right-4 text-[var(--color-muted)] transition-colors hover:text-[var(--color-accent)]"
+          className="absolute top-4 right-4 z-20 text-[var(--color-muted)] transition-colors hover:text-[var(--color-accent)] rounded-full bg-[var(--color-void)]/80 p-2 backdrop-blur"
           onClick={close}
           aria-label={closeLabel}
         >
           ✕
         </button>
 
-        <div className="mb-2 flex items-center gap-3 text-[10px] tracking-widest uppercase">
-          <span className="text-[var(--color-accent-2)]">{project.level}</span>
-          <span className="text-[var(--color-muted)]">{project.year}</span>
-          <span className="text-[var(--color-muted)]">· {project.role}</span>
-        </div>
+        {project.thumbnail && (
+          <div className="w-full shrink-0 overflow-hidden">
+            <img 
+              src={project.thumbnail} 
+              alt={project.title} 
+              className="w-full h-48 md:h-64 object-cover"
+            />
+          </div>
+        )}
 
-        <h2 className="font-[var(--font-display)] text-2xl font-semibold md:text-3xl">
+        <div className={`p-6 md:p-8 flex-1 ${project.thumbnail ? 'pt-6 md:pt-8' : ''}`}>
+          <div className="mb-3 flex items-center gap-3 text-[10px] tracking-widest uppercase">
+            <span className="text-[var(--color-accent-2)]">{project.level}</span>
+            <span className="text-[var(--color-muted)]">{project.year}</span>
+            <span className="text-[var(--color-muted)]">· {project.role}</span>
+          </div>
+
+        <h2 className="font-[var(--font-display)] text-2xl font-semibold md:text-3xl text-[var(--color-mist)]">
           {project.title}
         </h2>
-        <p className="mt-2 text-[var(--color-accent)]">{project.tagline[language]}</p>
+        <p className="mt-2 text-[var(--color-accent)] font-medium leading-snug">{project.tagline[language]}</p>
 
-        <p className="mt-5 leading-relaxed text-[var(--color-muted)]">{project.description[language]}</p>
+        <p className="mt-6 leading-relaxed text-[var(--color-mist)] whitespace-pre-line">{project.description[language]}</p>
 
         <h3 className="mt-6 mb-2 text-xs tracking-widest text-[var(--color-mist)] uppercase">
           Key features
@@ -118,6 +129,20 @@ export function ProjectModal() {
             ))}
           </div>
         )}
+
+        {(project.fullImage || project.thumbnail) && (
+          <div className="mt-8 overflow-hidden rounded-xl border border-[var(--color-glow)] bg-[var(--color-void)]">
+            <h3 className="bg-[var(--color-glow)] px-4 py-2 text-xs tracking-widest text-[var(--color-mist)] uppercase">
+              {language === 'th' ? 'รูปภาพฉบับเต็ม' : 'Full Image'}
+            </h3>
+            <img 
+              src={project.fullImage || project.thumbnail} 
+              alt={`${project.title} full view`} 
+              className="w-full h-auto"
+            />
+          </div>
+        )}
+        </div>
       </div>
     </div>
   );

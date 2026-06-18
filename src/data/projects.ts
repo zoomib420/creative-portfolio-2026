@@ -35,6 +35,8 @@ export interface Project {
   features: LocalizedString[];
   /** Optional media. Put compressed assets in /public. */
   thumbnail?: string;
+  /** Full, uncropped image for the modal detail view. */
+  fullImage?: string;
   model?: string; // path to a .glb for the 3D room
   /** Solfeggio frequency (Hz) used for ambient audio in this project's room. */
   ambientHz?: number;
@@ -55,9 +57,11 @@ export const projects: Project[] = [
     },
     description: {
       th: 'โปรแกรมช่วยเหลือสถาบันพัฒนาสมอง ลดงานทำมือโดยโอนข้อมูลจาก ERP ไป Google Sheet ได้อย่างแม่นยำ มีหน้า Preview ก่อนรันจริง มีแดชบอร์ด ระบบล็อค และโปรแกรมสร้าง classroom ใน ERP โดยไม่ต้องมี API (ใช้วิธี reverse engineering)',
-      en: 'An assistant program for a brain-training institute. Eliminates manual work by accurately transferring data from ERP to Google Sheets. Includes a pre-run Preview, dashboard, lock system, and an ERP classroom creator built without APIs (using reverse engineering).'
+      en: 'A Python-based scheduling bot using Selenium. It logs into the university portal, extracts course schedules and student lists, then automatically creates corresponding Google Classrooms via the API.'
     },
-    tools: ['Google Apps Script', 'Chrome Extension', 'Node.js'],
+    thumbnail: '/projects/Project-automator.png',
+    fullImage: '/projects/Project-automator2.png',
+    tools: ['Python', 'Selenium', 'Google Classroom API', 'Chromedriver'],
     features: [
       { th: 'Reverse engineering ERP', en: 'Reverse engineering ERP' },
       { th: 'โอนข้อมูลข้ามระบบแบบอัตโนมัติ', en: 'Automated cross-system data transfer' },
@@ -78,9 +82,11 @@ export const projects: Project[] = [
     },
     description: {
       th: 'แอปนับแคลอรี่ในแต่ละวันสำหรับเป้าหมายที่ต่างกัน (เพิ่ม/ลด/รักษาน้ำหนัก) โดยคำนวณแคลที่ควรได้รับจากอายุ น้ำหนัก ส่วนสูง และกิจกรรม ใช้ AI ในการประเมินแคลอรี่จากรูปถ่ายอาหาร พร้อมสรุปผลแชร์เป็นการ์ดสวยงาม',
-      en: 'A daily calorie tracker tailored for different goals (gain/lose/maintain weight). Calculates required calories based on age, weight, height, and activity. Uses AI to estimate calories from food photos and generates beautiful shareable summary cards.'
+      en: 'A diet and calorie tracking application featuring Thai food databases. It allows users to set goals, track daily intake, and monitor their progress with intuitive data visualization.'
     },
-    tools: ['React Native (Expo)', 'AI Vision', 'Database'],
+    thumbnail: '/projects/Project-caloriesbook.png',
+    fullImage: '/projects/Project-caloriesbook2.jpg',
+    tools: ['React Native', 'Firebase', 'Redux', 'Chart.js'],
     features: [
       { th: 'AI ถอดรหัสแคลอรี่จากรูปภาพ', en: 'AI-powered calorie estimation from photos' },
       { th: 'คำนวณเป้าหมายรายบุคคล', en: 'Personalized goal calculation' },
@@ -101,15 +107,42 @@ export const projects: Project[] = [
     },
     description: {
       th: 'เว็บแอปแบบทดสอบเพื่อค้นหาความเป็นอินโทรเวิร์ตในตัวคุณ ด้วยคำถามจิตวิทยา เอฟเฟกต์ภาพสวยงาม ประเมินผลออกมาเป็นตัวละคร 12 แบบพร้อมคำอธิบาย สร้างด้วย AI ทั้งกระบวนการและแชร์ผลลัพธ์เป็นการ์ดได้',
-      en: 'A web application quiz to discover your inner introvert. Features psychological questions, beautiful visual effects, and evaluates you into 12 character archetypes with descriptions. Fully built with AI and includes shareable result cards.'
+      en: 'A cozy mobile puzzle game where players guide an introverted character through social situations by managing their "social battery" and avoiding draining interactions.'
     },
-    tools: ['Web Tech', 'AI Content', 'UI/UX'],
+    thumbnail: '/projects/Project-introvert.png',
+    fullImage: '/projects/Project-introvert2.png',
+    tools: ['Unity', 'C#', 'Photoshop', 'FMOD'],
     features: [
       { th: 'วิเคราะห์ผลลัพธ์ 12 รูปแบบ', en: '12-archetype result analysis' },
       { th: 'เอฟเฟกต์ภาพลื่นไหล', en: 'Smooth visual effects' },
       { th: 'Generate card แชร์ลงโซเชียล', en: 'Generate shareable social cards' }
     ],
     ambientHz: 417,
+  },
+  {
+    id: 'intake-pilot',
+    title: 'Intake Pilot',
+    level: 'advanced',
+    category: 'automation',
+    year: 2026,
+    role: 'Creator & Developer',
+    tagline: {
+      th: 'แชทบอท AI รับลูกค้าและประเมินงานอัตโนมัติ',
+      en: 'AI Chatbot for client intake & estimation'
+    },
+    description: {
+      th: 'ระบบ AI รับลูกค้าหน้าด่านผ่าน LINE และเว็บแชท คอยสอบถามบัดเจท ความต้องการเบื้องต้น ประเมินความยากง่ายและราคาคร่าวๆ พร้อมแยกประเภทงานและความเร่งด่วน แล้วส่งข้อมูลจัดเรียงลง Notion อัตโนมัติ สร้างขึ้นมาเพื่อช่วยรับลูกค้าและเตรียมข้อมูลให้พร้อมก่อนคุยงานจริง',
+      en: 'An AI-powered first-line customer service chatbot for LINE and Web. It interviews clients about their budget and requirements, estimates project complexity and cost, categorizes urgency, and automatically organizes everything into Notion.'
+    },
+    thumbnail: '/projects/Project-intakepilot.png',
+    fullImage: '/projects/Project-intakepilot2.png',
+    tools: ['AI Chatbot', 'LINE API', 'Notion API'],
+    features: [
+      { th: 'AI สัมภาษณ์และประเมินราคาอัตโนมัติ', en: 'AI-driven client interview & estimation' },
+      { th: 'บันทึกและจัดหมวดหมู่ลง Notion', en: 'Automated Notion data entry' },
+      { th: 'คัดกรองความต้องการและความเร่งด่วน', en: 'Urgency & requirement categorization' }
+    ],
+    ambientHz: 741,
   },
   {
     id: 'kids-plearn',
@@ -124,9 +157,11 @@ export const projects: Project[] = [
     },
     description: {
       th: 'เว็บแอปเกมสำหรับเด็กหลายช่วงวัย ตอบคำถามเพื่อเก็บเหรียญรางวัล สามารถนำเหรียญไปแลกคำใบ้ หรือให้ผู้ปกครองตั้งรางวัลในชีวิตจริง (ใส่รูปเองได้) แล้วให้เด็กมากดแลก (กำลังพัฒนาเปิดให้ทดลองเล่นแล้ว)',
-      en: 'A web game for kids of various ages. Answer questions to collect coins, which can be exchanged for hints or real-world rewards set by parents (with custom photos). Currently in development with a playable demo.'
+      en: 'An interactive e-learning platform designed for kindergarten and primary school children. Features gamified lessons, progress tracking, and parent dashboards to encourage self-directed learning.'
     },
-    tools: ['Web Game Engine', 'Database', 'Frontend Framework'],
+    thumbnail: '/projects/Project-kids-plearn.png',
+    fullImage: '/projects/Project-kids-plearn2.png',
+    tools: ['React', 'Node.js', 'Express', 'MongoDB'],
     features: [
       { th: 'ระบบสะสมเหรียญ/ของรางวัล', en: 'Coin & Reward collection system' },
       { th: 'ปรับระดับความยากตามวัย', en: 'Age-adaptive difficulty' },
@@ -149,6 +184,7 @@ export const projects: Project[] = [
       th: 'เกมเอาชีวิตรอดในโลกซอมบี้บน Roblox มีระบบความหิว ล่าสัตว์ การโจมตีอิงตามชิ้นส่วน (ยิงหัวตาย แขน/ขาขาดส่งผลกับความสามารถ) ผู้เล่นเลือกได้ว่าจะเล่นตามเนื้อเรื่องหรือสำรวจอิสระ (กำลังพัฒนา)',
       en: 'A zombie survival game on Roblox. Features hunger, hunting, and limb-based damage (headshots kill, missing limbs affect abilities). Players can follow the storyline or explore freely in an open world. (In Development)'
     },
+    thumbnail: '/projects/Project-Zworld.png',
     tools: ['Roblox Studio', 'Luau', '3D Modeling'],
     features: [
       { th: 'ระบบความบาดเจ็บเฉพาะส่วน', en: 'Limb-specific damage system' },
@@ -170,9 +206,11 @@ export const projects: Project[] = [
     },
     description: {
       th: 'โปรเจกต์เว็บส่วนตัวนี้เลย! สร้างระบบนำทางแบบลิฟต์ 3D มีระบบตรวจสอบสเปคเครื่อง (Multi-tier Fidelity) แสดงผลแบบ WebGPU สำหรับเครื่องแรง และ 2D สำหรับมือถือ เพื่อประสบการณ์ที่ลื่นไหลทุกคน',
-      en: 'This very personal website! Features a 3D elevator navigation system and Multi-tier Fidelity capability detection. Renders in WebGPU for high-end devices and falls back to a 2D grid for mobile, ensuring a smooth experience for everyone.'
+      en: 'This very website! A multi-tier architecture featuring a 3D WebGPU elevator experience for high-end devices, gracefully degrading to WebGL2, and falling back to a clean 2D layout for mobile.'
     },
-    tools: ['React Three Fiber', 'Zustand', 'Tailwind v4'],
+    thumbnail: '/projects/Project-portfolio.png',
+    fullImage: '/projects/Project-portfolio2.png',
+    tools: ['React', 'Three.js', 'React Three Fiber', 'Tailwind v4'],
     features: [
       { th: 'Metaphor ระบบนำทางด้วยลิฟต์ 3D', en: '3D Elevator navigation metaphor' },
       { th: 'Multi-tier fallback ไม่ให้เว็บค้าง', en: 'Multi-tier fallback preventing freezes' },
