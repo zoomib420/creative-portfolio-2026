@@ -99,29 +99,50 @@ export function FloorContent({ id }: { id: string }) {
         </div>
       );
 
-    case 'contact':
+    case 'contact': {
+      const lineLink = profile.socials.find((s) => s.url.includes('lin.ee'));
+      const otherSocials = profile.socials.filter((s) => s !== lineLink);
       return (
         <div className="space-y-5">
           <p className="max-w-md leading-relaxed text-[#fffaf2]/90">{profile.contactCta[language]}</p>
-          <ul className="flex flex-wrap gap-3">
-            {profile.socials.map((s) => (
-              <li key={s.url}>
-                <a
-                  className="inline-block rounded-full border border-[#ffbc61]/40 bg-[#3d281c] px-4 py-2 text-xs font-bold tracking-widest text-[#ffbc61] uppercase transition-colors hover:bg-[#ffbc61] hover:text-[#2a2233]"
-                  href={s.url}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  {s.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+
+          {lineLink && (
+            <a
+              href={lineLink.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="group flex w-fit items-center gap-3 rounded-full bg-[#00B900] px-6 py-3 font-[var(--font-display)] text-lg font-bold text-white shadow-lg transition-all hover:-translate-y-1 hover:bg-[#009900] hover:shadow-[#00B900]/40"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
+                <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.122.303.079.778.039 1.085l-.171 1.027c-.053.303-.242 1.186 1.039.647 1.281-.54 6.911-4.069 9.428-6.967 1.739-1.907 2.572-3.843 2.572-5.992z" />
+              </svg>
+              {lineLink.label}
+            </a>
+          )}
+
+          {otherSocials.length > 0 && (
+            <ul className="flex flex-wrap gap-3">
+              {otherSocials.map((s) => (
+                <li key={s.url}>
+                  <a
+                    className="inline-block rounded-full border border-[#ffbc61]/40 bg-[#3d281c] px-4 py-2 text-xs font-bold tracking-widest text-[#ffbc61] uppercase transition-colors hover:bg-[#ffbc61] hover:text-[#2a2233]"
+                    href={s.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+
           <a className="inline-block text-sm text-[#fffaf2]/60 hover:text-[#ffbc61]" href={`mailto:${profile.email}`}>
             {profile.email}
           </a>
         </div>
       );
+    }
 
     case 'thanks':
       return (
