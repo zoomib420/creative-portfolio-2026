@@ -101,15 +101,13 @@ export function FloorContent({ id }: { id: string }) {
 
     case 'contact':
       return (
-        <div className="space-y-4">
-          <a className="inline-block text-lg text-[#ffbc61] hover:text-[#ffd479]" href={`mailto:${profile.email}`}>
-            {profile.email}
-          </a>
-          <ul className="flex flex-wrap gap-4 text-xs tracking-widest uppercase">
+        <div className="space-y-5">
+          <p className="max-w-md leading-relaxed text-[#fffaf2]/90">{profile.contactCta[language]}</p>
+          <ul className="flex flex-wrap gap-3">
             {profile.socials.map((s) => (
               <li key={s.url}>
                 <a
-                  className="text-[#fffaf2]/70 transition-colors hover:text-[#ffbc61]"
+                  className="inline-block rounded-full border border-[#ffbc61]/40 bg-[#3d281c] px-4 py-2 text-xs font-bold tracking-widest text-[#ffbc61] uppercase transition-colors hover:bg-[#ffbc61] hover:text-[#2a2233]"
                   href={s.url}
                   target="_blank"
                   rel="noreferrer noopener"
@@ -119,6 +117,9 @@ export function FloorContent({ id }: { id: string }) {
               </li>
             ))}
           </ul>
+          <a className="inline-block text-sm text-[#fffaf2]/60 hover:text-[#ffbc61]" href={`mailto:${profile.email}`}>
+            {profile.email}
+          </a>
         </div>
       );
 

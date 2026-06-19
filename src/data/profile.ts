@@ -31,6 +31,8 @@ export interface Profile {
   email: string;
   resumeUrl?: string;
   socials: SocialLink[];
+  /** ข้อความ CTA สั้น ๆ ที่โชว์เหนือช่องทางติดต่อ */
+  contactCta: LocalizedString;
 }
 
 export const profile: Profile = {
@@ -57,6 +59,11 @@ export const profile: Profile = {
   },
   email: 'zoomib420@gmail.com',
   socials: [
+    { label: 'คุยกับ Intake Pilot (LINE)', url: 'https://lin.ee/w3Fw9o6R' },
     { label: 'GitHub', url: 'https://github.com/zoomib420/' },
   ],
+  contactCta: {
+    th: 'อยากได้เว็บ แอป ระบบอัตโนมัติ หรือ AI workflow ให้ธุรกิจคุณ? ทักคุยกับ Intake Pilot — AI ผู้ช่วยรับงานของผม — เล่าปัญหาให้ฟังได้เลย แล้วผมจะติดต่อกลับพร้อมราคาคร่าวๆ',
+    en: 'Want a website, app, automation, or AI workflow for your business? Chat with Intake Pilot — my AI intake assistant — tell it about your problem and I will follow up with a rough quote.',
+  },
 };
