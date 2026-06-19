@@ -39,7 +39,7 @@ export function Overlay() {
             {profile.role[language]} · 2026
           </p>
           <h1 className="hidden font-[var(--font-display)] text-3xl leading-[1.05] font-extrabold text-[#fffaf2] text-balance sm:text-4xl md:block md:text-7xl">
-            {language === 'th' ? 'ผมคือ สุดยอดไก่ชน ' : 'I am Super Rooster '}
+            {language === 'th' ? 'ผมคือ ' : 'I am a '}
             <span className="relative block text-[#ffbc61] italic sm:inline-block">
               {/* Background Glow */}
               <span className="absolute inset-0 block bg-[#ffbc61] blur-[20px] opacity-20 scale-125" aria-hidden="true" />

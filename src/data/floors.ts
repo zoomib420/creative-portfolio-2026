@@ -55,33 +55,45 @@ export const floors: Floor[] = [
     accent: '#ff9a62',
     level: 2,
     ready: true,
-    teaser: { 
-      th: 'Automation · เว็บไซต์ · แอป · เกม', 
-      en: 'Automation · Websites · Apps · Games' 
+    teaser: {
+      th: 'Automation · เว็บไซต์ · แอป · เกม',
+      en: 'Automation · Websites · Apps · Games'
+    },
+  },
+  {
+    id: 'business',
+    n: '3',
+    label: { th: 'ระบบสำหรับธุรกิจ', en: 'Business Systems' },
+    accent: '#ffd479',
+    level: 3,
+    ready: true,
+    teaser: {
+      th: 'ลดงานซ้ำๆ ของธุรกิจคุณด้วยระบบอัตโนมัติ — ดูราคาเริ่มต้นได้เลย',
+      en: 'Cut repetitive business work with automation — see starting prices',
     },
   },
   {
     id: 'tech',
-    n: '3',
+    n: '4',
     label: { th: 'เทค & เครื่องมือ', en: 'Tech & Tools' },
     accent: '#c7a6e6',
-    level: 3,
+    level: 4,
     ready: true,
-    teaser: { 
-      th: 'สแต็ก/เครื่องมือที่ใช้ + แวะเล่นเกมตรงนี้', 
-      en: 'Tech stack / Tools + Play games here' 
+    teaser: {
+      th: 'สแต็ก/เครื่องมือที่ใช้ + แวะเล่นเกมตรงนี้',
+      en: 'Tech stack / Tools + Play games here'
     },
   },
   {
     id: 'contact',
-    n: '4',
+    n: '5',
     label: { th: 'ติดต่อ', en: 'Contact' },
     accent: '#7fd093',
-    level: 4,
+    level: 5,
     ready: true,
-    teaser: { 
-      th: 'อยากคุยหรือจ้างงาน ทักมาได้เลย', 
-      en: 'Let\'s talk or work together' 
+    teaser: {
+      th: 'อยากคุยหรือจ้างงาน ทักมาได้เลย',
+      en: 'Let\'s talk or work together'
     },
   },
   {
@@ -94,22 +106,22 @@ export const floors: Floor[] = [
   },
   {
     id: 'tech-games',
-    n: '3',
+    n: '4',
     label: { th: 'เลือกเกม', en: 'Pick a Game' },
     accent: '#c7a6e6',
-    level: 3,
+    level: 4,
     ready: false,
   },
   {
     id: 'thanks',
-    n: '5',
+    n: '6',
     label: { th: 'ขอบคุณ', en: 'Thanks' },
     accent: '#f4a3c0',
-    level: 5,
+    level: 6,
     ready: true,
-    teaser: { 
-      th: 'ขอบคุณที่แวะเข้ามาชม', 
-      en: 'Thanks for dropping by' 
+    teaser: {
+      th: 'ขอบคุณที่แวะเข้ามาชม',
+      en: 'Thanks for dropping by'
     },
   },
 ];

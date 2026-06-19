@@ -107,11 +107,11 @@ export const projects: Project[] = [
     },
     description: {
       th: 'เว็บแอปแบบทดสอบเพื่อค้นหาความเป็นอินโทรเวิร์ตในตัวคุณ ด้วยคำถามจิตวิทยา เอฟเฟกต์ภาพสวยงาม ประเมินผลออกมาเป็นตัวละคร 12 แบบพร้อมคำอธิบาย สร้างด้วย AI ทั้งกระบวนการและแชร์ผลลัพธ์เป็นการ์ดได้',
-      en: 'A cozy mobile puzzle game where players guide an introverted character through social situations by managing their "social battery" and avoiding draining interactions.'
+      en: 'A web quiz that helps you discover your introversion type — psychology-based questions and polished visual effects resolve into one of 12 character archetypes, each with its own description. Built end-to-end with AI tooling, with results shareable as a social card.'
     },
     thumbnail: '/projects/Project-introvert.png',
     fullImage: '/projects/Project-introvert2.png',
-    tools: ['Unity', 'C#', 'Photoshop', 'FMOD'],
+    tools: ['AI-assisted web build'],
     features: [
       { th: 'วิเคราะห์ผลลัพธ์ 12 รูปแบบ', en: '12-archetype result analysis' },
       { th: 'เอฟเฟกต์ภาพลื่นไหล', en: 'Smooth visual effects' },

@@ -131,6 +131,24 @@ body::after {
   }
 }
 
+/* On-load entrance for the 2D page. The element's resting state is fully visible
+   (no base opacity:0, no forwards fill), so if the animation never runs — reduced
+   motion, or a browser that doesn't tick the keyframes — content stays visible.
+   The fallback tier must NEVER hide content. The animation is pure enhancement. */
+@keyframes fade-up {
+  from {
+    transform: translateY(1.25rem);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-up {
+    animation: fade-up 0.7s ease-out;
+  }
+}
+
 @keyframes elevator-shake {
   0%, 100% { transform: translateY(0); }
   25% { transform: translateY(-2px); }

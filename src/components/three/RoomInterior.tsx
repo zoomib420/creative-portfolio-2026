@@ -924,6 +924,199 @@ function FloorPlant({ p, s = 1 }: { p: Vec3; s?: number }) {
   );
 }
 
+/** Executive boardroom chair — swivel pedestal base, armrests, tall rounded back. */
+function ExecChair({ p, ry = 0, c = '#2a2233', accent = '#8c6a3a' }: { p: Vec3; ry?: number; c?: string; accent?: string }) {
+  const grad = toonGradient(3);
+  return (
+    <group position={p} rotation={[0, ry, 0]}>
+      {/* swivel pedestal base — no castShadow: a thin floating disc casts a
+          detached shadow that shimmers/flickers; the seat & back above it carry
+          the believable chair shadow anyway. */}
+      <mesh position={[0, 0.06, 0]}>
+        <cylinderGeometry args={[0.22, 0.26, 0.06, 14]} />
+        <meshToonMaterial color="#1a1a1a" gradientMap={grad} />
+      </mesh>
+      <B p={[0, 0.22, 0]} s={[0.07, 0.32, 0.07]} c="#3a3a3a" cast={false} />
+      {/* seat */}
+      <B p={[0, 0.45, 0]} s={[0.56, 0.1, 0.56]} c={c} />
+      <B p={[0, 0.5, 0]} s={[0.48, 0.02, 0.48]} c={accent} cast={false} />
+      {/* armrests */}
+      {([-0.29, 0.29] as const).map((x) => (
+        <group key={x}>
+          <B p={[x, 0.5, 0.05]} s={[0.07, 0.18, 0.06]} c="#1a1a1a" cast={false} />
+          <B p={[x, 0.62, 0.1]} s={[0.08, 0.05, 0.36]} c="#1a1a1a" />
+        </group>
+      ))}
+      {/* tall backrest */}
+      <B p={[0, 0.95, 0.24]} s={[0.56, 0.62, 0.1]} c={c} />
+      <B p={[0, 0.95, 0.29]} s={[0.46, 0.5, 0.02]} c={accent} cast={false} />
+    </group>
+  );
+}
+
+/**
+ * Long executive boardroom table — dark walnut top, brushed-steel edge trim,
+ * twin centre pedestals, a presenter's laptop, an agenda folder and water
+ * glasses down the runner. Reads as "real boardroom", not a 2-person desk.
+ */
+function BoardTable({ p }: { p: Vec3 }) {
+  return (
+    <group position={p}>
+      {/* tabletop */}
+      <B p={[0, 0.74, 0]} s={[3.1, 0.1, 1.15]} c="#4a3224" />
+      {/* brushed-steel edge trim */}
+      <B p={[0, 0.685, 0]} s={[3.16, 0.02, 1.21]} c="#9aa0a6" cast={false} />
+      {/* dark runner strip down the centre */}
+      <B p={[0, 0.795, 0]} s={[2.7, 0.012, 0.22]} c="#2a2233" cast={false} />
+      {/* twin centre pedestal legs */}
+      {([-0.95, 0.95] as const).map((x) => (
+        <group key={x} position={[x, 0, 0]}>
+          <B p={[0, 0.35, 0]} s={[0.12, 0.68, 0.7]} c="#3a2818" />
+          <B p={[0, 0.04, 0]} s={[0.5, 0.06, 0.9]} c="#2a1d12" cast={false} />
+        </group>
+      ))}
+      {/* presenter's laptop at the centre */}
+      <Laptop p={[0, 0.79, -0.08]} c="#dcdcdc" sc="#8ab4f8" />
+      {/* agenda folder + pen at one seat */}
+      <group position={[-1.05, 0.795, 0.28]} rotation={[0, 0.12, 0]}>
+        <B p={[0, 0, 0]} s={[0.32, 0.015, 0.42]} c="#56c2b0" cast={false} />
+        <B p={[0, 0.01, 0]} s={[0.28, 0.01, 0.38]} c="#fdf5e0" cast={false} />
+        <group position={[0.15, 0.02, 0.05]} rotation={[0, 0, Math.PI / 2 - 0.3]}>
+          <B p={[0, 0, 0]} s={[0.16, 0.012, 0.012]} c="#1a1a1a" cast={false} />
+          <B p={[0.08, 0, 0]} s={[0.02, 0.014, 0.014]} c="#ffd700" cast={false} />
+        </group>
+      </group>
+      {/* water glasses down the runner */}
+      {([-1.15, -0.4, 0.4, 1.15] as const).map((x) => (
+        <mesh key={x} position={[x, 0.85, 0]} castShadow>
+          <cylinderGeometry args={[0.045, 0.04, 0.12, 12]} />
+          <meshToonMaterial color="#dff2ff" gradientMap={toonGradient(3)} transparent opacity={0.55} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+/**
+ * Big wall-mounted presentation display — reads as a real "pricing + growth"
+ * boardroom slide: titled header, a framed glowing screen, a left column of
+ * labelled package price rows and a right-hand bar chart with a rising trend
+ * arrow. Everything is laid out inside a safe content area (x ∈ [-1.25, 1.25],
+ * y ∈ [-0.78, 0.78]) so nothing spills over the bezel edge.
+ */
+function BoardroomScreen({ p }: { p: Vec3 }) {
+  // package rows — colours match the service-package card tags
+  const rows = [
+    { c: '#56c2b0', y: 0.30 },
+    { c: '#ff9a62', y: 0.02 },
+    { c: '#c7a6e6', y: -0.26 },
+  ] as const;
+  // ascending chart bars (left→right growth)
+  const bars = [0.18, 0.3, 0.44, 0.58] as const;
+  const trendAngle = 0.8; // radians — slope of the rising trend line/arrow
+  return (
+    <group position={p}>
+      {/* outer bezel */}
+      <B p={[0, 0, 0]} s={[3.0, 1.9, 0.08]} c="#16213a" />
+      {/* glowing screen face */}
+      <mesh position={[0, 0, 0.043]}>
+        <planeGeometry args={[2.8, 1.7]} />
+        <meshStandardMaterial color="#0e1a30" emissive="#1d3a5f" emissiveIntensity={0.55} toneMapped={false} />
+      </mesh>
+      {/* crisp brushed-steel inner frame around the screen */}
+      <B p={[0, 0.8, 0.05]} s={[2.72, 0.03, 0.012]} c="#3a4d6b" cast={false} />
+      <B p={[0, -0.8, 0.05]} s={[2.72, 0.03, 0.012]} c="#3a4d6b" cast={false} />
+      <B p={[-1.35, 0, 0.05]} s={[0.03, 1.63, 0.012]} c="#3a4d6b" cast={false} />
+      <B p={[1.35, 0, 0.05]} s={[0.03, 1.63, 0.012]} c="#3a4d6b" cast={false} />
+
+      {/* ---- header band: title + subtitle (left) and a live status dot (right) ---- */}
+      <B p={[0, 0.66, 0.05]} s={[2.5, 0.24, 0.012]} c="#24344f" cast={false} />
+      <B p={[-0.74, 0.7, 0.06]} s={[0.92, 0.08, 0.012]} c="#ffd479" cast={false} />
+      <B p={[-0.62, 0.61, 0.06]} s={[0.66, 0.04, 0.012]} c="#6b7a90" cast={false} />
+      <mesh position={[1.06, 0.66, 0.06]}>
+        <cylinderGeometry args={[0.04, 0.04, 0.02, 14]} />
+        <meshStandardMaterial color="#7fd093" emissive="#56c2b0" emissiveIntensity={1.1} toneMapped={false} />
+      </mesh>
+
+      {/* ---- left column: package rows (colour tag + name line + gold price chip) ---- */}
+      {rows.map(({ c, y }, i) => (
+        <group key={i} position={[0, y, 0.06]}>
+          <B p={[-1.12, 0, 0]} s={[0.17, 0.17, 0.014]} c={c} cast={false} />
+          <B p={[-0.6, 0, 0]} s={[0.64, 0.055, 0.012]} c="#aeb6c2" cast={false} />
+          <B p={[0.06, 0, 0]} s={[0.32, 0.15, 0.014]} c="#ffd479" cast={false} />
+        </group>
+      ))}
+
+      {/* ---- divider between the price list and the chart ---- */}
+      <B p={[0.42, 0.02, 0.055]} s={[0.012, 0.92, 0.012]} c="#3a557a" cast={false} />
+
+      {/* ---- right column: growth bar chart ---- */}
+      {/* chart title line */}
+      <B p={[0.92, 0.36, 0.06]} s={[0.6, 0.055, 0.012]} c="#8a96a8" cast={false} />
+      {/* axes (vertical + baseline) */}
+      <B p={[0.6, -0.06, 0.055]} s={[0.014, 0.72, 0.012]} c="#3a557a" cast={false} />
+      <B p={[0.93, -0.44, 0.055]} s={[0.7, 0.014, 0.012]} c="#3a557a" cast={false} />
+      {/* ascending bars */}
+      {bars.map((h, i) => {
+        const x = 0.7 + i * 0.13;
+        return (
+          <mesh key={i} position={[x, -0.43 + h / 2, 0.065]}>
+            <boxGeometry args={[0.1, h, 0.02]} />
+            <meshStandardMaterial color="#56c2b0" emissive="#56c2b0" emissiveIntensity={0.95} toneMapped={false} />
+          </mesh>
+        );
+      })}
+      {/* rising trend line + arrowhead over the bars */}
+      <group position={[0.895, 0.02, 0.07]} rotation={[0, 0, trendAngle]}>
+        <B p={[0, 0, 0]} s={[0.56, 0.025, 0.012]} c="#ffd479" cast={false} />
+      </group>
+      <mesh position={[1.09, 0.221, 0.07]} rotation={[0, 0, trendAngle - Math.PI / 2]}>
+        <coneGeometry args={[0.06, 0.14, 3]} />
+        <meshStandardMaterial color="#ffd479" emissive="#ffd479" emissiveIntensity={0.8} toneMapped={false} />
+      </mesh>
+
+      {/* footer strip */}
+      <B p={[0, -0.74, 0.05]} s={[2.5, 0.05, 0.012]} c="#3a557a" cast={false} />
+    </group>
+  );
+}
+
+/**
+ * Sleek executive planter — slim charcoal-and-steel box with upright,
+ * fanned "snake plant" blades. Sharper and more formal than the bubbly
+ * FloorPlant, so it reads as boardroom decor rather than a lobby plant.
+ */
+function ExecPlanter({ p, s = 1 }: { p: Vec3; s?: number }) {
+  const grad = toonGradient(3);
+  // Symmetric fan: blades splay OUTWARD from the planter's own centre — left
+  // blades lean left, right blades lean right, centre stands tall. (+rz tilts a
+  // blade's tip toward -x, so left blades get +rz and right blades get -rz.)
+  const blades = [
+    { x: -0.18, h: 0.6, rz: 0.34, c: '#2f6f52' },
+    { x: -0.09, h: 0.8, rz: 0.17, c: '#3c8c64' },
+    { x: 0.0, h: 0.94, rz: 0.0, c: '#56c2b0' },
+    { x: 0.09, h: 0.8, rz: -0.17, c: '#3c8c64' },
+    { x: 0.18, h: 0.6, rz: -0.34, c: '#2f6f52' },
+  ] as const;
+  return (
+    <group position={p} scale={s}>
+      {/* planter box — dark steel-charcoal, matches table pedestals/screen bezel */}
+      <B p={[0, 0.27, 0]} s={[0.52, 0.54, 0.32]} c="#23262b" />
+      <B p={[0, 0.55, 0]} s={[0.56, 0.04, 0.36]} c="#9aa0a6" cast={false} />
+      <B p={[0, 0.565, 0]} s={[0.42, 0.02, 0.24]} c="#1b1f24" cast={false} />
+      {/* upright blades, fanned slightly for a sharp, architectural silhouette */}
+      {blades.map(({ x, h, rz, c }, i) => (
+        <group key={i} position={[x, 0.57, 0]} rotation={[0, 0, rz]}>
+          <mesh position={[0, h / 2, 0]} castShadow>
+            <boxGeometry args={[0.05, h, 0.018]} />
+            <meshToonMaterial color={c} gradientMap={grad} />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  );
+}
+
 export function Furniture({ id }: { id: string }) {
   const g = toonGradient(3);
   switch (id) {
@@ -1166,6 +1359,32 @@ export function Furniture({ id }: { id: string }) {
 
           {/* Hanging Headphones on the back wall */}
           <HangingHeadphones p={[-0.8, 2.2, -2.98]} ry={0} />
+        </>
+      );
+
+    case 'business':
+      return (
+        <>
+          {/* Long executive boardroom table, centred in the room */}
+          <BoardTable p={[0, 0, -0.6]} />
+          {/* Six chairs lining both long sides, like a real board meeting.
+              Raised slightly (y=0.12) so the pedestal base sits clear of the
+              floor/rug and stops z-fighting (flicker) against them. */}
+          {([-1.0, 0, 1.0] as const).map((x) => (
+            <ExecChair key={`f${x}`} p={[x, 0.12, 0.35]} ry={0} />
+          ))}
+          {([-1.0, 0, 1.0] as const).map((x) => (
+            <ExecChair key={`b${x}`} p={[x, 0.12, -1.55]} ry={Math.PI} />
+          ))}
+
+          {/* Big presentation screen centred on the back wall — click to see packages + case studies */}
+          <Hotspot room="business" act={() => useAppStore.getState().openRoomPanel('business')} hintOffset={[0, 3.0, -2.7]}>
+            <BoardroomScreen p={[0, 1.85, -2.95]} />
+          </Hotspot>
+
+          {/* Sleek executive planters flanking the screen, flush against the back wall — leaves fan symmetrically out from each plant's own centre */}
+          <ExecPlanter p={[-2.4, 0.06, -2.82]} s={0.8} />
+          <ExecPlanter p={[2.4, 0.06, -2.82]} s={0.8} />
         </>
       );
 
