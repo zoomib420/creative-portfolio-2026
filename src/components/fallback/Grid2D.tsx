@@ -87,9 +87,10 @@ export function Grid2D() {
               {profile.role[language]} · 2026
             </p>
             <h1 className="font-[var(--font-display)] text-4xl leading-tight font-extrabold text-balance text-[#fffaf2] md:text-6xl">
-              {language === 'th' ? 'ผมคือ ' : 'I am a '}
-              <span className="text-[#ffbc61] italic">
-                {language === 'th' ? 'นักสร้าง' : 'Builder'}
+              {language === 'th' ? 'สุดยอดไก่ชน' : 'Super Rooster,'}
+              <br />
+              <span className="text-[#ffbc61] italic block mt-2">
+                {language === 'th' ? 'ยอดนักสร้าง' : 'The Ultimate Builder'}
               </span>
             </h1>
             <p className="mt-6 max-w-2xl leading-[1.8] font-normal whitespace-pre-line text-[#fffaf2]/80">

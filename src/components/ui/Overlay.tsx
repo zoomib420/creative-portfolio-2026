@@ -39,11 +39,12 @@ export function Overlay() {
             {profile.role[language]} · 2026
           </p>
           <h1 className="hidden font-[var(--font-display)] text-3xl leading-[1.05] font-extrabold text-[#fffaf2] text-balance sm:text-4xl md:block md:text-7xl">
-            {language === 'th' ? 'ผมคือ ' : 'I am a '}
-            <span className="relative block text-[#ffbc61] italic sm:inline-block">
+            {language === 'th' ? 'สุดยอดไก่ชน' : 'Super Rooster,'}
+            <br />
+            <span className="relative w-fit block text-[#ffbc61] italic mt-2">
               {/* Background Glow */}
               <span className="absolute inset-0 block bg-[#ffbc61] blur-[20px] opacity-20 scale-125" aria-hidden="true" />
-              <span className="relative z-10">{language === 'th' ? 'นักสร้าง' : 'Builder'}</span>
+              <span className="relative z-10">{language === 'th' ? 'ยอดนักสร้าง' : 'The Ultimate Builder'}</span>
               <Squiggle className="absolute -bottom-2 left-0 h-3 w-full z-10 opacity-80" />
             </span>
           </h1>
