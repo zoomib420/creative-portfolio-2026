@@ -5,6 +5,7 @@ import { Loader, ElevatorLoader } from './components/ui/Loader';
 import { Nav } from './components/ui/Nav';
 import { FidelityBadge } from './components/ui/FidelityBadge';
 import { ProjectModal } from './components/ui/ProjectModal';
+import { CaseStudyModal } from './components/ui/CaseStudyModal';
 import { GameModal } from './components/ui/GameModal';
 import { RoomModal } from './components/ui/RoomModal';
 import { CertViewer } from './components/ui/CertViewer';
@@ -87,6 +88,7 @@ export function App() {
       <RoomModal />
       <CertViewer />
       <ProjectModal />
+      <CaseStudyModal />
       <GameModal />
       <AIGuide />
       <ElevatorPanel />

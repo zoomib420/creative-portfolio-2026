@@ -15,6 +15,8 @@ interface AppState {
   audioEnabled: boolean;
   /** Currently open project modal, or null. */
   activeProjectId: string | null;
+  /** Currently open case-study modal (src/data/caseStudies.ts key), or null. */
+  activeCaseStudyId: string | null;
   /** Currently open game modal, or null. */
   activeGameId: string | null;
   /** Section the visitor is currently viewing (drives the elevator panel). */
@@ -33,6 +35,8 @@ interface AppState {
   setAudioEnabled: (enabled: boolean) => void;
   openProject: (id: string) => void;
   closeProject: () => void;
+  openCaseStudy: (id: string) => void;
+  closeCaseStudy: () => void;
   openGame: (id: string) => void;
   closeGame: () => void;
   setActiveSection: (id: string) => void;
@@ -52,6 +56,7 @@ export const useAppStore = create<AppState>((set) => ({
   hasUserGesture: false,
   audioEnabled: false,
   activeProjectId: null,
+  activeCaseStudyId: null,
   activeGameId: null,
   activeSection: 'hero',
   focusedFloor: null,
@@ -72,6 +77,8 @@ export const useAppStore = create<AppState>((set) => ({
   setAudioEnabled: (enabled) => set({ audioEnabled: enabled }),
   openProject: (id) => set({ activeProjectId: id }),
   closeProject: () => set({ activeProjectId: null }),
+  openCaseStudy: (id) => set({ activeCaseStudyId: id }),
+  closeCaseStudy: () => set({ activeCaseStudyId: null }),
   openGame: (id) => set({ activeGameId: id }),
   closeGame: () => set({ activeGameId: null }),
   setActiveSection: (id) => set({ activeSection: id }),

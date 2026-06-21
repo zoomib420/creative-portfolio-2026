@@ -51,6 +51,7 @@ type RoomLabel = {
 const ROOM_LABELS: Record<string, RoomLabel> = {
   about: { text: 'About me', size: 0.38, position: [0, 2.0, 0] },
   work: { text: 'Work', size: 0.5, position: [0, 2.0, 0] },
+  business: { text: 'Business\nSystems', size: 0.3, position: [0, 2.0, 0] },
   tech: { text: 'Tools & Games', size: 0.32, position: [0, 2.0, 0] },
   contact: { text: 'Contact', size: 0.42, position: [0, 2.0, 0] },
   thanks: { text: 'Thank you', size: 0.37, position: [0, 2.0, 0] },
