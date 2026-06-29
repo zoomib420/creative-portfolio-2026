@@ -22,6 +22,8 @@ export interface Profile {
   name: LocalizedString;
   /** ชื่อแบรนด์/handle สั้น ๆ ที่โชว์บน nav */
   handle: string;
+  portraitUrl: string;
+  portraitAlt: LocalizedString;
   role: LocalizedString;
   /** คำโปรย hero สั้น ๆ — บอกตัวตนใน 1–2 ประโยค */
   tagline: LocalizedString;
@@ -41,6 +43,11 @@ export const profile: Profile = {
     en: 'Pawasit Chairat (Zoom)' 
   },
   handle: 'ZOOM',
+  portraitUrl: '/profile-photo.jpg',
+  portraitAlt: {
+    th: 'รูปโปรไฟล์ของซูม ปวสิทธิ์ ไชยรัตน์',
+    en: 'Portrait photo of Zoom Pawasit Chairat',
+  },
   role: { 
     th: 'AI-Powered Builder', 
     en: 'AI-Powered Builder' 

@@ -22,6 +22,23 @@ export function FloorContent({ id }: { id: string }) {
     case 'about':
       return (
         <div className="space-y-4">
+          <div className="mx-auto w-full max-w-[15rem] sm:max-w-[17rem]">
+            <div className="overflow-hidden rounded-[1.75rem] border border-[#ffbc61]/25 bg-[#3d281c] p-2 shadow-[0_14px_28px_rgba(0,0,0,0.28)]">
+              <img
+                src={profile.portraitUrl}
+                alt={profile.portraitAlt[language]}
+                loading="lazy"
+                decoding="async"
+                className="aspect-[4/5] w-full rounded-[1.2rem] object-cover object-[center_20%]"
+              />
+            </div>
+            <div className="mt-3 flex items-center justify-between gap-3 rounded-full border border-[#ffbc61]/20 bg-[#3d281c]/80 px-4 py-2 text-xs text-[#fffaf2]/70">
+              <span className="font-[var(--font-label)] tracking-[0.24em] text-[#ffbc61] uppercase">
+                {profile.handle}
+              </span>
+              <span>{profile.role[language]}</span>
+            </div>
+          </div>
           <p className="leading-relaxed whitespace-pre-line text-[#fffaf2]/90">
             {profile.bio[language]}
           </p>
