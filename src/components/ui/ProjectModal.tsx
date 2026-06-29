@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAppStore } from '../../lib/store';
 import { projectsById } from '../../data/projects';
+import { caseStudies } from '../../data/caseStudies';
 import { ambientAudio } from '../../lib/audio';
 
 /**
@@ -11,6 +12,7 @@ import { ambientAudio } from '../../lib/audio';
 export function ProjectModal() {
   const activeId = useAppStore((s) => s.activeProjectId);
   const close = useAppStore((s) => s.closeProject);
+  const openCaseStudy = useAppStore((s) => s.openCaseStudy);
   const audioEnabled = useAppStore((s) => s.audioEnabled);
   const language = useAppStore((s) => s.language);
   const project = activeId ? projectsById[activeId] : null;
@@ -38,6 +40,8 @@ export function ProjectModal() {
   }, [project, close]);
 
   if (!project) return null;
+
+  const linkedCaseStudy = project.caseStudyId ? caseStudies[project.caseStudyId] : null;
 
   const closeLabel = language === 'th' ? 'ปิด' : 'Close';
 
@@ -127,6 +131,21 @@ export function ProjectModal() {
                 {l.label} ↗
               </a>
             ))}
+          </div>
+        )}
+
+        {linkedCaseStudy && (
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={() => {
+                close();
+                openCaseStudy(linkedCaseStudy.id);
+              }}
+              className="rounded-lg border border-[var(--color-accent-2)] px-4 py-2 text-sm text-[var(--color-accent-2)] transition-colors hover:bg-[var(--color-accent-2)] hover:text-[var(--color-void)]"
+            >
+              {language === 'th' ? 'อ่าน Case Study เต็ม' : 'Read full case study'} ↗
+            </button>
           </div>
         )}
 

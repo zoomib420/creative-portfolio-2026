@@ -23,6 +23,7 @@ export interface Project {
   title: string;
   level: ProjectLevel;
   category: ProjectCategory;
+  caseStudyId?: string;
   /** Year shown on the card / modal. */
   year: number;
   /** Your role on the project. */
@@ -124,6 +125,7 @@ export const projects: Project[] = [
     title: 'Intake Pilot',
     level: 'advanced',
     category: 'automation',
+    caseStudyId: 'intake-pilot',
     year: 2026,
     role: 'Creator & Developer',
     tagline: {
@@ -143,6 +145,35 @@ export const projects: Project[] = [
       { th: 'คัดกรองความต้องการและความเร่งด่วน', en: 'Urgency & requirement categorization' }
     ],
     ambientHz: 741,
+  },
+  {
+    id: 'fignest',
+    title: 'FigNest',
+    level: 'advanced',
+    category: 'website',
+    caseStudyId: 'fignest',
+    year: 2026,
+    role: 'Creator & Developer',
+    tagline: {
+      th: 'เว็บรวมฟิกเกอร์อนิเมะ พร้อมลิงก์ affiliate และตลาดมือสอง',
+      en: 'Anime figure marketplace guide with affiliate links and a second-hand board',
+    },
+    description: {
+      th: 'แพลตฟอร์มสำหรับนักสะสมฟิกเกอร์ที่รวมสินค้าตามเรื่องดังอย่าง One Piece, Naruto, Dragon Ball, Jujutsu Kaisen และ Demon Slayer พร้อมจัดหมวดให้ค้นง่าย เทียบราคาและส่งต่อไปยังลิงก์ affiliate ของ Shopee/Lazada รวมถึงมีพื้นที่ตลาดมือสองสำหรับนักสะสมไทยและหน้าคอนเทนต์ที่ช่วยให้ซื้อขายได้ปลอดภัยขึ้น',
+      en: 'A collector-focused figure discovery website that organizes anime figures by series, surfaces affiliate product listings from Shopee and Lazada, and adds a second-hand marketplace plus content pages for safer buying and selling.',
+    },
+    thumbnail: '/projects/Project-fignest.png',
+    fullImage: '/projects/Project-fignest.png',
+    tools: ['Next.js', 'TypeScript', 'Affiliate Commerce', 'Search & Filters'],
+    features: [
+      { th: 'คัดหมวดฟิกเกอร์ตามอนิเมะและแบรนด์ยอดนิยม', en: 'Figure discovery by anime franchise and brand' },
+      { th: 'เปรียบเทียบสินค้าผ่านลิงก์ affiliate ของ Shopee/Lazada', en: 'Affiliate-driven product discovery across Shopee and Lazada' },
+      { th: 'มีตลาดมือสองและหน้าคู่มือซื้อขายปลอดภัยสำหรับนักสะสมไทย', en: 'Second-hand marketplace and safe-trade content for Thai collectors' },
+    ],
+    links: [
+      { label: 'Live Site', url: 'https://fignest.vercel.app/' },
+    ],
+    ambientHz: 639,
   },
   {
     id: 'kids-plearn',

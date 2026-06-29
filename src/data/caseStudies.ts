@@ -103,4 +103,31 @@ export const caseStudies: Record<string, CaseStudy> = {
       { th: 'ร้านอาหาร/คาเฟ่: "แบบทดสอบหาเมนูที่ตรงกับบุคลิกคุณ" (แจกคูปองหลังทำแบบทดสอบ)', en: 'Restaurants/cafes: "find the menu item that matches your personality" (with a coupon after completing it)' },
     ],
   },
+  fignest: {
+    id: 'fignest',
+    projectTitle: 'FigNest',
+    context: {
+      th: 'สร้างเป็นเว็บสำหรับนักสะสมฟิกเกอร์อนิเมะ โดยตั้งใจให้เป็นทั้งหน้ารวมสินค้า affiliate และพื้นที่ตลาดมือสองสำหรับชุมชนนักสะสมไทยในที่เดียว',
+      en: 'Built as a collector-focused anime figure website that combines affiliate product discovery with a second-hand community board in one place.',
+    },
+    problem: {
+      th: 'คนที่สะสมฟิกเกอร์มักต้องกระโดดข้ามหลายที่: หา reference จากโพสต์หรือกลุ่ม, กดดูสินค้าจากหลายร้าน, เทียบราคาเอง, แล้วค่อยกลับไปหาตลาดมือสองอีกที ทำให้การค้นหาของสะสมที่อยากได้ช้าและกระจัดกระจาย โดยเฉพาะเวลาตามเรื่องดังหรือไลน์ฟิกเกอร์เฉพาะแบรนด์',
+      en: 'Figure collectors often have to bounce across multiple places: social posts for references, separate store listings for new products, manual price comparisons, then separate community spaces for second-hand deals. That makes discovery fragmented and slow, especially when browsing by franchise or brand.',
+    },
+    solution: {
+      th: 'FigNest จัดสินค้าใหม่ตามอนิเมะและแบรนด์ให้ค้นง่ายขึ้น พร้อมลิงก์ affiliate ไปยัง Shopee/Lazada, หน้า category ตามเรื่องยอดนิยม, search flow, ตลาดมือสอง และหน้าเนื้อหาอย่าง safe-trade / affiliate disclosure เพื่อให้เว็บดูน่าเชื่อถือและใช้งานได้จริงสำหรับชุมชนนักสะสม',
+      en: 'FigNest organizes new products by anime franchise and brand, adds affiliate paths to Shopee and Lazada, ships category pages for major series, supports search and browsing flows, and includes a second-hand board plus trust-building content such as safe-trade and affiliate disclosure pages.',
+    },
+    results: [
+      { th: 'รวม flow ค้นของสะสมใหม่และของมือสองไว้ในเว็บเดียว ทำให้ user ไม่ต้องเริ่มจากศูนย์ทุกครั้งที่อยากหาฟิกเกอร์', en: 'Combines new-product discovery and second-hand browsing in one place, reducing the need to restart the hunt from scratch each time.' },
+      { th: 'โครงสร้างตามอนิเมะดังช่วยให้เข้าหาของได้ไวกว่า listing รวมแบบไม่จัดหมวด', en: 'Series-first navigation helps collectors reach relevant items faster than a flat product feed.' },
+      { th: 'เพิ่มความโปร่งใสด้วย affiliate disclosure และคู่มือซื้อขายปลอดภัย ซึ่งสำคัญมากกับตลาดสะสมและมือสอง', en: 'Adds trust through affiliate disclosure and safe-trade guidance, which is especially important for collectible and second-hand commerce.' },
+    ],
+    tools: ['Next.js', 'TypeScript', 'Affiliate Commerce', 'Search & Filters'],
+    applicableTo: [
+      { th: 'เว็บ affiliate ที่ต้องคัดสินค้าจากหลายร้านแล้วจัดประสบการณ์ให้ค้นง่ายกว่า marketplace ตรง ๆ', en: 'Affiliate sites that curate products from multiple marketplaces and need a better discovery experience than the raw marketplaces provide.' },
+      { th: 'community commerce สำหรับงานสะสม/งานอดิเรก เช่น ของเล่น โมเดล การ์ด หรือ merchandise fandom', en: 'Community-commerce products for collectibles and fandom hobbies such as toys, models, cards, or merch.' },
+      { th: 'ธุรกิจ content + commerce ที่ต้องสร้างความน่าเชื่อถือผ่าน disclosure, safe-trade, และโครงสร้างข้อมูลที่ชัดเจน', en: 'Content-plus-commerce businesses that need trust-building layers like disclosure, safe-trade guidance, and clear information architecture.' },
+    ],
+  },
 };
