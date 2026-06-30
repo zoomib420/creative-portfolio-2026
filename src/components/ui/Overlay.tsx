@@ -51,6 +51,9 @@ export function Overlay() {
           <p className="mt-6 hidden max-w-xl text-sm font-normal leading-[1.8] text-[#fffaf2]/90 whitespace-pre-line md:mt-8 md:block md:text-base">
             {profile.tagline[language]}
           </p>
+          <p className="mt-4 hidden max-w-xl font-[var(--font-label)] text-xs font-bold tracking-[0.16em] text-[#ffd479] uppercase md:block">
+            {profile.availability[language]}
+          </p>
           <p className="mt-7 text-[10px] font-bold tracking-widest text-[#ffd479] uppercase md:mt-8 md:text-xs">
             {language === 'th' ? '↓ เลื่อนลงเพื่อสำรวจตึก แล้วคลิกห้องเพื่อดูข้อมูล' : '↓ Scroll down to explore, click rooms for info'}
           </p>

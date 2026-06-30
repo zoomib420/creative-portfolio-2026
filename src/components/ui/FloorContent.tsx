@@ -10,6 +10,62 @@ import { useAppStore } from '../../lib/store';
 /** Unique tools across all projects → tech chips. */
 const techChips = [...new Set(projects.flatMap((p) => p.tools))];
 
+function GitHubIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+      <path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.11.79-.25.79-.56v-2.17c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.03 1.76 2.69 1.25 3.35.95.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.03 0 0 .97-.31 3.17 1.17a10.98 10.98 0 0 1 5.77 0c2.2-1.48 3.17-1.17 3.17-1.17.62 1.58.23 2.74.11 3.03.73.8 1.18 1.82 1.18 3.07 0 4.41-2.69 5.38-5.26 5.66.41.36.78 1.06.78 2.14v3.18c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
+    </svg>
+  );
+}
+
+function LinkedInIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+      <path d="M4.98 3.5A2.48 2.48 0 1 0 5 8.46 2.48 2.48 0 0 0 4.98 3.5ZM2.75 9.75h4.47V21H2.75V9.75ZM9.86 9.75h4.29v1.54h.06c.6-1.13 2.06-1.97 4.24-1.97 4.53 0 5.36 2.98 5.36 6.86V21h-4.47v-4.27c0-1.02-.02-2.34-1.43-2.34-1.43 0-1.65 1.12-1.65 2.27V21H9.86V9.75Z" />
+    </svg>
+  );
+}
+
+function SocialIconButton({ label, url }: { label: string; url: string }) {
+  const icon =
+    label === 'GitHub' ? <GitHubIcon /> : label === 'LinkedIn' ? <LinkedInIcon /> : null;
+  const tone =
+    label === 'GitHub'
+      ? 'border-[#f5f5f5]/15 bg-[#181717] text-[#f5f5f5] hover:border-[#f5f5f5]/40 hover:bg-[#24292f] hover:text-white'
+      : label === 'LinkedIn'
+        ? 'border-[#0a66c2]/35 bg-[#0a66c2] text-white hover:border-[#58a6ff]/55 hover:bg-[#004182] hover:text-white'
+        : '';
+
+  if (!icon) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="inline-block rounded-full border border-[#ffbc61]/40 bg-[#3d281c] px-4 py-2 text-xs font-bold tracking-widest text-[#ffbc61] uppercase transition-colors hover:bg-[#ffbc61] hover:text-[#2a2233]"
+      >
+        {label}
+      </a>
+    );
+  }
+
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={label}
+      title={label}
+      className={`group relative flex h-11 w-11 items-center justify-center rounded-full border shadow-[0_10px_20px_rgba(0,0,0,0.22)] transition-all hover:-translate-y-0.5 focus-visible:-translate-y-0.5 ${tone}`}
+    >
+      <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 rounded-full border border-[#fffaf2]/14 bg-[#241710]/95 px-3 py-1 text-[10px] font-bold tracking-[0.18em] text-[#fffaf2] uppercase opacity-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)] transition-all duration-200 group-hover:-translate-y-1 group-hover:opacity-100 group-focus-visible:-translate-y-1 group-focus-visible:opacity-100">
+        {label}
+      </span>
+      {icon}
+    </a>
+  );
+}
+
 /**
  * Full content for a floor's "room". Shared by the 3D RoomModal (opened on
  * click) and the 2D fallback (rendered inline) so the two never drift apart.
@@ -191,6 +247,9 @@ export function FloorContent({ id }: { id: string }) {
       return (
         <div className="space-y-5">
           <p className="max-w-md leading-relaxed text-[#fffaf2]/90">{profile.contactCta[language]}</p>
+          <p className="font-[var(--font-label)] text-xs font-bold tracking-[0.16em] text-[#ffd479] uppercase">
+            {profile.availability[language]}
+          </p>
 
           {lineLink && (
             <a
@@ -210,14 +269,7 @@ export function FloorContent({ id }: { id: string }) {
             <ul className="flex flex-wrap gap-3">
               {otherSocials.map((s) => (
                 <li key={s.url}>
-                  <a
-                    className="inline-block rounded-full border border-[#ffbc61]/40 bg-[#3d281c] px-4 py-2 text-xs font-bold tracking-widest text-[#ffbc61] uppercase transition-colors hover:bg-[#ffbc61] hover:text-[#2a2233]"
-                    href={s.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
-                    {s.label}
-                  </a>
+                  <SocialIconButton label={s.label} url={s.url} />
                 </li>
               ))}
             </ul>

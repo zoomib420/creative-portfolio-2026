@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useProgress } from '@react-three/drei';
 
 interface LoaderProps {
@@ -24,12 +24,13 @@ export function ElevatorLoader() {
   const [isOpen, setIsOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [smoothProgress, setSmoothProgress] = useState(0);
+  const smoothProgressRef = useRef(0);
 
   // Smoothly interpolate the displayed progress number
   useEffect(() => {
     let animationFrameId: number;
-    let startTime = performance.now();
-    let startProgress = smoothProgress;
+    const startTime = performance.now();
+    const startProgress = smoothProgressRef.current;
     // When progress reaches 100, we take 800ms to smoothly tick up to 100
     // Otherwise we tick up to the current progress over 300ms
     const targetProgress = progress;
@@ -42,11 +43,13 @@ export function ElevatorLoader() {
       const easeT = 1 - Math.pow(1 - t, 3);
       
       const nextProgress = startProgress + (targetProgress - startProgress) * easeT;
+      smoothProgressRef.current = nextProgress;
       setSmoothProgress(nextProgress);
 
       if (t < 1) {
         animationFrameId = requestAnimationFrame(animate);
       } else {
+        smoothProgressRef.current = targetProgress;
         setSmoothProgress(targetProgress);
       }
     };

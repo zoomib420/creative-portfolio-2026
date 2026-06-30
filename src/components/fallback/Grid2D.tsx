@@ -96,6 +96,9 @@ export function Grid2D() {
             <p className="mt-6 max-w-2xl leading-[1.8] font-normal whitespace-pre-line text-[#fffaf2]/80">
               {profile.tagline[language]}
             </p>
+            <p className="mt-4 max-w-2xl font-[var(--font-label)] text-xs font-bold tracking-[0.16em] text-[#ffd479] uppercase">
+              {profile.availability[language]}
+            </p>
           </Reveal>
 
           {/* what I build — quick chips */}

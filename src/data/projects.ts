@@ -36,6 +36,8 @@ export interface Project {
   features: LocalizedString[];
   /** Optional media. Put compressed assets in /public. */
   thumbnail?: string;
+  /** Fine-tune thumbnail cropping when a screenshot needs a custom focal point. */
+  thumbnailPosition?: string;
   /** Full, uncropped image for the modal detail view. */
   fullImage?: string;
   model?: string; // path to a .glb for the 3D room
@@ -111,12 +113,17 @@ export const projects: Project[] = [
       en: 'A web quiz that helps you discover your introversion type — psychology-based questions and polished visual effects resolve into one of 12 character archetypes, each with its own description. Built end-to-end with AI tooling, with results shareable as a social card.'
     },
     thumbnail: '/projects/Project-introvert.png',
+    thumbnailPosition: '50% 0%',
     fullImage: '/projects/Project-introvert2.png',
     tools: ['AI-assisted web build'],
     features: [
       { th: 'วิเคราะห์ผลลัพธ์ 12 รูปแบบ', en: '12-archetype result analysis' },
       { th: 'เอฟเฟกต์ภาพลื่นไหล', en: 'Smooth visual effects' },
       { th: 'Generate card แชร์ลงโซเชียล', en: 'Generate shareable social cards' }
+    ],
+    links: [
+      { label: 'Live', url: 'https://introvert-eosin.vercel.app' },
+      { label: 'Code', url: 'https://github.com/zoomib420/Introvert' },
     ],
     ambientHz: 417,
   },
@@ -133,16 +140,20 @@ export const projects: Project[] = [
       en: 'AI Chatbot for client intake & estimation'
     },
     description: {
-      th: 'ระบบ AI รับลูกค้าหน้าด่านผ่าน LINE และเว็บแชท คอยสอบถามบัดเจท ความต้องการเบื้องต้น ประเมินความยากง่ายและราคาคร่าวๆ พร้อมแยกประเภทงานและความเร่งด่วน แล้วส่งข้อมูลจัดเรียงลง Notion อัตโนมัติ สร้างขึ้นมาเพื่อช่วยรับลูกค้าและเตรียมข้อมูลให้พร้อมก่อนคุยงานจริง',
-      en: 'An AI-powered first-line customer service chatbot for LINE and Web. It interviews clients about their budget and requirements, estimates project complexity and cost, categorizes urgency, and automatically organizes everything into Notion.'
+      th: 'ระบบ AI รับลูกค้าหน้าด่านผ่าน LINE และเว็บแชท คอยสอบถามบัดเจท ความต้องการเบื้องต้น ประเมินความยากง่ายและราคาคร่าวๆ พร้อมแยกประเภทงานและความเร่งด่วน แล้วส่งข้อมูลจัดเรียงลง Notion อัตโนมัติ สร้างขึ้นมาเพื่อช่วยรับลูกค้าและเตรียมข้อมูลให้พร้อมก่อนคุยงานจริง\n\nมีการออกแบบ prompt และประเมินคุณภาพคำตอบของ AI — ตรงกับงาน AI Trainer / Evaluator โดยตรง',
+      en: 'An AI-powered first-line customer service chatbot for LINE and Web. It interviews clients about their budget and requirements, estimates project complexity and cost, categorizes urgency, and automatically organizes everything into Notion.\n\nInvolves prompt design and evaluating AI response quality — directly relevant to AI Trainer / Evaluator work.'
     },
     thumbnail: '/projects/Project-intakepilot.png',
+    thumbnailPosition: '50% 0%',
     fullImage: '/projects/Project-intakepilot2.png',
     tools: ['AI Chatbot', 'LINE API', 'Notion API'],
     features: [
       { th: 'AI สัมภาษณ์และประเมินราคาอัตโนมัติ', en: 'AI-driven client interview & estimation' },
       { th: 'บันทึกและจัดหมวดหมู่ลง Notion', en: 'Automated Notion data entry' },
       { th: 'คัดกรองความต้องการและความเร่งด่วน', en: 'Urgency & requirement categorization' }
+    ],
+    links: [
+      { label: 'Live Demo', url: 'https://intake-pilot.vercel.app' },
     ],
     ambientHz: 741,
   },
@@ -171,7 +182,7 @@ export const projects: Project[] = [
       { th: 'มีตลาดมือสองและหน้าคู่มือซื้อขายปลอดภัยสำหรับนักสะสมไทย', en: 'Second-hand marketplace and safe-trade content for Thai collectors' },
     ],
     links: [
-      { label: 'Live Site', url: 'https://fignest.vercel.app/' },
+      { label: 'Live', url: 'https://fignest.vercel.app/' },
     ],
     ambientHz: 639,
   },
@@ -246,6 +257,10 @@ export const projects: Project[] = [
       { th: 'Metaphor ระบบนำทางด้วยลิฟต์ 3D', en: '3D Elevator navigation metaphor' },
       { th: 'Multi-tier fallback ไม่ให้เว็บค้าง', en: 'Multi-tier fallback preventing freezes' },
       { th: 'Audio reactive ตามเนื้อหา', en: 'Content-driven reactive audio' }
+    ],
+    links: [
+      { label: 'Live', url: 'https://super-rooster.vercel.app' },
+      { label: 'Code', url: 'https://github.com/zoomib420/creative-portfolio-2026' },
     ],
     ambientHz: 528,
   },
